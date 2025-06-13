@@ -43,6 +43,7 @@ public class UIStartScene : MonoBehaviour
         btnOption.onClick.AddListener(() =>
         {
             UIManager.Instance.OpenOption(ButtonGroupActive);
+            ButtonGroupActive();
         });
         
         // Exit
@@ -58,23 +59,17 @@ public class UIStartScene : MonoBehaviour
 
     private void ButtonGroupActive()
     {
-        float endValue = canvasGroupExitPopup.alpha > 0.5f ? 0 : 1;
+        float endValue = canvasGroupButtons.alpha > 0.5f ? 0 : 1;
 
-        if (endValue >= 0.95f)
-        {
-            canvasGroupButtons.FadeAnimation(endValue);
-        }
-        else
-        {
-            canvasGroupButtons.BlinkAnimation(endValue);
-        }
-        
+        canvasGroupButtons.FadeAnimation(endValue);
     }
     
     private void ExitPopupActive()
     {
         float endValue = canvasGroupExitPopup.alpha > 0.5f ? 0 : 1;
+        
         canvasGroupExitPopup.BlinkAnimation(endValue, false);
+        ButtonGroupActive();
     }
     
     private void ExitGame()
