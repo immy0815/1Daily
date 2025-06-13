@@ -16,10 +16,10 @@ public class ResourceManager : MonoBehaviour
 
     [SerializeField] private List<string> _stageKeys;
 
-    private SceneLoader _sceneLoader;
+    // private SceneLoader _sceneLoader;
     private StageLoader _stageLoader;
 
-    private SceneName _currentScene;
+    // private SceneName _currentScene;
 
     private void Awake()
     {
@@ -27,9 +27,9 @@ public class ResourceManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            _sceneLoader = new SceneLoader();
+            // _sceneLoader = new SceneLoader();
             _stageLoader = new StageLoader();
-            _sceneLoader.Init();
+            // _sceneLoader.Init();
         }
         else
         {
@@ -49,8 +49,8 @@ public class ResourceManager : MonoBehaviour
     {
         //ield return Addressables.InitializeAsync();
 
-        StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Title));
-        StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Game));
+        // StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Title));
+        // StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Game));
 
         foreach (string key in _stageKeys)
         {
@@ -59,24 +59,24 @@ public class ResourceManager : MonoBehaviour
 
         Debug.Log("All Resources Loaded");
 
-        SwitchScene(SceneName.Title);
+        // SwitchScene(SceneName.Title);
     }
 
-    public void SwitchScene(SceneName targetScene)
-    {
-        Scene current = _sceneLoader.GetScene(_currentScene);
-        Scene target = _sceneLoader.GetScene(targetScene);
-
-        SceneManager.SetActiveScene(target);
-
-        if (current.IsValid() && current != target)
-        {
-            SceneManager.UnloadSceneAsync(current);
-        }
-
-        _currentScene = targetScene;
-        Debug.Log($"[ResourceManager] Switched to scene: {targetScene}");
-    }
+    // public void SwitchScene(SceneName targetScene)
+    // {
+    //     Scene current = _sceneLoader.GetScene(_currentScene);
+    //     Scene target = _sceneLoader.GetScene(targetScene);
+    //
+    //     SceneManager.SetActiveScene(target);
+    //
+    //     if (current.IsValid() && current != target)
+    //     {
+    //         SceneManager.UnloadSceneAsync(current);
+    //     }
+    //
+    //     _currentScene = targetScene;
+    //     Debug.Log($"[ResourceManager] Switched to scene: {targetScene}");
+    // }
 
     public void InstantiateStage(string stageKey)
     {

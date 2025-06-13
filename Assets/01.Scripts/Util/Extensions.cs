@@ -34,6 +34,16 @@ public static class Extensions
             canvasGroup.blocksRaycasts = false;
         }
     }
+    
+    public static void FadeAnimation(this CanvasGroup canvasGroup, float endValue)
+    {
+        if (endValue < 0.1f)
+        {
+            canvasGroup.SetAlpha(endValue);
+        }
+        
+        canvasGroup.DOFade(endValue, 0.2f).OnComplete(() => canvasGroup.SetAlpha(endValue));
+    }
 
     public static void BlinkAnimation(this CanvasGroup canvasGroup, float endValue, bool enterAnim = true, float duration = 0.1f, int count = 2)
     {

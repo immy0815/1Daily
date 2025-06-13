@@ -16,7 +16,10 @@ public class UIManager : MonoBehaviour
     }
 
     [SerializeField] private UIOption uiOption;
-    [SerializeField] private UIStartScene uiStartScene;    
+    [SerializeField] private UIStartScene uiStartScene;
+
+    // 로딩 할 때, progressBar UI 업데이트 시, 호출
+    public Action<float> onUpdateLoadingProgress;
     
     private void Reset()
     {
@@ -63,5 +66,5 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void OpenOption() => uiOption.Open();
+    public void OpenOption(Action closeCallback) => uiOption.Open(closeCallback);
 }
