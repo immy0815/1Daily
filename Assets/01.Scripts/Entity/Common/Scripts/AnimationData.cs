@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace _01.Scripts.Entity.Common
+namespace _01.Scripts.Entity.Common.Scripts
 {
     [Serializable] public class AnimationData
     {
