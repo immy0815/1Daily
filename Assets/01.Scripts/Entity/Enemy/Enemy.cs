@@ -20,9 +20,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private NavMeshAgent agent;
     public NavMeshAgent Agent => agent;
 
-    [Header("Stats")]
-    // SO
-    [SerializeField] private int currentHP = 3;
+    [Header("Stats")] 
+    [SerializeField] private EnemyData enemyData;
+    public EnemyData EnemyData => enemyData;
+    [SerializeField] private int currentHP;
 
     [Header("Runtime Info")] 
     [SerializeField] private Transform target;
@@ -35,6 +36,8 @@ public class Enemy : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         fsm = GetComponent<EnemyFSM>();
         agent = GetComponent<NavMeshAgent>();
+
+        currentHP = enemyData.HP;
         
         Agent.SetDestination(Target.position);
     }
@@ -43,5 +46,31 @@ public class Enemy : MonoBehaviour
     public void SetTarget(Transform target)
     {
         this.target = target;
+    }
+
+    public float DistanceToTargetSQR()
+    {
+        return (target.position - transform.position).sqrMagnitude;
+    }
+
+    public float GetCurrentRange()
+    {
+        return 3;
+    }
+
+    public bool HasNoWeapon()
+    {
+        return true;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHP -= damage;
+        currentHP = Mathf.Max(currentHP, 0);
+    }
+
+    public Vector3 GetTargetDirection()
+    {
+        return (target.position - transform.position).normalized;
     }
 }

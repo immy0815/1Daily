@@ -20,10 +20,14 @@ public class EnemyIdleState : EnemyStateBase
 
     public override void Update()
     {
+        enemy.Agent.SetDestination(enemy.Target.position);
         if (enemy.Target && enemy.Agent.remainingDistance > enemy.Agent.stoppingDistance)
         {
-            enemy.Agent.SetDestination(enemy.Target.position);
             fsm.ChangeState(fsm.runState);
+        }
+        else if (true)  // 무기 검사 추가 필요. 거리는 되는 상황
+        {
+            fsm.ChangeState(fsm.punchState);
         }
     }
 

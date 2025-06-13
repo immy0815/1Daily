@@ -13,11 +13,6 @@ public abstract class EnemyStateBase : IState
         this.fsm = fsm;
     }
 
-    public void ChangeState()
-    {
-        
-    }
-
     public abstract void Enter();
     public abstract void Exit();
 

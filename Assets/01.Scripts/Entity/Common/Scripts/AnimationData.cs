@@ -10,6 +10,7 @@ namespace _01.Scripts.Entity.Common.Scripts
         [SerializeField] private string idleParameterName = "Idle";
         [SerializeField] private string walkParameterName = "Walk";
         [SerializeField] private string runParameterName = "Run";
+        [SerializeField] private string punchParameterName = "Punch";
         
         [Header("Animation Parameters on air")]
         [SerializeField] private string airParameterName = "@Air";
@@ -29,6 +30,7 @@ namespace _01.Scripts.Entity.Common.Scripts
         public int IdleParameterHash { get; private set; }
         public int WalkParameterHash { get; private set; }
         public int RunParameterHash { get; private set; }
+        public int PunchParameterHash { get; private set; }
         public int AirParameterHash { get; private set; }
         public int JumpParameterHash { get; private set; }
         public int FallParameterHash { get; private set; }
@@ -43,6 +45,7 @@ namespace _01.Scripts.Entity.Common.Scripts
             IdleParameterHash = Animator.StringToHash(idleParameterName);
             WalkParameterHash = Animator.StringToHash(walkParameterName);
             RunParameterHash = Animator.StringToHash(runParameterName);
+            PunchParameterHash = Animator.StringToHash(punchParameterName);
 
             AirParameterHash = Animator.StringToHash(airParameterName);
             JumpParameterHash = Animator.StringToHash(jumpParameterName);
