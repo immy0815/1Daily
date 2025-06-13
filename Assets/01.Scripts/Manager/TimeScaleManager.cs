@@ -7,7 +7,7 @@ namespace _01.Scripts.Manager
     public enum PriorityType
     {
         Move,
-        Interact,
+        Attack,
         Jump,
     }
     
@@ -15,7 +15,7 @@ namespace _01.Scripts.Manager
     {
         // Properties
         [field: Header("TimeScale Values")]
-        [field: SerializeField] public PriorityType BaseUpdateType { get; private set; } = PriorityType.Move;
+        [field: SerializeField] public PriorityType PreviousUpdateType { get; private set; } = PriorityType.Move;
         [field: SerializeField] public float TargetTimeScale { get; private set; } = 0.01f;
         [field: SerializeField] public float CurrentTimeScale { get; private set; }
         
@@ -37,11 +37,14 @@ namespace _01.Scripts.Manager
             CurrentTimeScale = Time.timeScale;
         }
 
-        public void ChangeTimeScale(PriorityType type,  float timeScale)
+        public void ChangeTimeScale(PriorityType type, float timeScale)
         {
-            if (BaseUpdateType > type) return;
-            TargetTimeScale = timeScale;
+            if (PreviousUpdateType == PriorityType.Jump && type == PriorityType.Attack) return;
+            
+            if (TargetTimeScale < timeScale || PreviousUpdateType == type) TargetTimeScale = timeScale;
             Time.timeScale = TargetTimeScale;
+            
+            PreviousUpdateType = type;
         }
     }
 }
