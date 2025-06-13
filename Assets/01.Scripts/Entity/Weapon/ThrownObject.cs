@@ -21,8 +21,8 @@ public class ThrownObject : MonoBehaviour
         Enemy enemy = collision.gameObject.GetComponent<Enemy>();
         if (enemy != null)
         {
-            enemy.TakeDamage(damage);
-            enemy.DropWeapon();
+            enemy.takeDamage(damage);
+            enemy.dropWeapon();
             hasAppliedDamage = true;
         }
         */

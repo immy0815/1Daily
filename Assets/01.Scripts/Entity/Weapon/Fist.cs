@@ -7,5 +7,6 @@ public class Fist : Weapon, IHittable
     public void OnHit()
     {
         Debug.Log("Punch hit");
+        
     }
 }
