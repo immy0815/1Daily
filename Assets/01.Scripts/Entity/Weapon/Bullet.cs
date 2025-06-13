@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [SerializeField] private float bulletSpeed = 1f;
+    [SerializeField] private int bulletDamage = 10;
     private Rigidbody rb;
-    private float bulletSpeed = 200f;
     private bool isActive = false;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        rb.useGravity = false;
         GetComponent<MeshRenderer>().material.color = Color.black;
     }
 
@@ -27,21 +29,18 @@ public class Bullet : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
         if (!isActive) return;
 
-        /*
-         Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        Enemy enemy = other.GetComponent<Enemy>();
         if (enemy != null)
         {
-            enemy.takeDamage(bulletDamage);
+            enemy.TakeDamage(bulletDamage);
         }
-        */
 
         ReturnToPool();
     }
-
     private void ReturnToPool()
     {
         isActive = false;

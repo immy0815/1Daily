@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Katana : Weapon, IHittable, IThrowable
 {
-    [SerializeField] private Collider katanaCollider; // 트리거 콜라이더
+    [SerializeField] private Collider katanaCollider;
     public void OnHit()
     {
         Debug.Log("Katana slash");
@@ -27,14 +27,13 @@ public class Katana : Weapon, IHittable, IThrowable
     
     private void OnTriggerEnter(Collider other)
     {
-        /*
-         Enemy enemy = other.GetComponent<Enemy>();
+        Enemy enemy = other.GetComponent<Enemy>();
         if (enemy != null)
         {
-            enemy.takeDamage(weaponData.damage);
-            enemy.dropWeapon();
+            enemy.TakeDamage(weaponData.damage);
+            //enemy.dropWeapon();
         }
-        */
+        
     }
     
     private IEnumerator DisableCollider(float delay)
