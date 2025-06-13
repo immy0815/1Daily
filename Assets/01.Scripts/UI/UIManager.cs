@@ -1,18 +1,42 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private static UIManager instance;
+    public static UIManager Instance 
     {
-        
+        get
+        {
+            if (instance == null)
+                return null;
+            return instance;
+        }
+    }
+    
+    public Dictionary<SoundType, Action<float>> OnVolumeChangedByType = new();
+    
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+            return;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetVolume(SoundType type, float volume)
     {
-        
+        if (OnVolumeChangedByType.TryGetValue(type, out var callback))
+        {
+            callback?.Invoke(volume);
+        }
     }
 }
