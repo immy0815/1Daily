@@ -14,9 +14,17 @@ public class UIManager : MonoBehaviour
             return instance;
         }
     }
+
+    [SerializeField] private UIOption uiOption;
+    [SerializeField] private UIStartScene uiStartScene;    
     
-    public Dictionary<SoundType, Action<float>> OnVolumeChangedByType = new();
-    
+    private void Reset()
+    {
+        // 이후 Initialization할 때 해주기
+        uiOption = GetComponentInChildren<UIOption>();
+        uiStartScene = GetComponentInChildren<UIStartScene>();
+    }
+
     private void Awake()
     {
         if (instance == null)
@@ -30,13 +38,30 @@ public class UIManager : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
+
+        Initialization();
     }
 
-    public void SetVolume(SoundType type, float volume)
+    private void Initialization()
     {
-        if (OnVolumeChangedByType.TryGetValue(type, out var callback))
+        if (uiOption == null)
         {
-            callback?.Invoke(volume);
+            Debug.Log("UI Option is null");
+        }
+        else
+        {
+            uiOption.Initialization();
+        }
+        
+        if (uiOption == null)
+        {
+            Debug.Log("UI Start Scene is null");
+        }
+        else
+        {
+            uiStartScene.Initialization();
         }
     }
+
+    public void OpenOption() => uiOption.Open();
 }
