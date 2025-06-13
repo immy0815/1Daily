@@ -12,18 +12,25 @@ public class EnemyFSM : MonoBehaviour
     public EnemyIdleState idleState;
     public EnemyRunState runState;      // runState 안에서 무기 소지시 공격
     public EnemyPunchState punchState;
+    public EnemyHitState hitState;
     private void Awake()
     {
         enemy = GetComponent<Enemy>();
         idleState = new EnemyIdleState(enemy, this);
         runState = new EnemyRunState(enemy, this);
         punchState = new EnemyPunchState(enemy, this);
+        hitState = new EnemyHitState(enemy, this);
         
         ChangeState(idleState);
     }
 
     private void Update()
     {
+        if (enemy.IsHit)
+        {
+            ChangeState(hitState);
+        }
+        
         currentState.Update();
     }
 

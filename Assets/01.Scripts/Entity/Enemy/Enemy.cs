@@ -28,6 +28,7 @@ public class Enemy : MonoBehaviour
     [Header("Runtime Info")] 
     [SerializeField] private Transform target;
     public Transform Target => target;
+    public bool IsHit { get; private set; }
 
     private void Awake()
     {
@@ -40,6 +41,13 @@ public class Enemy : MonoBehaviour
         currentHP = enemyData.HP;
         
         Agent.SetDestination(Target.position);
+    }
+
+    private void Reset()
+    {
+        animator = GetComponentInChildren<Animator>();
+        fsm = GetComponent<EnemyFSM>();
+        agent = GetComponent<NavMeshAgent>();
     }
 
 
@@ -67,6 +75,17 @@ public class Enemy : MonoBehaviour
     {
         currentHP -= damage;
         currentHP = Mathf.Max(currentHP, 0);
+        if (currentHP != 0) IsHit = true;
+        else Die();
+    }
+
+    private void Die()
+    {
+        Animator.SetTrigger(AnimationData.DeathParameterHash);
+        agent.enabled = false;
+        fsm.enabled = false;
+        enabled = false;
+        Debug.Log("죽음 (부족한부분 확인 필요)");
     }
 
     public Vector3 GetTargetDirection()
