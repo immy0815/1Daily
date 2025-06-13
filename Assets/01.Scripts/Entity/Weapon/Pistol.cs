@@ -5,12 +5,17 @@ using UnityEngine;
 public class Pistol : Weapon, IShootable, IThrowable
 {
     public Transform firePoint;
-    public GameObject bulletPrefab;
+    public GameObject bullet;
+    public GameObject bulletPoolObj;
 
     public void OnShoot()
     {
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation); // 오브젝트풀링으로 총알 구현되면 변경
-        bullet.GetComponent<Rigidbody>().velocity = firePoint.forward * 20f;
+        BulletPool bulletpool = bulletPoolObj.GetComponent<BulletPool>();
+        bullet = bulletpool.GetBullet();
+        
+        Vector3 direction = transform.forward;
+        
+        bullet.GetComponent<Bullet>().Init(transform.position, direction);
     }
 
     public void OnThrow(Vector3 force)

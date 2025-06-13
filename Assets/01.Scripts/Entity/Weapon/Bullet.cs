@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
     private Rigidbody rb;
     private float bulletSpeed = 200f;
     private bool isActive = false;
+    private int bulletDamage = 10;
 
     private void Awake()
     {
@@ -31,13 +32,13 @@ public class Bullet : MonoBehaviour
     {
         if (!isActive) return;
 
-        /*
+        
          Enemy enemy = collision.gameObject.GetComponent<Enemy>();
         if (enemy != null)
         {
-            enemy.takeDamage(bulletDamage);
+            enemy.TakeDamage(bulletDamage);
         }
-        */
+        
 
         ReturnToPool();
     }
