@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
 public enum SceneName
@@ -17,6 +18,8 @@ public class ResourceManager : MonoBehaviour
 
     private SceneLoader _sceneLoader;
     private StageLoader _stageLoader;
+
+    private SceneName _currentScene;
 
     private void Awake()
     {
@@ -44,7 +47,10 @@ public class ResourceManager : MonoBehaviour
 
     private IEnumerator LoadAllResources()
     {
-        LoadAllScenes();
+        //ield return Addressables.InitializeAsync();
+
+        StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Title));
+        StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Game));
 
         foreach (string key in _stageKeys)
         {
@@ -53,39 +59,26 @@ public class ResourceManager : MonoBehaviour
 
         Debug.Log("All Resources Loaded");
 
-        Scene titleScene = _sceneLoader.GetScene(SceneName.Title);
-        if (titleScene.IsValid())
-        {
-            Debug.Log("Try Load Title Scene");
-            SceneManager.SetActiveScene(titleScene);
-            SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
-        }
-    }
-
-    public void LoadAllScenes()
-    {
-        StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Title));
-        StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Game));
-
-        Debug.Log("All Scenes Loaded");
+        SwitchScene(SceneName.Title);
     }
 
     public void SwitchScene(SceneName targetScene)
     {
-        var target = _sceneLoader.GetScene(targetScene);
-        if (target.IsValid())
+        Scene current = _sceneLoader.GetScene(_currentScene);
+        Scene target = _sceneLoader.GetScene(targetScene);
+
+        SceneManager.SetActiveScene(target);
+
+        if (current.IsValid() && current != target)
         {
-            SceneManager.SetActiveScene(target);
-            SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
-            Debug.Log($"Switched to scene: {target.name}");
+            SceneManager.UnloadSceneAsync(current);
         }
-        else
-        {
-            Debug.LogError($"Scene '{targetScene}' not loaded");
-        }
+
+        _currentScene = targetScene;
+        Debug.Log($"[ResourceManager] Switched to scene: {targetScene}");
     }
 
-    public void LoadStage(string stageKey)
+    public void InstantiateStage(string stageKey)
     {
         GameObject prefab = _stageLoader.GetStagePrefab(stageKey);
         if (prefab != null)

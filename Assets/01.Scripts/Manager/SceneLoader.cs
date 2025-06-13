@@ -45,4 +45,9 @@ public class SceneLoader
     {
         return _loadedScenes.TryGetValue(name, out var scene) ? scene : default;
     }
+
+    public Dictionary<SceneName, Scene> GetLoadedScenes()
+    {
+        return _loadedScenes;
+    }
 }
