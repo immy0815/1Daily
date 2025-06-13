@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using _01.Scripts.Manager;
+using UnityEngine;
 
 namespace _01.Scripts.Entity.Player.Scripts.States.Air
 {
@@ -12,6 +13,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
         {
             stateMachine.JumpForce = stateMachine.Player.PlayerCondition.JumpForce; 
             stateMachine.Player.PlayerGravity.Jump(stateMachine.JumpForce);
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Jump, 1f);
             
             base.Enter();
             StartAnimation(stateMachine.Player.AnimationData.JumpParameterHash);
