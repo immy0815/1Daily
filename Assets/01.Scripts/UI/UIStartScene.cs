@@ -1,4 +1,3 @@
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -67,9 +66,7 @@ public class UIStartScene : MonoBehaviour
     private void ExitPopupActive()
     {
         float endValue = canvasGroupExitPopup.alpha > 0.5f ? 0 : 1;
-        
         canvasGroupExitPopup.BlinkAnimation(endValue, false);
-        ButtonGroupActive();
     }
     
     private void ExitGame()

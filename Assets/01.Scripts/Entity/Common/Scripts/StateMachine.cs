@@ -1,5 +1,4 @@
-﻿using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 using IState = _01.Scripts.Entity.Common.Scripts.Interface.IState;
 
 namespace _01.Scripts.Entity.Common.Scripts
