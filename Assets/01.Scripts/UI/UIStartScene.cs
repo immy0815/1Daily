@@ -7,9 +7,7 @@ public class UIStartScene : MonoBehaviour
     [SerializeField] private Button btnOption;
     [SerializeField] private Button btnExit;
     
-    [SerializeField] private RectTransform rectTrBtnStart;
-    [SerializeField] private RectTransform rectTrBtnOption;
-    [SerializeField] private RectTransform rectTrBtnExit;
+    [SerializeField] private CanvasGroup canvasGroupButtons;
     
     [SerializeField] private Button btnYes;
     [SerializeField] private Button btnNo;
@@ -22,9 +20,7 @@ public class UIStartScene : MonoBehaviour
         btnOption = transform.FindChildByName<Button>("Btn_Option");
         btnExit = transform.FindChildByName<Button>("Btn_Exit");
 
-        rectTrBtnStart = btnStart.gameObject.GetComponent<RectTransform>();
-        rectTrBtnOption = btnOption.gameObject.GetComponent<RectTransform>();
-        rectTrBtnExit = btnExit.gameObject.GetComponent<RectTransform>();
+        canvasGroupButtons = transform.FindChildByName<CanvasGroup>("Group_Buttons");
         
         btnYes = transform.FindChildByName<Button>("Btn_Yes");
         btnNo = transform.FindChildByName<Button>("Btn_No");
@@ -35,6 +31,7 @@ public class UIStartScene : MonoBehaviour
     public void Initialization()
     {
         canvasGroupExitPopup.SetAlpha(0);
+        canvasGroupButtons.SetAlpha(1);
         
         // Start
         btnStart.onClick.RemoveAllListeners();
@@ -42,7 +39,11 @@ public class UIStartScene : MonoBehaviour
         
         // Option
         btnOption.onClick.RemoveAllListeners();
-        btnOption.onClick.AddListener(UIManager.Instance.OpenOption);
+        btnOption.onClick.AddListener(() =>
+        {
+            UIManager.Instance.OpenOption(ButtonGroupActive);
+            ButtonGroupActive();
+        });
         
         // Exit
         btnExit.onClick.RemoveAllListeners();
@@ -55,9 +56,11 @@ public class UIStartScene : MonoBehaviour
         btnYes.onClick.AddListener(ExitGame);
     }
 
-    void StartGame()
+    private void ButtonGroupActive()
     {
-        
+        float endValue = canvasGroupButtons.alpha > 0.5f ? 0 : 1;
+
+        canvasGroupButtons.FadeAnimation(endValue);
     }
     
     private void ExitPopupActive()
