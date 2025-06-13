@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using _01.Scripts.Manager;
+using UnityEngine;
 
 namespace _01.Scripts.Entity.Player.Scripts.States.Air
 {
@@ -16,6 +17,8 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
 
         public override void Exit()
         {
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Jump, 0.01f);
+            
             base.Exit();
             StopAnimation(stateMachine.Player.AnimationData.FallParameterHash);
         }
