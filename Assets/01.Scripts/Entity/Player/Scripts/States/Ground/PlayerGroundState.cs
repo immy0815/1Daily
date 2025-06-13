@@ -52,5 +52,11 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             base.OnJumpStarted(context);
             stateMachine.ChangeState(stateMachine.JumpState);
         }
+
+        protected override void OnAttack(InputAction.CallbackContext context)
+        {
+            base.OnAttack(context);
+            
+        }
     }
 }
