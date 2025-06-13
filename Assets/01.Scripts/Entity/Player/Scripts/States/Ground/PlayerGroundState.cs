@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using _01.Scripts.Manager;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace _01.Scripts.Entity.Player.Scripts.States.Ground
@@ -35,8 +36,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
         protected override void ReadMovementInput()
         {
             base.ReadMovementInput();
-            if (stateMachine.MovementDirection == Vector2.zero) {} // TODO: Change Time scale to 0.01 or so
-            else {} // TODO: Change Time scale to 1
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Move, stateMachine.MovementDirection == Vector2.zero ? 0.01f : 1f);
         }
 
         protected override void OnMoveCanceled(InputAction.CallbackContext context)
