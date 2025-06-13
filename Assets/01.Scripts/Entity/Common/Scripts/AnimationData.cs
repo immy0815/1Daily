@@ -24,6 +24,8 @@ namespace _01.Scripts.Entity.Common.Scripts
         
         [Header("Animation Parameter on death")]
         [SerializeField] private string deathParameterName = "Dead";
+        [SerializeField] private string hitParameterName = "Hit";
+        
         
         // Properties of parameter hash
         public int GroundParameterHash { get; private set; }
@@ -38,6 +40,8 @@ namespace _01.Scripts.Entity.Common.Scripts
         public int ComboAttackParameterHash { get; private set; }
         public int ComboAttackIndexHash { get; private set; }
         public int DeathParameterHash { get; private set; }
+        
+        public int HitParameterHash { get; private set; }
         
         public void Initialize()
         {
