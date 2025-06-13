@@ -11,7 +11,6 @@ using UnityEngine.SceneManagement;
   /// </summary>
   public static class SoundManager
   {
-    public static bool Loaded { get; private set; } = false;
     public const string Label = "Audio";
     public static readonly Dictionary<string, AudioClip> Clips = new();
 
@@ -42,23 +41,31 @@ using UnityEngine.SceneManagement;
     #region Volumes
 
     private static AudioMixer mixer;
+    /// <summary>
+    /// 현재 활성화된 AudioMixer를 가져올 수 있습니다.
+    /// Temp) 임시로 Addressable를 통해서 AudioMixer를 가져옵니다.
+    /// </summary>
     public static AudioMixer Mixer
     {
-      get => mixer;
+      get
+      {
+        if(!mixer) mixer = Resources.Load<AudioMixer>("AudioMixer");
+
+        return mixer;
+      }
       set
       {
         mixer = value;
-        if (mixer)
-        {
-          MasterVolume = PlayerPrefs.GetFloat("MasterVolume", 80);
-          BgmVolume = PlayerPrefs.GetFloat("BgmVolume", 80);
-          UIVolume = PlayerPrefs.GetFloat("UIVolume", 80);
-          SfxVolume = PlayerPrefs.GetFloat("SfxVolume", 80);
+        if (!mixer) return;
         
-          uiGroup = Mixer.FindMatchingGroups("UI")[0];
-          bgmGroup = Mixer.FindMatchingGroups("Bgm")[0];
-          sfxGroup = Mixer.FindMatchingGroups("Sfx")[0];
-        }
+        MasterVolume = PlayerPrefs.GetFloat("MasterVolume", 80);
+        BgmVolume = PlayerPrefs.GetFloat("BgmVolume", 80);
+        UIVolume = PlayerPrefs.GetFloat("UIVolume", 80);
+        SfxVolume = PlayerPrefs.GetFloat("SfxVolume", 80);
+        
+        uiGroup = Mixer.FindMatchingGroups("UI")[0];
+        bgmGroup = Mixer.FindMatchingGroups("Bgm")[0];
+        sfxGroup = Mixer.FindMatchingGroups("Sfx")[0];
       }
     }
 
@@ -128,6 +135,9 @@ using UnityEngine.SceneManagement;
       }
     }
 
+    /// <summary>
+    /// 현재 활성화된 UI AudioSource를 가져옵니다.
+    /// </summary>
     public static AudioSource UISource
     {
       get
@@ -149,6 +159,9 @@ using UnityEngine.SceneManagement;
       }
     }
     
+    /// <summary>
+    /// 현재 활성화된 Bgm AudioSource를 가져옵니다.
+    /// </summary>
     public static AudioSource BgmSource
     {
       get
@@ -175,6 +188,11 @@ using UnityEngine.SceneManagement;
 
     #region Controller
     
+    /// <summary>
+    /// 오브젝트에서 clip을 재생합니다.
+    /// </summary>
+    /// <param name="clip">재생할 AudioClip입니다.</param>
+    /// <param name="obj">AudioClip이 재생될 게임오브젝트입니다.</param>
     public static void Play(AudioClip clip, GameObject obj)
     {
       if(!Mixer) return;
@@ -187,16 +205,24 @@ using UnityEngine.SceneManagement;
       source.Play();
     }
 
-    public static void Play(string clipName, GameObject obj)
+    /// <summary>
+    /// SoundManager.Clips에서 clipId에 맞는 AudioClip를 가져와 obj에서 재생합니다.
+    /// </summary>
+    /// <param name="clipId">재생할 클립의 Clips에 등록된 Id입니다.</param>
+    /// <param name="obj">AudioClip이 재생될 게임오브젝트입니다.</param>
+    public static void Play(string clipId, GameObject obj)
     {
-      if(!Loaded) return;
-      
-      if(Clips.TryGetValue(clipName, out var clip)) Play(clip, obj);
+      if(Clips.TryGetValue(clipId, out var clip)) Play(clip, obj);
       #if UNITY_EDITOR
-      else Debug.LogWarning($"AudioClip {clipName} is not found.");
+      else Debug.LogWarning($"AudioClip {clipId} is not found.");
       #endif
     }
 
+    /// <summary>
+    /// type에 맞는 방식으로 AudioClip을 재생합니다.
+    /// </summary>
+    /// <param name="clip">재생할 AudioClip입니다.</param>
+    /// <param name="type">음원을 재생할 방식입니다.</param>
     public static void Play(AudioClip clip, AudioType type = AudioType.UI)
     {
       if(!Mixer) return;
@@ -213,16 +239,23 @@ using UnityEngine.SceneManagement;
       source.Play();
     }
     
-    public static void Play(string clipName, AudioType type = AudioType.UI)
+    /// <summary>
+    /// SoundManager.Clips에서 clipId에 맞는 AudioClip를 가져와 type의 방식으로 재생합니다.
+    /// </summary>
+    /// <param name="clipId"></param>
+    /// <param name="type"></param>
+    public static void Play(string clipId, AudioType type = AudioType.UI)
     {
-      if(!Loaded) return;
-      
-      if(Clips.TryGetValue(clipName, out var clip)) Play(clip, type);
+      if(Clips.TryGetValue(clipId, out var clip)) Play(clip, type);
       #if UNITY_EDITOR
-      else Debug.LogWarning($"AudioClip {clipName} is not found.");
+      else Debug.LogWarning($"AudioClip {clipId} is not found.");
       #endif
     }
 
+    /// <summary>
+    /// 타입에 맞는 음원의 재생을 중지시킵니다.
+    /// </summary>
+    /// <param name="type">중지할 음원의 타입입니다.</param>
     public static void Stop(AudioType type = AudioType.Bgm)
     {
       if(!Mixer) return;
