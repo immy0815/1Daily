@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponType: pistol
   damage: 0
-  prefab: {fileID: 0}
+  prefab: {fileID: 919132149155446097, guid: 63942349e8135f1428c662fffbedd172, type: 3}
