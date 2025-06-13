@@ -6,27 +6,26 @@ public class Bullet : MonoBehaviour
 {
     [SerializeField] private float bulletSpeed = 1f;
     [SerializeField] private int bulletDamage = 10;
-    private Rigidbody rb;
+    private Rigidbody bulletRigidBody;
     private bool isActive = false;
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        rb.useGravity = false;
+        bulletRigidBody = GetComponent<Rigidbody>();
+        bulletRigidBody.useGravity = false;
         GetComponent<MeshRenderer>().material.color = Color.black;
     }
 
     private void OnEnable()
     {
         isActive = true;
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        bulletRigidBody.velocity = Vector3.zero;
+        bulletRigidBody.angularVelocity = Vector3.zero;
     }
 
     private void Update()
     {
         if (!isActive) return;
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -52,6 +51,6 @@ public class Bullet : MonoBehaviour
         transform.position = position;
         transform.rotation = Quaternion.LookRotation(direction);
 
-        rb.velocity = direction.normalized * bulletSpeed;
+        bulletRigidBody.velocity = direction.normalized * bulletSpeed;
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour, IThrowable
 {
     public WeaponData weaponData;
-     public virtual void Equip() { }
+    public virtual void Equip() { }
 
     public virtual void Unequip() { }
 
