@@ -30,6 +30,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States
         public virtual void Update()
         {
             Move();
+            Rotate(new Vector3(stateMachine.Player.MainCameraTransform.forward.x, 0, stateMachine.Player.MainCameraTransform.forward.z));
         }
 
         public virtual void PhysicsUpdate()
@@ -99,21 +100,25 @@ namespace _01.Scripts.Entity.Player.Scripts.States
             
             var unitTransform = stateMachine.Player.transform;
             var targetRotation = Quaternion.LookRotation(direction);
-            unitTransform.rotation = Quaternion.Slerp(unitTransform.rotation, targetRotation, stateMachine.RotationalDamping * Time.deltaTime);
+            unitTransform.rotation = Quaternion.Slerp(unitTransform.rotation, targetRotation, stateMachine.RotationalDamping * Time.unscaledDeltaTime);
         }
 
         protected virtual void AddInputActionCallbacks()
         {
-            var unitController = stateMachine.Player.PlayerController;
-            unitController.PlayerActions.Move.canceled += OnMoveCanceled;
-            unitController.PlayerActions.Jump.started += OnJumpStarted;
+            var playerController = stateMachine.Player.PlayerController;
+            playerController.PlayerActions.Move.canceled += OnMoveCanceled;
+            playerController.PlayerActions.Jump.started += OnJumpStarted;
+            playerController.PlayerActions.SlowMotion.performed += OnSlowMotionPerformed;
+            playerController.PlayerActions.SlowMotion.canceled += OnSlowMotionCanceled;
         }
         
         protected virtual void RemoveInputActionCallbacks()
         {
-            var unitController = stateMachine.Player.PlayerController;
-            unitController.PlayerActions.Move.canceled -= OnMoveCanceled;
-            unitController.PlayerActions.Jump.started -= OnJumpStarted;
+            var playerController = stateMachine.Player.PlayerController;
+            playerController.PlayerActions.Move.canceled -= OnMoveCanceled;
+            playerController.PlayerActions.Jump.started -= OnJumpStarted;
+            playerController.PlayerActions.SlowMotion.performed -= OnSlowMotionPerformed;
+            playerController.PlayerActions.SlowMotion.canceled -= OnSlowMotionCanceled;
         }
 
         protected virtual void OnMoveCanceled(InputAction.CallbackContext context) { }
@@ -121,10 +126,16 @@ namespace _01.Scripts.Entity.Player.Scripts.States
         {
             if (playerCondition.IsDead) return;
         }
-        protected virtual void OnSlowMotion(InputAction.CallbackContext context)
+        protected virtual void OnSlowMotionPerformed(InputAction.CallbackContext context)
         {
             if (playerCondition.IsDead) return;
         }
+
+        protected virtual void OnSlowMotionCanceled(InputAction.CallbackContext context)
+        {
+            if (playerCondition.IsDead) return;
+        }
+        
         protected virtual void OnAttack(InputAction.CallbackContext context)
         {
             if (playerCondition.IsDead) return;
