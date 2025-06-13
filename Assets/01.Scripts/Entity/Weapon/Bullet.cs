@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [SerializeField] private float bulletSpeed = 1f;
+    [SerializeField] private int bulletDamage = 10;
     private Rigidbody rb;
-    private float bulletSpeed = 200f;
     private bool isActive = false;
-    private int bulletDamage = 10;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        rb.useGravity = false;
         GetComponent<MeshRenderer>().material.color = Color.black;
     }
 
@@ -31,7 +32,6 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (!isActive) return;
-
         
          Enemy enemy = collision.gameObject.GetComponent<Enemy>();
         if (enemy != null)
@@ -39,7 +39,6 @@ public class Bullet : MonoBehaviour
             enemy.TakeDamage(bulletDamage);
         }
         
-
         ReturnToPool();
     }
 

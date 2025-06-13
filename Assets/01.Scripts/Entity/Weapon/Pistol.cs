@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Pistol : Weapon, IShootable, IThrowable
 {
-    public Transform firePoint;
-    public GameObject bullet;
-    public GameObject bulletPoolObj;
+    
+    [SerializeField] private GameObject bullet;
+    [SerializeField] private GameObject bulletPoolObj;
+    [SerializeField] private GameObject firePoint;
 
     public void OnShoot()
     {
@@ -15,7 +16,7 @@ public class Pistol : Weapon, IShootable, IThrowable
         
         Vector3 direction = transform.forward;
         
-        bullet.GetComponent<Bullet>().Init(transform.position, direction);
+        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction);
     }
 
     public void OnThrow(Vector3 force)
