@@ -17,7 +17,7 @@ public class TestAgent : MonoBehaviour
 
     private void Start()
     {
-        if (destination != null)
+        if (destination)
         {
             agent.SetDestination(destination.position);
         }
