@@ -1,4 +1,5 @@
 using _01.Scripts.Entity.Player.Scripts.Interface;
+using _01.Scripts.Manager;
 using UnityEngine;
 
 namespace _01.Scripts.Entity.Player.Scripts
@@ -13,7 +14,7 @@ namespace _01.Scripts.Entity.Player.Scripts
 
         // Fields
         private float timeSinceLastCheck;
-        private Camera camera;
+        private Camera cam;
         
         // Properties
         public IInteractable Interactable { get; private set; }
@@ -21,7 +22,7 @@ namespace _01.Scripts.Entity.Player.Scripts
         // Start is called before the first frame update
         private void Start()
         {
-            camera = Camera.main;
+            cam = Camera.main;
             timeSinceLastCheck = 0;
         }
 
@@ -31,7 +32,7 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (timeSinceLastCheck < checkRate) { timeSinceLastCheck += Time.unscaledDeltaTime; return; }
 
             timeSinceLastCheck = 0;
-            var ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+            var ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
             if (Physics.Raycast(ray, out var hit, maxCheckDistance, interactableLayers))
             {
                 if (hit.collider.gameObject == interactableObject) return;
@@ -52,6 +53,8 @@ namespace _01.Scripts.Entity.Player.Scripts
             Interactable.OnInteract();
             interactableObject = null;
             Interactable = null;
+
+            
         }
     }
 }

@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class ThrownObject : MonoBehaviour
 {
-    private float damage;
+    private int damage;
     private bool hasAppliedDamage;
 
-    public void Init(float damage)
+    public void Init(int damage)
     {
         this.damage = damage;
         hasAppliedDamage = false;
@@ -17,15 +17,13 @@ public class ThrownObject : MonoBehaviour
     {
         if (hasAppliedDamage) return;
         
-        /*
         Enemy enemy = collision.gameObject.GetComponent<Enemy>();
         if (enemy != null)
         {
-            enemy.takeDamage(damage);
-            enemy.dropWeapon();
+            enemy.TakeDamage(damage);
+            //enemy.DropWeapon();
             hasAppliedDamage = true;
         }
-        */
         
         else if (collision.gameObject.CompareTag("Ground"))
         {

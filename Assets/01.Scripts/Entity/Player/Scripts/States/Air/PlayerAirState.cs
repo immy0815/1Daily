@@ -1,4 +1,6 @@
-﻿using UnityEngine.InputSystem;
+﻿using _01.Scripts.Manager;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace _01.Scripts.Entity.Player.Scripts.States.Air
 {
@@ -10,7 +12,6 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
         
         public override void Enter()
         {
-            // TODO: Change Time scale to 1
             base.Enter();
             StartAnimation(stateMachine.Player.AnimationData.AirParameterHash);
         }
@@ -21,13 +22,20 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             StopAnimation(stateMachine.Player.AnimationData.AirParameterHash);
         }
 
-        protected override void OnSlowMotion(InputAction.CallbackContext context)
+        protected override void OnSlowMotionPerformed(InputAction.CallbackContext context)
         {
-            base.OnSlowMotion(context);
-            if (context.performed)
-            {
-                //TODO: Change Time Scale to smaller value
-            }
+            Debug.Log("Changed Time scale to 0.3f");
+
+            base.OnSlowMotionPerformed(context);
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Jump, 0.3f);
+        }
+
+        protected override void OnSlowMotionCanceled(InputAction.CallbackContext context)
+        {
+            Debug.Log("Changed Time scale to 1f");
+
+            base.OnSlowMotionCanceled(context);
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Jump, 1f);
         }
     }
 }

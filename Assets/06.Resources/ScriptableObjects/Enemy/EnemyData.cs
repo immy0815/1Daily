@@ -10,5 +10,5 @@ public class EnemyData : ScriptableObject
 
     [field: SerializeField] public float PunchDuration { get; private set; }
     [field: SerializeField] public float PunchApplyTime01 { get; private set; }
-    
+    [field: SerializeField] public float StiffnessTime { get; private set; } // 경직 시간
 }

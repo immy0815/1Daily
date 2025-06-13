@@ -22,6 +22,7 @@ namespace _01.Scripts.Entity.Player.Scripts
         public float RotationalDamping { get; private set; }
         public float JumpForce { get; set; }
         public Transform MainCameraTransform { get; set; }
+        public int ComboIndex { get; set; }
 
         // Constructor
         public PlayerStateMachine(Player player)

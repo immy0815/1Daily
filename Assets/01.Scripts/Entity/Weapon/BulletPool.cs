@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BulletPool : MonoBehaviour
 {
-    public GameObject bulletPrefab;
+    [SerializeField] private GameObject bulletPrefab;
     public int poolSize = 20;
     public Queue<GameObject> pool = new Queue<GameObject>();
 
