@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public static class Extensions
@@ -18,11 +19,11 @@ public static class Extensions
     }
     
     // Extension: Canvas Group
-    public static void SetAlpha(this CanvasGroup canvasGroup, bool active)
+    public static void SetAlpha(this CanvasGroup canvasGroup, float alpha)
     {
-        if (active)
+        if (alpha > 0.1f)
         {
-            canvasGroup.alpha = 1;
+            canvasGroup.alpha = alpha;
             canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
         }
@@ -32,5 +33,28 @@ public static class Extensions
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
         }
+    }
+
+    public static void BlinkAnimation(this CanvasGroup canvasGroup, float endValue, bool enterAnim = true, float duration = 0.1f, int count = 2)
+    {
+        float startValue = canvasGroup.alpha;
+        float halfDuration = duration / 2f;
+        Sequence blinkSequence = DOTween.Sequence();
+
+        if(enterAnim)
+            blinkSequence.Append(canvasGroup.DOFade(endValue * 0.7f, 0.35f));
+        
+        for (int i = 0; i < count; i++)
+        {
+            blinkSequence.Append(canvasGroup.DOFade(endValue, halfDuration));
+            blinkSequence.Append(canvasGroup.DOFade(startValue, halfDuration));
+        }
+        
+        blinkSequence.Append(canvasGroup.DOFade(endValue, halfDuration));
+        
+        blinkSequence.OnComplete(() =>
+        {
+            canvasGroup.SetAlpha(endValue);
+        });
     }
 }
