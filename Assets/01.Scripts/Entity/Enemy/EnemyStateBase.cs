@@ -17,7 +17,7 @@ public abstract class EnemyStateBase : IState
     public abstract void Enter();
     public void HandleInput()
     {
- 
+
     }
 
     public void PhysicsUpdate()

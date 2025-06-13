@@ -13,6 +13,7 @@ public class EnemyFSM : MonoBehaviour
     public EnemyRunState runState;      // runState 안에서 무기 소지시 공격
     public EnemyPunchState punchState;
     public EnemyHitState hitState;
+
     private void Awake()
     {
         enemy = GetComponent<Enemy>();

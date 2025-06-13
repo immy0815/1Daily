@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour
     public Transform Target => target;
     public bool IsHit { get; private set; }
 
+
     private void Awake()
     {
         AnimationData = new AnimationData();
@@ -49,8 +50,7 @@ public class Enemy : MonoBehaviour
         fsm = GetComponent<EnemyFSM>();
         agent = GetComponent<NavMeshAgent>();
     }
-
-
+    
     public void SetTarget(Transform target)
     {
         this.target = target;

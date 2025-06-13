@@ -40,7 +40,6 @@ namespace _01.Scripts.Manager
         public void ChangeTimeScale(PriorityType type, float timeScale)
         {
             if (PreviousUpdateType == PriorityType.Jump && type == PriorityType.Attack) return;
-            
             if (TargetTimeScale < timeScale || PreviousUpdateType == type) TargetTimeScale = timeScale;
             Time.timeScale = TargetTimeScale;
             
