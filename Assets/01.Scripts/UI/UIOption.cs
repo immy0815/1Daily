@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,14 +16,16 @@ public class UIOption : MonoBehaviour
     public void Initialization()
     {
         canvasGroup.SetAlpha(0);
-        
         btnClose.onClick.RemoveAllListeners();
         btnClose.onClick.AddListener(Close);
     }
 
-    public void Open()
+    public void Open(Action closeCallback)
     {
         canvasGroup.BlinkAnimation(1);
+        
+        btnClose.onClick.RemoveAllListeners();
+        btnClose.onClick.AddListener(() => { closeCallback.Invoke(); Close(); });
     }
 
     private void Close()
