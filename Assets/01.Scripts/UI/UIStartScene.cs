@@ -55,7 +55,7 @@ public class UIStartScene : MonoBehaviour
         btnYes.onClick.AddListener(ExitGame);
     }
 
-    void ButtonAnimation()
+    void StartGame()
     {
         
     }
