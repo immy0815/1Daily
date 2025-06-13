@@ -5,6 +5,7 @@ using UnityEngine;
 public class Katana : Weapon, IHittable, IThrowable
 {
     [SerializeField] private Collider katanaCollider;
+    
     public void OnHit()
     {
         Debug.Log("Katana slash");
