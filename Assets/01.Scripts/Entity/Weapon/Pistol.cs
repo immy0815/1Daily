@@ -8,7 +8,7 @@ public class Pistol : Weapon, IShootable, IThrowable
     [SerializeField] private GameObject bullet;
     [SerializeField] private GameObject bulletPoolObj;
     [SerializeField] private GameObject firePoint;
-
+    
     public void OnShoot()
     {
         BulletPool bulletpool = bulletPoolObj.GetComponent<BulletPool>();

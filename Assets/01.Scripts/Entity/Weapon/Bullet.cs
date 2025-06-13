@@ -29,19 +29,18 @@ public class Bullet : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
         if (!isActive) return;
-        
-         Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+
+        Enemy enemy = other.GetComponent<Enemy>();
         if (enemy != null)
         {
             enemy.TakeDamage(bulletDamage);
         }
-        
+
         ReturnToPool();
     }
-
     private void ReturnToPool()
     {
         isActive = false;
