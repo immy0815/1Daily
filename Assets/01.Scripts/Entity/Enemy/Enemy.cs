@@ -92,4 +92,9 @@ public class Enemy : MonoBehaviour
     {
         return (target.position - transform.position).normalized;
     }
+
+    public bool CanTouchTarget()
+    {
+       return Target && DistanceToTargetSQR() < Mathf.Pow(Agent.stoppingDistance, 2);
+    }
 }

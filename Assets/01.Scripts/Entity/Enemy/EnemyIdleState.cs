@@ -21,7 +21,7 @@ public class EnemyIdleState : EnemyStateBase
     public override void Update()
     {
         enemy.Agent.SetDestination(enemy.Target.position);
-        if (enemy.Target && enemy.Agent.remainingDistance > enemy.Agent.stoppingDistance)
+        if (!enemy.CanTouchTarget())
         {
             fsm.ChangeState(fsm.runState);
         }
