@@ -1,5 +1,4 @@
 using _01.Scripts.Entity.Player.Scripts.Interface;
-using _01.Scripts.Manager;
 using UnityEngine;
 
 namespace _01.Scripts.Entity.Player.Scripts

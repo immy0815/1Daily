@@ -1,5 +1,3 @@
-using System;
-using _01.Scripts.Entity.Common;
 using _01.Scripts.Entity.Common.Scripts;
 using _01.Scripts.Util;
 using UnityEngine;

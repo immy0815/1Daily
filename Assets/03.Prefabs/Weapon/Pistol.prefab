@@ -77,7 +77,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -91,9 +91,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!65 &6979269650190680963
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -128,12 +128,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 0.5
-  <WeaponData>k__BackingField: {fileID: 0}
+  <WeaponData>k__BackingField: {fileID: 11400000, guid: 3d61f78d06630c5469f2d0df5daa134e, type: 2}
   <IsThrown>k__BackingField: 0
-  rigidBody: {fileID: 0}
-  bullet: {fileID: 5148502391975629586, guid: ae98e24746652ee41b86806f28adae9b, type: 3}
+  rigidBody: {fileID: 8293249635332495934}
+  boxCollider: {fileID: 6979269650190680963}
+  bullet: {fileID: 0}
   bulletPoolObj: {fileID: 0}
-  firePoint: {fileID: 1404909240147758454}
+  firePoint: {fileID: 0}
   throwForce: 10
 --- !u!1001 &7956753187734204440
 PrefabInstance:

@@ -368,11 +368,6 @@ Transform:
   - {fileID: 1853549667}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &404667426 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4732568229074423916, guid: 94d1fa6dc21cfc14094889871bdb5b52, type: 3}
-  m_PrefabInstance: {fileID: 1757851867999526431}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &609670770
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,16 +573,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!65 &1607702342 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 6979269650190680963, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
-  m_PrefabInstance: {fileID: 7869985461480629122}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &1607702345 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 8293249635332495934, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
-  m_PrefabInstance: {fileID: 7869985461480629122}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1853549666
 GameObject:
   m_ObjectHideFlags: 3
@@ -717,25 +702,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2163060283811807229, guid: 94d1fa6dc21cfc14094889871bdb5b52, type: 3}
-      propertyPath: <CameraPivot>k__BackingField
-      value: 
-      objectReference: {fileID: 1261093310}
-    - target: {fileID: 2163060283811807229, guid: 94d1fa6dc21cfc14094889871bdb5b52, type: 3}
-      propertyPath: <WeaponPivot>k__BackingField
-      value: 
-      objectReference: {fileID: 404667426}
     - target: {fileID: 2899072078333946734, guid: 94d1fa6dc21cfc14094889871bdb5b52, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 4045212521366188724, guid: 94d1fa6dc21cfc14094889871bdb5b52, type: 3}
-      propertyPath: <RotationalDamping>k__BackingField
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4732568229074423916, guid: 94d1fa6dc21cfc14094889871bdb5b52, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.205
       objectReference: {fileID: 0}
     - target: {fileID: 5632590248030071680, guid: 94d1fa6dc21cfc14094889871bdb5b52, type: 3}
       propertyPath: m_LocalPosition.x
@@ -833,46 +802,6 @@ PrefabInstance:
     - target: {fileID: 6184057944275672367, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
       propertyPath: m_Name
       value: Pistol
-      objectReference: {fileID: 0}
-    - target: {fileID: 6979269650190680963, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
-      propertyPath: m_ProvidesContacts
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7136393713580456878, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
-      propertyPath: bullet
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7136393713580456878, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
-      propertyPath: firePoint
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7136393713580456878, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
-      propertyPath: rigidBody
-      value: 
-      objectReference: {fileID: 1607702345}
-    - target: {fileID: 7136393713580456878, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
-      propertyPath: boxCollider
-      value: 
-      objectReference: {fileID: 1607702342}
-    - target: {fileID: 8293249635332495934, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8293249635332495934, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
-      propertyPath: m_AngularDrag
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8293249635332495934, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
-      propertyPath: m_Interpolate
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8293249635332495934, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8293249635332495934, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

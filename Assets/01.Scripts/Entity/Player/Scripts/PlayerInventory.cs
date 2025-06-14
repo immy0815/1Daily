@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using _01.Scripts.Manager;
-using _01.Scripts.Util;
 using UnityEngine;
 
 namespace _01.Scripts.Entity.Player.Scripts
