@@ -617,6 +617,7 @@ MonoBehaviour:
   btnStart: {fileID: 2294083467454416992}
   btnOption: {fileID: 6867672719722149103}
   btnExit: {fileID: 8031888427661218909}
+  canvasGroupButtons: {fileID: 7660761547378180724}
   btnYes: {fileID: 3734111419054827794}
   btnNo: {fileID: 2846473091728265678}
   canvasGroupExitPopup: {fileID: 496176360899286406}
@@ -1110,6 +1111,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1488977154784037160}
   - component: {fileID: 6225850738258187160}
+  - component: {fileID: 7660761547378180724}
   m_Layer: 5
   m_Name: Group_Buttons
   m_TagString: Untagged
@@ -1165,6 +1167,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 1
+--- !u!225 &7660761547378180724
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5821579299564803776}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6499973871301564225
 GameObject:
   m_ObjectHideFlags: 0

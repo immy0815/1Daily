@@ -789,7 +789,7 @@ MonoBehaviour:
   maxCheckDistance: 5
   interactableLayers:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 0
   interactableObject: {fileID: 0}
   timeSinceLastCheck: 0
 --- !u!114 &6416116590577898970
@@ -817,6 +817,7 @@ MonoBehaviour:
     comboAttackParameterName: ComboAttack
     comboAttackIndex: Combo
     deathParameterName: Dead
+    hitParameterName: Hit
   <Animator>k__BackingField: {fileID: 3439992321258709547}
   <CharacterController>k__BackingField: {fileID: 1689909025527273621}
   <PlayerController>k__BackingField: {fileID: 2871678874714045733}

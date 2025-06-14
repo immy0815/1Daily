@@ -21,7 +21,7 @@ public class ThrownObject : MonoBehaviour
         if (enemy != null)
         {
             enemy.TakeDamage(damage);
-            //enemy.dropWeapon();
+            //enemy.DropWeapon();
             hasAppliedDamage = true;
         }
         
