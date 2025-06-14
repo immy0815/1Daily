@@ -1,4 +1,5 @@
-﻿using _01.Scripts.Manager;
+﻿using _01.Scripts.Entity.Player.Scripts.Interface;
+using _01.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -36,7 +37,15 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
         protected override void ReadMovementInput()
         {
             base.ReadMovementInput();
-            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Move, stateMachine.MovementDirection == Vector2.zero ? 0.01f : 1f);
+            if (stateMachine.MovementDirection != Vector2.zero)
+            {
+                stateMachine.Player.PlayerInventory.ResetThrowCoroutine();
+                if(!Mathf.Approximately(Time.timeScale, 1))
+                    TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Move, 1f);
+                return;
+            }
+            if (stateMachine.Player.PlayerInventory.ThrowCoroutine == null && !Mathf.Approximately(Time.timeScale, 0.01f))
+                TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Move, 0.01f);
         }
 
         protected override void OnMoveCanceled(InputAction.CallbackContext context)
@@ -58,18 +67,45 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             base.OnAttack(context);
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
             {
-                
+                // If pistol is ready
+                // TODO: Animation 호출
+                // pistol.OnShoot();
                 return;
             }
 
             if (stateMachine.Player.PlayerInteraction.Interactable is not Enemy enemy) return;
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
-                //TODO: Animation 호출, Enemy 데미지 호출 함수
+                //TODO: Animation 호출
+                enemy.TakeDamage(katana.WeaponData.damage);
             }
             else
             {
-                //TODO: Animation 호출, Enemy 데미지 호출 함수
+                //TODO: Animation 호출
+                enemy.TakeDamage(stateMachine.Player.PlayerCondition.Damage);
+            }
+            stateMachine.Player.PlayerInteraction.ResetParameters();
+        }
+
+        protected override void OnPickOrThrow(InputAction.CallbackContext context)
+        {
+            base.OnPickOrThrow(context);
+
+            if (stateMachine.Player.PlayerInventory.CurrentWeapon)
+            {
+                stateMachine.Player.PlayerInventory.OnDropWeapon(stateMachine.Player.MainCameraTransform.forward);
+                return;
+            }
+
+            switch (stateMachine.Player.PlayerInteraction.Interactable)
+            {
+                case null: return;
+                case Weapon weapon:
+                    stateMachine.Player.PlayerInventory.OnEquipWeapon(weapon); 
+                    stateMachine.Player.PlayerInteraction.ResetParameters();
+                    break;
+                default:
+                    stateMachine.Player.PlayerInteraction.OnInteract(); break;
             }
         }
     }

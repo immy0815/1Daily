@@ -34,6 +34,7 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!PlayerGravity) PlayerGravity = gameObject.GetComponent_Helper<PlayerGravity>();
             
             AnimationData.Initialize();
+            PlayerInteraction.Init(this);
         }
 
         private void Reset()
@@ -47,6 +48,7 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!PlayerGravity) PlayerGravity = gameObject.GetComponent_Helper<PlayerGravity>();
             
             AnimationData.Initialize();
+            PlayerInteraction.Init(this);
         }
 
         // Start is called before the first frame update

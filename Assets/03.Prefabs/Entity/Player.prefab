@@ -660,6 +660,7 @@ GameObject:
   - component: {fileID: 4045212521366188724}
   - component: {fileID: 1810071388816411344}
   - component: {fileID: 2871678874714045733}
+  - component: {fileID: 2163060283811807229}
   - component: {fileID: 2914589697141439159}
   - component: {fileID: 6416116590577898970}
   m_Layer: 6
@@ -757,6 +758,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f036d6b0b60f884d83c8b37c5ad0fa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2163060283811807229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2899072078333946734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b14ec7236fd0411c97eef67261385fca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <CurrentWeapon>k__BackingField: {fileID: 0}
+  <CameraPivot>k__BackingField: {fileID: 0}
+  <WeaponPivot>k__BackingField: {fileID: 4732568229074423916}
 --- !u!114 &2914589697141439159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -775,6 +791,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   interactableObject: {fileID: 0}
+  timeSinceLastCheck: 0
 --- !u!114 &6416116590577898970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -792,6 +809,7 @@ MonoBehaviour:
     idleParameterName: Idle
     walkParameterName: Walk
     runParameterName: Run
+    punchParameterName: Punch
     airParameterName: '@Air'
     jumpParameterName: Jump
     fallParameterName: Fall
@@ -804,6 +822,7 @@ MonoBehaviour:
   <PlayerController>k__BackingField: {fileID: 2871678874714045733}
   <PlayerCondition>k__BackingField: {fileID: 4045212521366188724}
   <PlayerInteraction>k__BackingField: {fileID: 2914589697141439159}
+  <PlayerInventory>k__BackingField: {fileID: 2163060283811807229}
   <PlayerGravity>k__BackingField: {fileID: 1810071388816411344}
   <MainCameraTransform>k__BackingField: {fileID: 0}
 --- !u!1 &2911242834350918119
@@ -1438,6 +1457,37 @@ Transform:
   - {fileID: 5414323122297063640}
   m_Father: {fileID: 5400562735472045554}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5650003011905002694
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4732568229074423916}
+  m_Layer: 0
+  m_Name: WeaponPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4732568229074423916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5650003011905002694}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.2, y: -0.18000007, z: 0.45}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6312346090052736190}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5825653593139385011
 GameObject:
   m_ObjectHideFlags: 0
@@ -1880,7 +1930,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 1.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4732568229074423916}
   m_Father: {fileID: 5632590248030071680}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7797426130383432936

@@ -13,8 +13,10 @@ namespace _01.Scripts.Entity.Player.Scripts
         [SerializeField] private GameObject interactableObject;
 
         // Fields
-        private float timeSinceLastCheck;
+        [Header("Last Check Time")]
+        [SerializeField] private float timeSinceLastCheck;
         private Camera cam;
+        private Player player;
         
         // Properties
         public IInteractable Interactable { get; private set; }
@@ -48,13 +50,21 @@ namespace _01.Scripts.Entity.Player.Scripts
             }
         }
 
+        public void Init(Player player)
+        {
+            this.player = player;
+        }
+
         public void OnInteract()
         {
             Interactable.OnInteract();
+            ResetParameters();
+        }
+
+        public void ResetParameters()
+        {
             interactableObject = null;
             Interactable = null;
-
-            
         }
     }
 }

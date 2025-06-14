@@ -44,18 +44,45 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             base.OnAttack(context);
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
             {
-                pistol.OnShoot();
+                // If pistol is ready
+                // TODO: Animation 호출
+                // pistol.OnShoot();
                 return;
             }
 
-            if (stateMachine.Player.PlayerInteraction.Interactable is not IDamagable enemy) return;
+            if (stateMachine.Player.PlayerInteraction.Interactable is not Enemy enemy) return;
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
-                //TODO: Animation 호출, Enemy 데미지 호출 함수
+                //TODO: Animation 호출
+                enemy.TakeDamage(katana.WeaponData.damage);
             }
             else
             {
-                //TODO: Animation 호출, Enemy 데미지 호출 함수
+                //TODO: Animation 호출
+                enemy.TakeDamage(stateMachine.Player.PlayerCondition.Damage);
+            }
+            stateMachine.Player.PlayerInteraction.ResetParameters();
+        }
+
+        protected override void OnPickOrThrow(InputAction.CallbackContext context)
+        {
+            base.OnPickOrThrow(context);
+
+            if (stateMachine.Player.PlayerInventory.CurrentWeapon)
+            {
+                stateMachine.Player.PlayerInventory.OnDropWeapon(stateMachine.Player.MainCameraTransform.forward);
+                return;
+            }
+
+            switch (stateMachine.Player.PlayerInteraction.Interactable)
+            {
+                case null: return;
+                case Weapon weapon:
+                    stateMachine.Player.PlayerInventory.OnEquipWeapon(weapon); 
+                    stateMachine.Player.PlayerInteraction.ResetParameters();
+                    break;
+                default:
+                    stateMachine.Player.PlayerInteraction.OnInteract(); break;
             }
         }
     }
