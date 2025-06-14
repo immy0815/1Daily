@@ -14,7 +14,7 @@ namespace _01.Scripts.Entity.Player.Scripts
         }
 
         // Methods
-        public void EquipWeapon(Weapon weapon) { CurrentWeapon = weapon; }
-        // public void DropWeapon() { if (CurrentWeapon) CurrentWeapon.OnThrow(); }
+        public void OnEquipWeapon(Weapon weapon) { CurrentWeapon = weapon; }
+        // public void OnDropWeapon() { if (CurrentWeapon) CurrentWeapon.OnThrow(); }
     }
 }
