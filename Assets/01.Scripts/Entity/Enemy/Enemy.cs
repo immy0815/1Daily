@@ -40,8 +40,6 @@ public class Enemy : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
 
         currentHP = enemyData.HP;
-        
-        Agent.SetDestination(Target.position);
     }
 
     private void Reset()

@@ -20,6 +20,8 @@ public class EnemyIdleState : EnemyStateBase
 
     public override void Update()
     {
+        if (!enemy.Target) return;
+        
         enemy.Agent.SetDestination(enemy.Target.position);
         if (!enemy.CanTouchTarget())
         {

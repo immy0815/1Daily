@@ -47,6 +47,7 @@ public class EnemyPunchState : EnemyStateBase
 
     private void UpdateRotation()
     {
+        if (!enemy.Target) return;
         Quaternion targetLookRotation = Quaternion.LookRotation(enemy.GetTargetDirection());
         enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, targetLookRotation, rotationDamp * Time.deltaTime);
     }
