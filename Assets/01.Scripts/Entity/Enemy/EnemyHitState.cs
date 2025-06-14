@@ -11,6 +11,7 @@ public class EnemyHitState : EnemyStateBase
     public override void Enter()
     {
         enemy.Animator.SetTrigger("Hit");
+        enemy.IsHit = false;
     }
 
     public override void Exit()

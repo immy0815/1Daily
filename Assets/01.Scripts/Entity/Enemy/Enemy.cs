@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
      
     [SerializeField] private NavMeshAgent agent;
     public NavMeshAgent Agent => agent;
+    private CharacterController characterController;
 
     [Header("Stats")] 
     [SerializeField] private EnemyData enemyData;
@@ -28,7 +29,8 @@ public class Enemy : MonoBehaviour
     [Header("Runtime Info")] 
     [SerializeField] private Transform target;
     public Transform Target => target;
-    public bool IsHit { get; private set; }
+    public bool IsHit { get; set; }
+    public bool IsDead { get; private set; }
 
 
     private void Awake()
@@ -38,7 +40,9 @@ public class Enemy : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         fsm = GetComponent<EnemyFSM>();
         agent = GetComponent<NavMeshAgent>();
+        characterController = GetComponent<CharacterController>();
 
+        IsDead = false;
         currentHP = enemyData.HP;
     }
 
@@ -71,6 +75,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (IsDead) return;
         currentHP -= damage;
         currentHP = Mathf.Max(currentHP, 0);
         if (currentHP != 0) IsHit = true;
@@ -79,11 +84,12 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        IsDead = true;
         Animator.SetTrigger(AnimationData.DeathParameterHash);
         agent.enabled = false;
         fsm.enabled = false;
+        characterController.enabled = false;
         enabled = false;
-        Debug.Log("죽음 (부족한부분 확인 필요)");
     }
 
     public Vector3 GetTargetDirection()

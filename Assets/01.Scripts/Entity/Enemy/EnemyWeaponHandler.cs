@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class EnemyWeaponHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Weapon weapon;
+    public Weapon Weapon => weapon;
 
-    // Update is called once per frame
-    void Update()
+    public void Attack()
     {
-        
+        switch (weapon)
+        {
+            case IShootable shootable:
+                shootable.OnShoot();
+                break;
+            case IHittable hittable:
+                hittable.OnHit();
+                break;
+        }
     }
 }

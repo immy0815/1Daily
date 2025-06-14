@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] private int bulletDamage = 10;
     private Rigidbody rb;
     private bool isActive = false;
+    [SerializeField]LayerMask terrainLayer;
 
     private void Awake()
     {
@@ -33,13 +34,18 @@ public class Bullet : MonoBehaviour
     {
         if (!isActive) return;
 
+        if ((terrainLayer & 1 << other.gameObject.layer) == terrainLayer)
+        {
+            ReturnToPool();
+        }
         Enemy enemy = other.GetComponent<Enemy>();
         if (enemy != null)
         {
             enemy.TakeDamage(bulletDamage);
+            ReturnToPool();
         }
 
-        ReturnToPool();
+
     }
     private void ReturnToPool()
     {
