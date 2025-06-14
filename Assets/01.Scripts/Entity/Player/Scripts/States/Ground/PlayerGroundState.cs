@@ -56,7 +56,21 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
         protected override void OnAttack(InputAction.CallbackContext context)
         {
             base.OnAttack(context);
-            
+            if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
+            {
+                
+                return;
+            }
+
+            if (stateMachine.Player.PlayerInteraction.Interactable is not Enemy enemy) return;
+            if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
+            {
+                //TODO: Animation 호출, Enemy 데미지 호출 함수
+            }
+            else
+            {
+                //TODO: Animation 호출, Enemy 데미지 호출 함수
+            }
         }
     }
 }

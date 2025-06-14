@@ -1,4 +1,5 @@
-﻿using _01.Scripts.Manager;
+﻿using _01.Scripts.Entity.Player.Scripts.Interface;
+using _01.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -36,6 +37,26 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
 
             base.OnSlowMotionCanceled(context);
             TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Jump, 1f);
+        }
+
+        protected override void OnAttack(InputAction.CallbackContext context)
+        {
+            base.OnAttack(context);
+            if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
+            {
+                pistol.OnShoot();
+                return;
+            }
+
+            if (stateMachine.Player.PlayerInteraction.Interactable is not IDamagable enemy) return;
+            if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
+            {
+                //TODO: Animation 호출, Enemy 데미지 호출 함수
+            }
+            else
+            {
+                //TODO: Animation 호출, Enemy 데미지 호출 함수
+            }
         }
     }
 }

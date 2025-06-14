@@ -8,8 +8,8 @@ namespace _01.Scripts.Entity.Common.Scripts
     public class EntityCondition : MonoBehaviour, IDamagable
     {
         [field: Header("Basic Entity Settings")]
-        [field: SerializeField] public int Health { get; private set; }
-        [field: SerializeField] public int Damage { get; private set; }
+        [field: SerializeField] public int Health { get; private set; } = 1;
+        [field: SerializeField] public int Damage { get; private set; } = 1;
         [field: SerializeField] public bool IsDead { get; private set; }
 
         [field: Header("Entity Physics Settings")]
