@@ -22,12 +22,12 @@ public class EnemyIdleState : EnemyStateBase
     {
         if (!enemy.Target) return;
         
-        enemy.Agent.SetDestination(enemy.Target.position);
+        enemy.Agent.SetDestination(enemy.Target.transform.position);
         if (!enemy.CanTouchTarget())
         {
             fsm.ChangeState(fsm.runState);
         }
-        else if (true)  // 무기 검사 추가 필요. 거리는 되는 상황
+        else if (!enemy.HasWeapon())  // 무기 검사 추가 필요. 거리는 되는 상황
         {
             fsm.ChangeState(fsm.punchState);
         }

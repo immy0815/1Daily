@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _01.Scripts.Entity.Common.Scripts;
+using _01.Scripts.Entity.Player.Scripts;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,10 +16,13 @@ public class Enemy : MonoBehaviour
     
     [SerializeField] private EnemyFSM fsm;
     public EnemyFSM FSM => fsm;
-    
      
     [SerializeField] private NavMeshAgent agent;
     public NavMeshAgent Agent => agent;
+
+    [SerializeField] private EnemyWeaponHandler weaponHandler;
+    public EnemyWeaponHandler WeaponHandler => weaponHandler;
+    
     private CharacterController characterController;
 
     [Header("Stats")] 
@@ -29,6 +33,9 @@ public class Enemy : MonoBehaviour
     [Header("Runtime Info")] 
     [SerializeField] private Transform target;
     public Transform Target => target;
+    [SerializeField] private Player targetPlayer;
+    public Player TargetPlayer => targetPlayer;
+    
     public bool IsHit { get; set; }
     public bool IsDead { get; private set; }
 
@@ -41,6 +48,7 @@ public class Enemy : MonoBehaviour
         fsm = GetComponent<EnemyFSM>();
         agent = GetComponent<NavMeshAgent>();
         characterController = GetComponent<CharacterController>();
+        weaponHandler = GetComponent<EnemyWeaponHandler>();
 
         IsDead = false;
         currentHP = enemyData.HP;
@@ -51,11 +59,22 @@ public class Enemy : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         fsm = GetComponent<EnemyFSM>();
         agent = GetComponent<NavMeshAgent>();
+        characterController = GetComponent<CharacterController>();
+        weaponHandler = GetComponent<EnemyWeaponHandler>();
     }
     
     public void SetTarget(Transform target)
     {
         this.target = target;
+
+        if (!target)
+        {
+            targetPlayer = null;
+        }
+        else if (!targetPlayer || targetPlayer.transform != target)
+        {
+            targetPlayer = target.GetComponent<Player>();
+        }
     }
 
     public float DistanceToTargetSQR()
@@ -63,14 +82,14 @@ public class Enemy : MonoBehaviour
         return (target.position - transform.position).sqrMagnitude;
     }
 
-    public float GetCurrentRange()
+    public float GetPunchRange()
     {
         return 3;
     }
 
-    public bool HasNoWeapon()
+    public bool HasWeapon()
     {
-        return true;
+        return weaponHandler.Weapon;
     }
 
     public void TakeDamage(int damage)

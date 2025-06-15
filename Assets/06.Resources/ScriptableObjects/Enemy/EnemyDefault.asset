@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: EnemyDefault
   m_EditorClassIdentifier: 
   <HP>k__BackingField: 3
-  <BaseRange>k__BackingField: 2
+  <BaseRange>k__BackingField: 2.4
   <PunchDuration>k__BackingField: 0.95
   <PunchApplyTime01>k__BackingField: 0.3
+  <StiffnessTime>k__BackingField: 0.5

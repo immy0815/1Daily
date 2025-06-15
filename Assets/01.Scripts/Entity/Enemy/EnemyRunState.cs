@@ -28,7 +28,7 @@ public class EnemyRunState : EnemyStateBase
         {
             fsm.ChangeState(fsm.idleState);
         }
-        if(enemy.Target) enemy.Agent.SetDestination(enemy.Target.position); 
+        if(enemy.Target) enemy.Agent.SetDestination(enemy.Target.transform.position); 
         
     }
 

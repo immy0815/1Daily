@@ -31,6 +31,19 @@ public class EnemyFSM : MonoBehaviour
         {
             ChangeState(hitState);
         }
+
+        if (currentState == idleState || currentState == runState)
+        {
+            if (enemy.HasWeapon() && enemy.Target)
+            {
+                enemy.Animator.SetBool(enemy.AnimationData.ShotParameterHash, true);
+                enemy.WeaponHandler.Attack();
+            }
+            else
+            {
+                enemy.Animator.SetBool(enemy.AnimationData.ShotParameterHash, false);
+            }
+        }
         
         currentState.Update();
     }

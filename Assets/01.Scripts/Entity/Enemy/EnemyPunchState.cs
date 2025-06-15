@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using _01.Scripts.Entity.Player.Scripts;
 using UnityEngine;
 
 public class EnemyPunchState : EnemyStateBase
@@ -39,7 +40,10 @@ public class EnemyPunchState : EnemyStateBase
         }
         else if (prevElapsedTime01 < punchApplyTime && elapsedTime01 > punchApplyTime)
         {
-            // if (TargetIsInRange()) ;  플레이어 타격 적용 
+             // 플레이어에게 데미지 적용
+             // 플레이어 레이캐스트 탐지 시 실시간 GetComponent를 안 하기 위해 여기서 컴포넌트를 불러옴
+             if (TargetIsInRange() && enemy.TargetPlayer)
+                 enemy.TargetPlayer.PlayerCondition.OnTakeDamage(1);
         }
 
         UpdateRotation();
@@ -60,6 +64,6 @@ public class EnemyPunchState : EnemyStateBase
     bool TargetIsInRange()
     {
         float distance = (enemy.Target.transform.position - enemy.transform.position).sqrMagnitude;
-        return distance < enemy.GetCurrentRange();
+        return distance < enemy.EnemyData.BaseRange;
     }
 }
