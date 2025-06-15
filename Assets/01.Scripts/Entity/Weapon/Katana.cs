@@ -35,13 +35,14 @@ public class Katana : Weapon, IHittable
         StartCoroutine(DisableCollider(0.3f));
     }
 
-    public override void OnThrow(Vector3 direction)
+    public override void OnThrow(Vector3 direction, bool isThrownByPlayer)
     {
         transform.SetParent(null);
         rigidBody.isKinematic = false;
         rigidBody.useGravity = true;
         boxCollider.isTrigger = false;
-        IsThrown = true;
+        IsThrownByPlayer = isThrownByPlayer;
+        IsThrownByEnemy = !isThrownByPlayer;
         
         rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
         // gameObject.AddComponent<ThrownObject>().Init(WeaponData.damage);
@@ -49,7 +50,7 @@ public class Katana : Weapon, IHittable
 
     public override void OnInteract(Transform pivot)
     {
-        if (IsThrown) return;
+        if (IsThrownByEnemy) return;
         rigidBody.isKinematic = true;
         rigidBody.useGravity = false;
         boxCollider.isTrigger = true;

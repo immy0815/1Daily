@@ -34,16 +34,17 @@ namespace _01.Scripts.Entity.Player.Scripts
         // Methods
         public void OnEquipWeapon(Weapon weapon)
         {
+            if (weapon.IsThrownByPlayer) return;
             CurrentWeapon = weapon;
             weapon.OnInteract(WeaponPivot);
         }
-        public void OnDropWeapon(Vector3 direction) 
+        
+        public void OnDropWeapon(Vector3 direction)
         {
-            if (CurrentWeapon)
-            {
-                ThrowCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
-                CurrentWeapon.OnThrow(direction);
-            }
+            if (!CurrentWeapon) return;
+            
+            ThrowCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
+            CurrentWeapon.OnThrow(direction, true);
             CurrentWeapon = null;
         }
 

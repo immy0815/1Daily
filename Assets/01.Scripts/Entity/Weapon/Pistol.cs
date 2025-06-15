@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using _01.Scripts.Entity.Player.Scripts;
 using _01.Scripts.Util;
 using UnityEngine;
 
@@ -15,12 +11,25 @@ public class Pistol : Weapon, IShootable
     [SerializeField] private GameObject bullet;
     [SerializeField] private GameObject bulletPoolObj;
     [SerializeField] private GameObject firePoint;
+    [SerializeField] private int bulletCount = 6;
+    [SerializeField] private float recoilTime = 1f;
     [SerializeField] private float throwForce = 10;
+    
+    [field: Header("Pistol Condition")]
+    [field: SerializeField] public float TimeSinceLastShoot { get; private set; }
+    [field: SerializeField] public bool IsReady { get; private set; } = true;
     
     private void Awake()
     {
         if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
+    }
+
+    private void Update()
+    {
+        if (IsReady) return;
+        if (TimeSinceLastShoot < recoilTime) TimeSinceLastShoot += Time.deltaTime;
+        else { IsReady = true; TimeSinceLastShoot = 0; }
     }
 
     private void Reset()
@@ -29,23 +38,35 @@ public class Pistol : Weapon, IShootable
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
     }
 
-    public void OnShoot()
+    public bool OnShoot()
     {
-        BulletPool bulletpool = bulletPoolObj.GetComponent<BulletPool>();
-        bullet = bulletpool.GetBullet();
+        if (!IsReady || bulletCount < 1) return false;
+        AttackCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
+        var bulletPool = bulletPoolObj?.GetComponent<BulletPool>();
+        if (!bulletPool) return false;
+        bullet = bulletPool.GetBullet();
         
-        Vector3 direction = transform.forward;
+        if (!bullet) return false;
+        bulletCount--;
+        IsReady = false;
         
+        var direction = transform.forward;
         bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction);
+        return true;
     }
 
-    public override void OnThrow(Vector3 direction)
+    public override void OnThrow(Vector3 direction, bool isThrownByPlayer)
     {
+        if (AttackCoroutine != null) { StopCoroutine(AttackCoroutine); AttackCoroutine = null; } 
         transform.SetParent(null);
         rigidBody.isKinematic = false;
         rigidBody.useGravity = true;
         boxCollider.isTrigger = false;
-        IsThrown = true;
+        bulletCount = 6;
+        IsReady = true;
+        TimeSinceLastShoot = 0;
+        IsThrownByPlayer = isThrownByPlayer;
+        IsThrownByEnemy = !isThrownByPlayer;
         
         rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
         // gameObject.AddComponent<ThrownObject>().Init(WeaponData.damage);
@@ -53,7 +74,7 @@ public class Pistol : Weapon, IShootable
 
     public override void OnInteract(Transform pivot)
     {
-        if (IsThrown) return;
+        if (IsThrownByPlayer) return;
         rigidBody.isKinematic = true;
         rigidBody.useGravity = false;
         boxCollider.isTrigger = true;

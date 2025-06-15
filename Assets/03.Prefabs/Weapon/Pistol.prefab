@@ -129,13 +129,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0.5
   <WeaponData>k__BackingField: {fileID: 11400000, guid: 3d61f78d06630c5469f2d0df5daa134e, type: 2}
-  <IsThrown>k__BackingField: 0
+  <IsThrownByEnemy>k__BackingField: 0
+  <IsThrownByPlayer>k__BackingField: 0
   rigidBody: {fileID: 8293249635332495934}
   boxCollider: {fileID: 6979269650190680963}
-  bullet: {fileID: 0}
+  bullet: {fileID: 5148502391975629586, guid: ae98e24746652ee41b86806f28adae9b, type: 3}
   bulletPoolObj: {fileID: 0}
-  firePoint: {fileID: 0}
+  firePoint: {fileID: 1404909240147758454}
+  bulletCount: 6
+  recoilTime: 2
   throwForce: 10
+  <TimeSinceLastShoot>k__BackingField: 0
+  <IsReady>k__BackingField: 1
 --- !u!1001 &7956753187734204440
 PrefabInstance:
   m_ObjectHideFlags: 0

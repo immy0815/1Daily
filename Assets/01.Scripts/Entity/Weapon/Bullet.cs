@@ -37,9 +37,8 @@ public class Bullet : MonoBehaviour
         if (enemy != null)
         {
             enemy.TakeDamage(bulletDamage);
+            ReturnToPool();
         }
-
-        ReturnToPool();
     }
     private void ReturnToPool()
     {

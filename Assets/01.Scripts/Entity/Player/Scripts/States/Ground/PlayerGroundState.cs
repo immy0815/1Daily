@@ -38,13 +38,18 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             base.ReadMovementInput();
             if (stateMachine.MovementDirection != Vector2.zero)
             {
+                stateMachine.Player.PlayerInventory.CurrentWeapon?.ResetAttackCoroutine();
                 stateMachine.Player.PlayerInventory.ResetThrowCoroutine();
                 if(!Mathf.Approximately(Time.timeScale, 1))
                     TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Move, 1f);
                 return;
             }
-            if (stateMachine.Player.PlayerInventory.ThrowCoroutine == null && !Mathf.Approximately(Time.timeScale, 0.01f))
-                TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Move, 0.01f);
+
+            if (!Mathf.Approximately(Time.timeScale, 0.01f)) return;
+            if (stateMachine.Player.PlayerInventory.CurrentWeapon && stateMachine.Player.PlayerInventory.CurrentWeapon.AttackCoroutine != null) return;
+            if (stateMachine.Player.PlayerInventory.ThrowCoroutine != null) return;
+                
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Move, 0.01f);
         }
 
         protected override void OnMoveCanceled(InputAction.CallbackContext context)
@@ -66,9 +71,10 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             base.OnAttack(context);
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
             {
-                // If pistol is ready
-                // TODO: Animation 호출
-                // pistol.OnShoot();
+                if (pistol.OnShoot())
+                {
+                    // TODO: Animation 호출
+                }
                 return;
             }
 
@@ -76,6 +82,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
                 //TODO: Animation 호출
+				katana.OnHit();
                 enemy.TakeDamage(katana.WeaponData.damage);
             }
             else
