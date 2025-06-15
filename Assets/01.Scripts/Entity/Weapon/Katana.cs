@@ -29,6 +29,8 @@ public class Katana : Weapon, IHittable
     public void OnHit()
     {
         Debug.Log("Katana slash");
+        if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
+        AttackCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
         boxCollider.enabled = true;
 
         // 공격 애니메이션 이후 콜라이더 끄기

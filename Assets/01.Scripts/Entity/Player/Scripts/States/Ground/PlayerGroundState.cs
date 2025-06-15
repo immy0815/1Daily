@@ -45,7 +45,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
                 return;
             }
 
-            if (!Mathf.Approximately(Time.timeScale, 0.01f)) return;
+            if (Mathf.Approximately(Time.timeScale, 0.01f)) return;
             if (stateMachine.Player.PlayerInventory.CurrentWeapon && stateMachine.Player.PlayerInventory.CurrentWeapon.AttackCoroutine != null) return;
             if (stateMachine.Player.PlayerInventory.ThrowCoroutine != null) return;
                 

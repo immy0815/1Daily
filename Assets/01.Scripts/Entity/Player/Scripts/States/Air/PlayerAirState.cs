@@ -43,9 +43,10 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             base.OnAttack(context);
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
             {
-                // If pistol is ready
-                // TODO: Animation 호출
-                // pistol.OnShoot();
+                if (pistol.OnShoot())
+                {
+                    // TODO: Animation 호출
+                }
                 return;
             }
 
@@ -53,6 +54,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
                 //TODO: Animation 호출
+                katana.OnHit();
                 enemy.TakeDamage(katana.WeaponData.damage);
             }
             else
