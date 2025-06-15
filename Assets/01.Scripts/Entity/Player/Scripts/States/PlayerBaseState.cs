@@ -30,7 +30,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States
         public virtual void Update()
         {
             Move();
-            Rotate(new Vector3(stateMachine.Player.MainCameraTransform.forward.x, 0, stateMachine.Player.MainCameraTransform.forward.z));
+            Rotate(stateMachine.Player.MainCameraTransform.forward);
         }
 
         public virtual void PhysicsUpdate()
@@ -64,7 +64,6 @@ namespace _01.Scripts.Entity.Player.Scripts.States
         {
             var movementDirection = GetMovementDirection();
             Move(movementDirection);
-            Rotate(movementDirection);
         }
 
         private Vector3 GetMovementDirection()
@@ -99,26 +98,36 @@ namespace _01.Scripts.Entity.Player.Scripts.States
             if (direction == Vector3.zero) return;
             
             var unitTransform = stateMachine.Player.transform;
-            var targetRotation = Quaternion.LookRotation(direction);
+            var cameraPivotTransform = stateMachine.Player.PlayerInventory.CameraPivot; 
+            
+            var unitDirection = new Vector3(direction.x, 0, direction.z);
+            var targetRotation = Quaternion.LookRotation(unitDirection);
             unitTransform.rotation = Quaternion.Slerp(unitTransform.rotation, targetRotation, stateMachine.RotationalDamping * Time.unscaledDeltaTime);
+            
+            var cameraTargetRotation = Quaternion.LookRotation(direction);
+            cameraPivotTransform.rotation = cameraTargetRotation;
         }
 
-        protected virtual void AddInputActionCallbacks()
+        private void AddInputActionCallbacks()
         {
             var playerController = stateMachine.Player.PlayerController;
             playerController.PlayerActions.Move.canceled += OnMoveCanceled;
             playerController.PlayerActions.Jump.started += OnJumpStarted;
             playerController.PlayerActions.SlowMotion.performed += OnSlowMotionPerformed;
             playerController.PlayerActions.SlowMotion.canceled += OnSlowMotionCanceled;
+            playerController.PlayerActions.Attack.started += OnAttack;
+            playerController.PlayerActions.PickOrThrow.started += OnPickOrThrow;
         }
         
-        protected virtual void RemoveInputActionCallbacks()
+        private void RemoveInputActionCallbacks()
         {
             var playerController = stateMachine.Player.PlayerController;
             playerController.PlayerActions.Move.canceled -= OnMoveCanceled;
             playerController.PlayerActions.Jump.started -= OnJumpStarted;
             playerController.PlayerActions.SlowMotion.performed -= OnSlowMotionPerformed;
             playerController.PlayerActions.SlowMotion.canceled -= OnSlowMotionCanceled;
+            playerController.PlayerActions.Attack.started -= OnAttack;
+            playerController.PlayerActions.PickOrThrow.started -= OnPickOrThrow;
         }
 
         protected virtual void OnMoveCanceled(InputAction.CallbackContext context) { }

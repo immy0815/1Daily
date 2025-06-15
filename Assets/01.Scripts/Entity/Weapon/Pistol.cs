@@ -1,54 +1,85 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using _01.Scripts.Util;
 using UnityEngine;
 
-public class Pistol : Weapon, IShootable, IThrowable
+public class Pistol : Weapon, IShootable
 {
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private GameObject firePoint;
-    [SerializeField] private int bulletCount;
+    [Header("Components")] 
+    [SerializeField] private Rigidbody rigidBody;
+    [SerializeField] private BoxCollider boxCollider;
     
-    private Rigidbody PistolRigidbody;
-    private Collider PistolCollider;
-
-    private void Awake()
+    [Header("Pistol Settings")]
+    [SerializeField] private GameObject bullet;
+    [SerializeField] private GameObject bulletPoolObj;
+    [SerializeField] private GameObject firePoint;
+    [SerializeField] private int bulletCount = 6;
+    [SerializeField] private float recoilTime = 1f;
+    [SerializeField] private float throwForce = 10;
+    
+    [field: Header("Pistol Condition")]
+    [field: SerializeField] public float TimeSinceLastShoot { get; private set; }
+    [field: SerializeField] public bool IsReady { get; private set; } = true;
+    
+    protected override void Awake()
     {
-        PistolRigidbody = GetComponent<Rigidbody>();
-        PistolCollider = GetComponent<Collider>();
+        base.Awake();
+        if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
+        if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
     }
 
-    public void OnShoot()
+    private void Update()
     {
-        Vector3 direction = transform.forward;
-        BulletPool.Instance.GetBullet().GetComponent<Bullet>().Init(firePoint.transform.position, direction);
+        if (IsReady) return;
+        if (TimeSinceLastShoot < recoilTime) TimeSinceLastShoot += Time.deltaTime;
+        else { IsReady = true; TimeSinceLastShoot = 0; }
     }
 
-    public void OnThrow(Vector3 force)
+    protected override void Reset()
     {
-        transform.parent = null;
-        PistolRigidbody.isKinematic = false;
-        PistolRigidbody.AddForce(force, ForceMode.Impulse);
-        gameObject.AddComponent<ThrownObject>().Init(weaponData.damage);
+        base.Reset();
+        if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
+        if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
     }
 
-    public virtual void Equip(Transform transform)
+    public bool OnShoot()
     {
-        PistolRigidbody.isKinematic = true;
-        PistolRigidbody.velocity = Vector3.zero;
-        PistolRigidbody.angularVelocity = Vector3.zero;
+        if (!IsReady || bulletCount < 1) return false;
+        AttackCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
+        var bulletPool = bulletPoolObj?.GetComponent<BulletPool>();
+        if (!bulletPool) return false;
+        bullet = bulletPool.GetBullet();
         
-        if (PistolCollider != null) PistolCollider.enabled = false;
-
-        transform.SetParent(transform);
-        transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.identity;
+        if (!bullet) return false;
+        bulletCount--;
+        IsReady = false;
+        
+        var direction = transform.forward;
+        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction);
+        return true;
     }
 
-    public virtual void Unequip()
+    public override void OnThrow(Vector3 direction, bool isThrownByPlayer)
     {
+        if (AttackCoroutine != null) { StopCoroutine(AttackCoroutine); AttackCoroutine = null; } 
         transform.SetParent(null);
-        if (PistolCollider != null) PistolCollider.enabled = true;
-        PistolRigidbody.isKinematic = false;
+        rigidBody.isKinematic = false;
+        rigidBody.useGravity = true;
+        boxCollider.isTrigger = false;
+        bulletCount = 6;
+        IsReady = true;
+        TimeSinceLastShoot = 0;
+        IsThrownByPlayer = isThrownByPlayer;
+        IsThrownByEnemy = !isThrownByPlayer;
+        
+        rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
+        thrownObject.enabled = true;
+    }
+
+    public override void OnInteract(Transform pivot)
+    {
+        if (IsThrownByPlayer) return;
+        rigidBody.isKinematic = true;
+        rigidBody.useGravity = false;
+        boxCollider.isTrigger = true;
+        StartCoroutine(MoveToPivot(pivot));
     }
 }

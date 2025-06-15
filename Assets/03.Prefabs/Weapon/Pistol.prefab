@@ -40,8 +40,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5815383501102415361}
+  - component: {fileID: 8293249635332495934}
+  - component: {fileID: 6979269650190680963}
   - component: {fileID: 7136393713580456878}
-  m_Layer: 0
+  - component: {fileID: 2969448868185744027}
+  m_Layer: 8
   m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,13 +61,61 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1.509}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7630973137897117683}
   - {fileID: 1724408064235650787}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &8293249635332495934
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6184057944275672367}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 1
+--- !u!65 &6979269650190680963
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6184057944275672367}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.45727685, y: 1.1871719, z: 2.024664}
+  m_Center: {x: 0, y: 0.17, z: 0.5359287}
 --- !u!114 &7136393713580456878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,10 +128,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15e762f5bc013e4b95683206aba9ff1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponData: {fileID: 11400000, guid: 3d61f78d06630c5469f2d0df5daa134e, type: 2}
+  duration: 0.5
+  thrownObject: {fileID: 2969448868185744027}
+  <WeaponData>k__BackingField: {fileID: 11400000, guid: 3d61f78d06630c5469f2d0df5daa134e, type: 2}
+  <IsThrownByEnemy>k__BackingField: 0
+  <IsThrownByPlayer>k__BackingField: 0
+  rigidBody: {fileID: 8293249635332495934}
+  boxCollider: {fileID: 6979269650190680963}
   bullet: {fileID: 5148502391975629586, guid: ae98e24746652ee41b86806f28adae9b, type: 3}
   bulletPoolObj: {fileID: 0}
   firePoint: {fileID: 1404909240147758454}
+  bulletCount: 6
+  recoilTime: 1
+  throwForce: 10
+  <TimeSinceLastShoot>k__BackingField: 0
+  <IsReady>k__BackingField: 1
+--- !u!114 &2969448868185744027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6184057944275672367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fea4928ef55673e4ca964cfa81b45b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hittableLayer:
+    serializedVersion: 2
+    m_Bits: 1664
 --- !u!1001 &7956753187734204440
 PrefabInstance:
   m_ObjectHideFlags: 0
