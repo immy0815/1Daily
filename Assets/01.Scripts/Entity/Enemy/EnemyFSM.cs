@@ -31,10 +31,19 @@ public class EnemyFSM : MonoBehaviour
         {
             ChangeState(hitState);
         }
+        HandleLightWeapon();
+        
+        currentState.Update();
+    }
 
-        if (currentState == idleState || currentState == runState)
+    // 움직이면서 공격 가능한 무기
+    private void HandleLightWeapon()
+    {
+        if (currentState != idleState && currentState != runState) return;
+        
+        if (enemy.WeaponHandler.Weapon is IShootable)
         {
-            if (enemy.HasWeapon() && enemy.Target)
+            if (enemy.Target)
             {
                 enemy.Animator.SetBool(enemy.AnimationData.ShotParameterHash, true);
                 enemy.WeaponHandler.Attack();
@@ -44,8 +53,6 @@ public class EnemyFSM : MonoBehaviour
                 enemy.Animator.SetBool(enemy.AnimationData.ShotParameterHash, false);
             }
         }
-        
-        currentState.Update();
     }
 
     public void ChangeState(EnemyStateBase newState)
