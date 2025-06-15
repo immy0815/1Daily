@@ -99,6 +99,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
 
             if (stateMachine.Player.PlayerInventory.CurrentWeapon)
             {
+                // TODO: Animation 호출?
                 stateMachine.Player.PlayerInventory.OnDropWeapon(stateMachine.Player.MainCameraTransform.forward);
                 return;
             }

@@ -3,21 +3,37 @@ using System.Collections;
 using _01.Scripts.Entity.Player.Scripts;
 using _01.Scripts.Entity.Player.Scripts.Interface;
 using _01.Scripts.Manager;
+using _01.Scripts.Util;
 using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour, IThrowable, IInteractable
 {
     [field: Header("Basic Weapon Settings")]
     [SerializeField] private float duration = 0.5f;
+    [SerializeField] protected ThrownObject thrownObject;
     [field: SerializeField] public WeaponData WeaponData { get; private set; }
     [field: SerializeField] public bool IsThrownByEnemy { get; protected set; }
     [field: SerializeField] public bool IsThrownByPlayer { get; protected set; }
 
     public Coroutine AttackCoroutine { get; protected set; }
 
-    private void Start()
+    protected virtual void Awake()
+    {
+        if (!thrownObject) thrownObject = gameObject.GetComponent_Helper<ThrownObject>();
+    }
+
+    protected virtual void Reset()
+    {
+        if (!thrownObject) thrownObject = gameObject.GetComponent_Helper<ThrownObject>();
+    }
+
+    protected virtual void Start()
     {
         AttackCoroutine = null;
+        
+        // TODO: 던지는 데미지를 적용해야 하는데 현재는 무기의 기본 데미지가 적용되어있음.(수정 필요!!!)
+        thrownObject.Init(WeaponData.damage); 
+        thrownObject.enabled = false;
     }
 
     public abstract void OnThrow(Vector3 direction, bool isThrownByPlayer);

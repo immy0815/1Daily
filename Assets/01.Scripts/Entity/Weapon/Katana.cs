@@ -14,14 +14,16 @@ public class Katana : Weapon, IHittable
     [Header("Katana Settings")]
     [SerializeField] private float throwForce = 10;
     
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
     }
 
-    private void Reset()
+    protected override void Reset()
     {
+        base.Reset();
         if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
     }
@@ -47,7 +49,7 @@ public class Katana : Weapon, IHittable
         IsThrownByEnemy = !isThrownByPlayer;
         
         rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
-        // gameObject.AddComponent<ThrownObject>().Init(WeaponData.damage);
+        thrownObject.enabled = true;
     }
 
     public override void OnInteract(Transform pivot)

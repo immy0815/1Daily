@@ -19,8 +19,9 @@ public class Pistol : Weapon, IShootable
     [field: SerializeField] public float TimeSinceLastShoot { get; private set; }
     [field: SerializeField] public bool IsReady { get; private set; } = true;
     
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
     }
@@ -32,8 +33,9 @@ public class Pistol : Weapon, IShootable
         else { IsReady = true; TimeSinceLastShoot = 0; }
     }
 
-    private void Reset()
+    protected override void Reset()
     {
+        base.Reset();
         if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
     }
@@ -69,7 +71,7 @@ public class Pistol : Weapon, IShootable
         IsThrownByEnemy = !isThrownByPlayer;
         
         rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
-        // gameObject.AddComponent<ThrownObject>().Init(WeaponData.damage);
+        thrownObject.enabled = true;
     }
 
     public override void OnInteract(Transform pivot)
