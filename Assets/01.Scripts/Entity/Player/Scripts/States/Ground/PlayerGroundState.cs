@@ -81,13 +81,13 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             if (stateMachine.Player.PlayerInteraction.Interactable is not Enemy enemy) return;
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
-                //TODO: Animation 호출
+                // TODO: Animation 호출
 				katana.OnHit();
                 enemy.TakeDamage(katana.WeaponData.damage);
             }
             else
             {
-                //TODO: Animation 호출
+                // TODO: Animation 호출
                 enemy.TakeDamage(stateMachine.Player.PlayerCondition.Damage);
             }
             stateMachine.Player.PlayerInteraction.ResetParameters();
