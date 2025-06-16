@@ -8,24 +8,43 @@ public class Stage : MonoBehaviour
 {
   #region Inspector
   
-  [SerializeField, ReadOnly] private int currentWaveIndex = 0; 
-  [SerializeField, ReadOnly] private WaveGroup currentWave;
+  [SerializeField, ReadOnly, Tooltip("현재 웨이브의 순서입니다.")] private int currentWaveIndex = 0; 
+  [SerializeField, ReadOnly, Tooltip("현재 진행중인 웨이브입니다. Reset시 자동으로 설정됩니다.")] private WaveGroup currentWave;
   /// <summary>
   /// 스테이지를 클리어하는 중 걸리는 시간
   /// 단위는 0.1초 단위입니다.
   /// </summary>
-  [SerializeField, ReadOnly] protected int takenTime = 0;
-  public List<WaveGroup> waves = new();
-  [SerializeField] protected Player player;
+  [SerializeField, ReadOnly, Tooltip("현재 스테이지의 진행시간입니다.")] protected int takenTime = 0;
+  [Tooltip("스테이지의 적 웨이브 정보입니다. Reset시 자동으로 설정됩니다.")] public List<WaveGroup> waves = new();
+  [SerializeField, Tooltip("스테이지 시작시 배치되는 플레이어입니다. Reset시 자동으로 설정됩니다.")] protected Player player;
   
   #endregion
   
+  /// <summary>
+  /// 현재 진행중인 웨이브입니다.
+  /// </summary>
   public WaveGroup CurrentWave => currentWave;
+  
+  /// <summary>
+  /// 스테이지의 진행시간입니다.
+  /// </summary>
   public int TakenTime => takenTime;
+  
+  /// <summary>
+  /// 스테이지의 플레이어입니다.
+  /// </summary>
   public Player Player => player;
+  
+  /// <summary>
+  /// 적 웨이브가 클리어됬을 때 호출되는 이벤트입니다.
+  /// </summary>
   public event Action<WaveGroup> OnWaveClear;
-  public event Action<StageFinishType> OnStageEnd;
-  private Coroutine timer;
+  
+  /// <summary>
+  /// 스테이지가 끝났을 때 호출되는 이벤트입니다.
+  /// </summary>
+  public event Action<StageFinishState> OnStageEnd;
+  private Coroutine timer = null;
   
   #region Unity Event
   
@@ -45,6 +64,7 @@ public class Stage : MonoBehaviour
         if (child.gameObject.TryGetComponent<WaveGroup>(out var waveGroup))
         {
           waves.Add(waveGroup);
+          waveGroup.Reset();
         }
       }
 
@@ -68,11 +88,16 @@ public class Stage : MonoBehaviour
   
   #region Feature
   
+  /// <summary>
+  /// 스테이지가 진행중이지 않을 경우 시작시킵니다.
+  /// </summary>
   public void StartStage()
   {
+    if (timer != null) return;
     OnStageEnd += (_) =>
     {
       StopCoroutine(timer);
+      timer = null;
     };
     timer = StartCoroutine(StartTimer());
     currentWave = waves[currentWaveIndex];
@@ -81,15 +106,19 @@ public class Stage : MonoBehaviour
     player.PlayerCondition.OnDeath += OnPlayerDeath;
   }
 
+  /// <summary>
+  /// 스테이지를 강제로 중지시킬 수 있습니다.
+  /// OnStageEnd 이벤트를 Cancel 매개변수로 호출합니다.
+  /// </summary>
   public void StopStage()
   {
-    OnStageEnd?.Invoke(StageFinishType.Cancel);
+    OnStageEnd?.Invoke(StageFinishState.Cancel);
   }
   
   private void OnPlayerDeath()
   {
     player.PlayerCondition.OnDeath -= OnPlayerDeath;
-    OnStageEnd?.Invoke(StageFinishType.Failure);
+    OnStageEnd?.Invoke(StageFinishState.Failure);
   }
 
   private void StartNextWave()
@@ -105,7 +134,7 @@ public class Stage : MonoBehaviour
     }
     else if (currentWaveIndex == waves.Count - 1)
     {
-      OnStageEnd?.Invoke(StageFinishType.Clear);
+      OnStageEnd?.Invoke(StageFinishState.Clear);
     }
   }
 
@@ -123,9 +152,15 @@ public class Stage : MonoBehaviour
   #endregion
 }
 
-public enum StageFinishType
+/// <summary>
+/// 스테이지가 끝났을 때 호출하는 이벤트의 인자들입니다.
+/// </summary>
+public enum StageFinishState
 {
-  Clear,
-  Failure,
-  Cancel
+  // 스테이지를 클리어했을 때 넘겨줍니다.
+  Clear = 1,
+  // 스테이지를 실패했을 때 넘겨줍니다.
+  Failure = 2,
+  // 스테이지를 취소했을 때 넘겨줍니다.
+  Cancel = 3
 }
