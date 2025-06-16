@@ -11,5 +11,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/00.Scenes/GameScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/00.Scenes/Test/TaeYoung/LoadingScene.unity
+    guid: de9db6d7d35fe71409137e50615caabb
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 47f7be9b431959e41b921c0618923564, type: 2}
