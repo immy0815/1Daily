@@ -13,7 +13,7 @@ namespace _01.Scripts.Entity.Player.Scripts
 
         // Fields
         [Header("Last Check Time")]
-        [SerializeField] private float timeSinceLastCheck;
+        [SerializeField, ReadOnly] private float timeSinceLastCheck;
         private Camera cam;
         private Player player;
         
