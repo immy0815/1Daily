@@ -26,7 +26,7 @@ public class EnemySightSensor : MonoBehaviour
         // 1. 시야각 안에 있음
         if (Vector3.Dot(transform.forward, posDiffDirection) < Mathf.Cos(viewAngle / 2 * Mathf.Deg2Rad))
         {
-            Debug.Log(Mathf.Cos(viewAngle / 2 * Mathf.Deg2Rad));
+            // Debug.Log(Mathf.Cos(viewAngle / 2 * Mathf.Deg2Rad));
             enemy.SetTarget(null);
             return;
         }
@@ -47,7 +47,7 @@ public class EnemySightSensor : MonoBehaviour
         }
         else
         {
-            Debug.Log("Missing");
+            // Debug.Log("Missing");
         }
     }
 
