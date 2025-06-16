@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace _01.Scripts.Entity.Player.Scripts.States.Ground
+﻿namespace _01.Scripts.Entity.Player.Scripts.States.Ground
 {
     public class PlayerWalkState : PlayerGroundState
     {

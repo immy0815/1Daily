@@ -8,6 +8,7 @@ namespace _01.Scripts.Manager
     {
         Move,
         Attack,
+        Throw,
         Jump,
     }
     
@@ -17,10 +18,10 @@ namespace _01.Scripts.Manager
         [field: Header("TimeScale Values")]
         [field: SerializeField] public PriorityType PreviousUpdateType { get; private set; } = PriorityType.Move;
         [field: SerializeField] public float TargetTimeScale { get; private set; } = 0.01f;
-        [field: SerializeField] public float CurrentTimeScale { get; private set; }
         
         // Fields
         private Coroutine timeScaleCoroutine;
+        private float originalFixedDeltaTime;
         
         // Singleton
         public static TimeScaleManager Instance { get; private set; }
@@ -34,16 +35,20 @@ namespace _01.Scripts.Manager
         private void Start()
         {
             Time.timeScale = TargetTimeScale;
-            CurrentTimeScale = Time.timeScale;
+            originalFixedDeltaTime = Time.fixedDeltaTime;
         }
 
         public void ChangeTimeScale(PriorityType type, float timeScale)
         {
-            if (PreviousUpdateType == PriorityType.Jump && type == PriorityType.Attack) return;
-            if (TargetTimeScale < timeScale || PreviousUpdateType == type) TargetTimeScale = timeScale;
-            Time.timeScale = TargetTimeScale;
+            if (PreviousUpdateType == PriorityType.Jump && type is PriorityType.Attack or PriorityType.Throw) return;
             
+            if (Mathf.Approximately(TargetTimeScale, timeScale)) return; 
+            // Debug.Log($"Time Scale Changed from {TargetTimeScale} to {timeScale}");
+            TargetTimeScale = timeScale;
             PreviousUpdateType = type;
+            
+            Time.timeScale = TargetTimeScale;
+            Time.fixedDeltaTime = originalFixedDeltaTime * Time.timeScale;
         }
     }
 }

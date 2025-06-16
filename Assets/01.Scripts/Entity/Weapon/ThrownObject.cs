@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using _01.Scripts.Entity.Player.Scripts.Interface;
 using UnityEngine;
 
 public class ThrownObject : MonoBehaviour
 {
+    [Header("Object Settings")] 
+    [SerializeField] private LayerMask hittableLayer;
+    
     private int damage;
     private bool hasAppliedDamage;
 
@@ -13,21 +17,14 @@ public class ThrownObject : MonoBehaviour
         hasAppliedDamage = false;
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnCollisionStay(Collision other)
     {
         if (hasAppliedDamage) return;
-        
-        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-        if (enemy != null)
-        {
-            enemy.TakeDamage(damage);
-            //enemy.DropWeapon();
-            hasAppliedDamage = true;
-        }
-        
-        else if (collision.gameObject.CompareTag("Ground"))
-        {
-            Destroy(gameObject); 
-        }
+        if (((1 << other.gameObject.layer) & hittableLayer.value) == 0) return;
+
+        var damagable = other.gameObject.GetComponent<IDamagable>();
+        if (damagable == null) { Destroy(gameObject); return; }
+        damagable.OnTakeDamage(damage);
+        Destroy(gameObject);
     }
 }
