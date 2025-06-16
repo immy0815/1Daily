@@ -58,7 +58,7 @@ public class ResourceManager : MonoBehaviour
 
         // 임시
         yield return StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Game));
-        InstantiateStage("Stage1");
+        InstantiateStage("Stage1", out _currentStage);
     }
 
     public IEnumerator ReleaseAllResources()
@@ -85,7 +85,7 @@ public class ResourceManager : MonoBehaviour
         StartCoroutine(_sceneLoader.LoadSceneAsync(targetScene));
     }
 
-    public void InstantiateStage(string stageKey)
+    public bool InstantiateStage(string stageKey, out GameObject stagePrefab)
     {
         if (_currentStage != null)
         {
@@ -97,12 +97,16 @@ public class ResourceManager : MonoBehaviour
         if (prefab != null)
         {
             _currentStage = Instantiate(prefab);
+            stagePrefab = _currentStage;
 
             Debug.Log($"[ResourceManager] Instantiated stage: {stageKey}");
+            return true;
         }
         else
         {
             Debug.LogError($"[ResourceManager] Cannot instantiate stage. <{stageKey}> not found.");
+            stagePrefab = null;
+            return false;
         }
     }
 }
