@@ -469,6 +469,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &1600468951 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5105702947756385047, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+  m_PrefabInstance: {fileID: 7282113808312785144}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1657170854
 GameObject:
   m_ObjectHideFlags: 0
@@ -636,6 +641,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Damping: 0
+--- !u!114 &2031644009 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8976164741523262714, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+  m_PrefabInstance: {fileID: 7282113808312785144}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fea4928ef55673e4ca964cfa81b45b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &2031644011 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 3854936703475330530, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+  m_PrefabInstance: {fileID: 7282113808312785144}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &2031644012 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 2788764869667943519, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+  m_PrefabInstance: {fileID: 7282113808312785144}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1757851867999526431
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -701,6 +727,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 821403802585397404, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: bulletPoolObj
+      value: 
+      objectReference: {fileID: 1657170854}
     - target: {fileID: 1423228212087389340, guid: 6326b71661c324c44b88502d66609e05, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -741,6 +771,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2500395243125800611, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: bulletPoolObj
+      value: 
+      objectReference: {fileID: 1657170854}
+    - target: {fileID: 3909244333386365376, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: bulletPoolObj
+      value: 
+      objectReference: {fileID: 1657170854}
+    - target: {fileID: 3940003164237845967, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: bullet
+      value: 
+      objectReference: {fileID: 5148502391975629586, guid: ae98e24746652ee41b86806f28adae9b, type: 3}
+    - target: {fileID: 3940003164237845967, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: firePoint
+      value: 
+      objectReference: {fileID: 1600468951}
+    - target: {fileID: 3940003164237845967, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: rigidBody
+      value: 
+      objectReference: {fileID: 2031644012}
+    - target: {fileID: 3940003164237845967, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: boxCollider
+      value: 
+      objectReference: {fileID: 2031644011}
+    - target: {fileID: 3940003164237845967, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: thrownObject
+      value: 
+      objectReference: {fileID: 2031644009}
+    - target: {fileID: 3940003164237845967, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: bulletPoolObj
+      value: 
+      objectReference: {fileID: 1657170854}
+    - target: {fileID: 3940003164237845967, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: shootableLayer.m_Bits
+      value: 1728
+      objectReference: {fileID: 0}
+    - target: {fileID: 3940003164237845967, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: <WeaponData>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 3d61f78d06630c5469f2d0df5daa134e, type: 2}
     - target: {fileID: 4219400898579753179, guid: 6326b71661c324c44b88502d66609e05, type: 3}
       propertyPath: m_Name
       value: Stage_3
