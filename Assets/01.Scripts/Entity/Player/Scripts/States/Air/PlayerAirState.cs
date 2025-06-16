@@ -45,7 +45,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             {
                 if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
                 AttackCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
-                if (pistol.OnShoot())
+                if (pistol.OnShoot(stateMachine.Player))
                 {
                     // TODO: Animation 호출
                 }
