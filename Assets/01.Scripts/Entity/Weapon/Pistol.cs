@@ -28,6 +28,7 @@ public class Pistol : Weapon, IShootable
         base.Awake();
         if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
+        if (!bulletPoolObj) bulletPoolObj = GameObject.Find("BulletPool");
         
         originalBulletCount = bulletCount;
     }
@@ -44,6 +45,7 @@ public class Pistol : Weapon, IShootable
         base.Reset();
         if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
+        if (!bulletPoolObj) bulletPoolObj = GameObject.Find("BulletPool");
     }
 
     public bool OnShoot(Player player)
