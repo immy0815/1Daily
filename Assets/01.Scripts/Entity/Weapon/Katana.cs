@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using _01.Scripts.Entity.Player.Scripts;
 using _01.Scripts.Util;
 using UnityEngine;
 
@@ -31,8 +28,6 @@ public class Katana : Weapon, IHittable
     public void OnHit()
     {
         Debug.Log("Katana slash");
-        if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
-        AttackCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
         boxCollider.enabled = true;
 
         // 공격 애니메이션 이후 콜라이더 끄기
@@ -46,18 +41,18 @@ public class Katana : Weapon, IHittable
         rigidBody.useGravity = true;
         boxCollider.isTrigger = false;
         IsThrownByPlayer = isThrownByPlayer;
-        IsThrownByEnemy = !isThrownByPlayer;
         
         rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
         thrownObject.enabled = true;
     }
 
-    public override void OnInteract(Transform pivot)
+    public override void OnInteract(Transform pivot, bool isOwnedByPlayer)
     {
-        if (IsThrownByEnemy) return;
+        if (IsThrownByPlayer) return;
         rigidBody.isKinematic = true;
         rigidBody.useGravity = false;
         boxCollider.isTrigger = true;
+        IsOwnedByPlayer = isOwnedByPlayer;
         StartCoroutine(MoveToPivot(pivot));
     }
 

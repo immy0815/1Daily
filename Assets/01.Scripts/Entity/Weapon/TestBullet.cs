@@ -18,6 +18,6 @@ public class TestBullet : MonoBehaviour
 
         Vector3 direction = transform.forward;
         
-        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool2);
+        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool2, false);
     }
 }

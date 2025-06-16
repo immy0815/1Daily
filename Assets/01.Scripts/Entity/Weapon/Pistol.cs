@@ -19,11 +19,19 @@ public class Pistol : Weapon, IShootable
     [field: SerializeField] public float TimeSinceLastShoot { get; private set; }
     [field: SerializeField] public bool IsReady { get; private set; } = true;
     
+	private int originalBulletCount;
+
     protected override void Awake()
     {
         base.Awake();
         if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        originalBulletCount = bulletCount;
     }
 
     private void Update()
@@ -43,7 +51,6 @@ public class Pistol : Weapon, IShootable
     public bool OnShoot()
     {
         if (!IsReady || bulletCount < 1) return false;
-        AttackCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
         var bulletPool = bulletPoolObj?.GetComponent<BulletPool>();
         if (!bulletPool) return false;
         bullet = bulletPool.GetBullet();
@@ -53,13 +60,12 @@ public class Pistol : Weapon, IShootable
         IsReady = false;
         
         var direction = transform.forward;
-        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool);
+        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
         return true;
     }
 
     public override void OnThrow(Vector3 direction, bool isThrownByPlayer)
     {
-        if (AttackCoroutine != null) { StopCoroutine(AttackCoroutine); AttackCoroutine = null; } 
         transform.SetParent(null);
         rigidBody.isKinematic = false;
         rigidBody.useGravity = true;
@@ -68,18 +74,26 @@ public class Pistol : Weapon, IShootable
         IsReady = true;
         TimeSinceLastShoot = 0;
         IsThrownByPlayer = isThrownByPlayer;
-        IsThrownByEnemy = !isThrownByPlayer;
         
         rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
         thrownObject.enabled = true;
     }
 
-    public override void OnInteract(Transform pivot)
+    /// <summary>
+    /// Enemy가 총을 쏠 때 재장전이 필요할 때 부르는 함수
+    /// </summary>
+	public void FillAmmo()
+    {
+        bulletCount = originalBulletCount;
+    }
+
+    public override void OnInteract(Transform pivot, bool isOwnedByPlayer)
     {
         if (IsThrownByPlayer) return;
         rigidBody.isKinematic = true;
         rigidBody.useGravity = false;
         boxCollider.isTrigger = true;
+        IsOwnedByPlayer = isOwnedByPlayer;
         StartCoroutine(MoveToPivot(pivot));
     }
 }

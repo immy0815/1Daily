@@ -43,19 +43,27 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             base.OnAttack(context);
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
             {
+                if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
+                AttackCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
                 if (pistol.OnShoot())
                 {
                     // TODO: Animation 호출
+                }
+                else
+                {
+                    // TODO: 탄환 없음 UI 출력
                 }
                 return;
             }
 
             if (stateMachine.Player.PlayerInteraction.Interactable is not Enemy enemy) return;
+            if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
+            AttackCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
                 // TODO: Animation 호출
-                katana.OnHit();
-                enemy.OnTakeDamage(katana.WeaponData.damage);
+				        katana.OnHit();
+                enemy.TakeDamage(katana.WeaponData.damage);
             }
             else
             {
@@ -71,6 +79,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
 
             if (stateMachine.Player.PlayerInventory.CurrentWeapon)
             {
+                // TODO: Animation 호출?
                 stateMachine.Player.PlayerInventory.OnDropWeapon(stateMachine.Player.MainCameraTransform.forward);
                 return;
             }

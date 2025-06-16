@@ -16,6 +16,9 @@ public class Bullet : MonoBehaviour
     [SerializeField] private Rigidbody rigidBody;
     [SerializeField] private MeshRenderer meshRenderer;
 
+    [Header("Bullet State")]
+    [SerializeField] private bool isShotByPlayer;
+    
     BulletPool _bulletPool;
     private bool isActive;
 
@@ -51,11 +54,11 @@ public class Bullet : MonoBehaviour
         if(elapsedTime >= lifeTime) ReturnToPool();
     }
 
-    public void Init(Vector3 position, Vector3 direction, BulletPool bulletPool)
+    public void Init(Vector3 position, Vector3 direction, BulletPool bulletPool, bool isShotByPlayer)
     {
         transform.position = position;
         transform.rotation = Quaternion.LookRotation(direction);
-
+        this.isShotByPlayer = isShotByPlayer;
         rigidBody.AddForce(direction * bulletSpeed, ForceMode.Impulse);
         _bulletPool = bulletPool;
         elapsedTime = 0f;
@@ -71,6 +74,7 @@ public class Bullet : MonoBehaviour
         damagable.OnTakeDamage(bulletDamage);
         ReturnToPool();
     }
+    
     private void ReturnToPool()
     {
         isActive = false;
