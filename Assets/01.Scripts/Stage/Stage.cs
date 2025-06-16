@@ -1,21 +1,28 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _01.Scripts.Entity.Player.Scripts;
 using UnityEngine;
 
 public class Stage : MonoBehaviour
 {
+  #region Inspector
+  
   [SerializeField, ReadOnly] private int currentWaveIndex = 0; 
   [SerializeField, ReadOnly] private WaveGroup currentWave;
   /// <summary>
   /// 스테이지를 클리어하는 중 걸리는 시간
   /// 단위는 0.1초 단위입니다.
   /// </summary>
-  [SerializeField, ReadOnly] private int takenTime = 0;
+  [SerializeField, ReadOnly] protected int takenTime = 0;
   public List<WaveGroup> waves = new();
+  [SerializeField] protected Player player;
+  
+  #endregion
   
   public WaveGroup CurrentWave => currentWave;
   public int TakenTime => takenTime;
+  public Player Player => player;
   public event Action<WaveGroup> OnWaveClear;
   public event Action<StageFinishType> OnStageEnd;
   private Coroutine timer;
@@ -44,12 +51,20 @@ public class Stage : MonoBehaviour
       if (waves.Count > 0)
         currentWave = waves[0];
     }
+
+    for (var i = 0; i < transform.childCount; i++)
+    {
+      var child = transform.GetChild(i);
+      if (child.gameObject.TryGetComponent<Player>(out var player))
+      {
+        this.player = player;
+      }
+    }
   }
   
   #endif
   
   #endregion
-  
   
   #region Feature
   
@@ -63,11 +78,18 @@ public class Stage : MonoBehaviour
     currentWave = waves[currentWaveIndex];
     currentWave.OnClear += StartNextWave;
     currentWave.Spawn();
+    player.PlayerCondition.OnDeath += OnPlayerDeath;
   }
 
   public void StopStage()
   {
     OnStageEnd?.Invoke(StageFinishType.Cancel);
+  }
+  
+  private void OnPlayerDeath()
+  {
+    player.PlayerCondition.OnDeath -= OnPlayerDeath;
+    OnStageEnd?.Invoke(StageFinishType.Failure);
   }
 
   private void StartNextWave()

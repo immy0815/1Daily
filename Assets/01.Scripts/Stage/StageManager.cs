@@ -1,21 +1,19 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 public static class StageManager
 {
   private static Stage currentStage = null;
+  
+  public static event Action<Stage> OnStageStart;
+  public static event Action<Stage> OnStageEnd;
+  
   public static Stage StartStage(int stageIndex)
   {
     var sceneName = SceneManager.GetActiveScene().name;
-    if (sceneName == "GameScene")
-    {
-      if(currentStage != null)
-      {
-        currentStage.StopStage();
-        Object.Destroy(currentStage.gameObject);
-        currentStage = null;
-      }
-    }
+    if (sceneName == "GameScene") StopStage();
     else SceneManager.LoadScene("GameScene");
     
     if (ResourceManager.Instance.InstantiateStage($"Stage{stageIndex}", out var obj))
@@ -24,6 +22,8 @@ public static class StageManager
       obj.transform.position = Vector3.zero;
       currentStage = stage;
       stage.StartStage();
+      OnStageStart?.Invoke(stage);
+      stage.OnStageEnd += OnStageFinish;
     }
     else
     {
@@ -44,5 +44,11 @@ public static class StageManager
       Object.Destroy(currentStage.gameObject);
       currentStage = null;
     }
+  }
+
+  private static void OnStageFinish(StageFinishType type)
+  {
+    currentStage.OnStageEnd -= OnStageFinish;
+    OnStageEnd?.Invoke(currentStage);
   }
 }
