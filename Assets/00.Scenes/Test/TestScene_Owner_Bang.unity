@@ -863,7 +863,7 @@ PrefabInstance:
       objectReference: {fileID: 1657170854}
     - target: {fileID: 8293249635332495934, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
       propertyPath: m_Mass
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8293249635332495934, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
       propertyPath: m_UseGravity
@@ -883,6 +883,6 @@ SceneRoots:
   - {fileID: 1519113172}
   - {fileID: 609670774}
   - {fileID: 1757851867999526431}
-  - {fileID: 37318270}
   - {fileID: 7869985461480629122}
   - {fileID: 1657170856}
+  - {fileID: 37318270}

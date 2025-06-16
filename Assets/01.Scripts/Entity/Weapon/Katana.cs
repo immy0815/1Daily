@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using _01.Scripts.Entity.Player.Scripts;
 using _01.Scripts.Util;
 using UnityEngine;
 
