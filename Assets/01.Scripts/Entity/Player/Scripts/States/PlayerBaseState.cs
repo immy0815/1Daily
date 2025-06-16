@@ -1,5 +1,7 @@
-﻿using _01.Scripts.Entity.Common.Scripts;
+﻿using System.Collections;
+using _01.Scripts.Entity.Common.Scripts;
 using _01.Scripts.Entity.Common.Scripts.Interface;
+using _01.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,10 +11,12 @@ namespace _01.Scripts.Entity.Player.Scripts.States
     {
         protected readonly PlayerStateMachine stateMachine;
         protected readonly EntityCondition playerCondition;
+        protected Coroutine AttackCoroutine;
 
         public PlayerBaseState(PlayerStateMachine machine)
         {
             stateMachine = machine;
+            AttackCoroutine = null;
             playerCondition = stateMachine.Player.PlayerCondition;
         }
         
@@ -106,6 +110,20 @@ namespace _01.Scripts.Entity.Player.Scripts.States
             
             var cameraTargetRotation = Quaternion.LookRotation(direction);
             cameraPivotTransform.rotation = cameraTargetRotation;
+        }
+        
+        protected IEnumerator ChangeTimeScaleForSeconds(float timeDuration)
+        {
+            var time = 0f;
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Throw, 1);
+            while (time < timeDuration)
+            {
+                time += Time.unscaledDeltaTime;
+                var t = time / timeDuration;
+                TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Throw,Mathf.Lerp(Time.timeScale, 0.01f, t));
+                yield return null;
+            }
+            AttackCoroutine = null;
         }
 
         private void AddInputActionCallbacks()

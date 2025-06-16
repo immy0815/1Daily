@@ -71,6 +71,8 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             base.OnAttack(context);
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
             {
+                if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
+                AttackCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
                 if (pistol.OnShoot())
                 {
                     // TODO: Animation 호출
@@ -79,6 +81,8 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             }
 
             if (stateMachine.Player.PlayerInteraction.Interactable is not Enemy enemy) return;
+            if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
+            AttackCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
                 // TODO: Animation 호출

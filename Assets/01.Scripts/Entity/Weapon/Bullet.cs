@@ -15,6 +15,9 @@ public class Bullet : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Rigidbody rigidBody;
     [SerializeField] private MeshRenderer meshRenderer;
+
+    [Header("Bullet State")]
+    [SerializeField] private bool isShotByPlayer;
     
     private bool isActive;
 
@@ -45,11 +48,11 @@ public class Bullet : MonoBehaviour
         if (!isActive) return;
     }
 
-    public void Init(Vector3 position, Vector3 direction)
+    public void Init(Vector3 position, Vector3 direction, bool isShotByPlayer)
     {
         transform.position = position;
         transform.rotation = Quaternion.LookRotation(direction);
-
+        this.isShotByPlayer = isShotByPlayer;
         rigidBody.AddForce(direction * bulletSpeed, ForceMode.Impulse);
     }
 

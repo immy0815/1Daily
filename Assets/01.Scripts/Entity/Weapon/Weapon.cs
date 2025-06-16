@@ -12,7 +12,7 @@ public abstract class Weapon : MonoBehaviour, IThrowable, IInteractable
     [SerializeField] private float duration = 0.5f;
     [SerializeField] protected ThrownObject thrownObject;
     [field: SerializeField] public WeaponData WeaponData { get; private set; }
-    [field: SerializeField] public bool IsThrownByEnemy { get; protected set; }
+    [field: SerializeField] public bool IsOwnedByPlayer { get; protected set; }
     [field: SerializeField] public bool IsThrownByPlayer { get; protected set; }
 
     public Coroutine AttackCoroutine { get; protected set; }
@@ -37,7 +37,7 @@ public abstract class Weapon : MonoBehaviour, IThrowable, IInteractable
     }
 
     public abstract void OnThrow(Vector3 direction, bool isThrownByPlayer);
-    public abstract void OnInteract(Transform pivot);
+    public abstract void OnInteract(Transform pivot, bool isOwnedByPlayer);
     public virtual void OnInteract() { }
     
     protected IEnumerator MoveToPivot(Transform pivot)
