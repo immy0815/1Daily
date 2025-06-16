@@ -109,8 +109,9 @@ public class Pistol : Weapon, IShootable
         TimeSinceLastShoot = 0;
         IsThrownByPlayer = isThrownByPlayer;
         
+        // TODO: 던지는 데미지를 적용해야 하는데 현재는 무기의 기본 데미지가 적용되어있음.(수정 필요!!!)
+        thrownObject.Init(WeaponData.damage);
         rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
-        thrownObject.enabled = true;
     }
 
     /// <summary>
