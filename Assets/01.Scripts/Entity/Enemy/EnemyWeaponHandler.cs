@@ -11,6 +11,8 @@ public class EnemyWeaponHandler : MonoBehaviour
 
     [SerializeField] private Transform pivot;
 
+    private Enemy enemy;
+    
     private void Awake()
     {
         weapon = GetComponentInChildren<Weapon>();
@@ -20,12 +22,17 @@ public class EnemyWeaponHandler : MonoBehaviour
         }
     }
 
+    public void Init(Enemy enemyEntity)
+    {
+        enemy = enemyEntity;
+    }
+
     public void Attack()
     {
         switch (weapon)
         {
             case IShootable shootable:
-                shootable.OnShoot();
+                shootable.OnShoot(enemy);
                 break;
             case IHittable hittable:
                 hittable.OnHit();

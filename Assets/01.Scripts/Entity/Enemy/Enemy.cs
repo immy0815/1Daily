@@ -64,7 +64,12 @@ public class Enemy : MonoBehaviour, IDamagable
         characterController = GetComponent<CharacterController>();
         weaponHandler = GetComponent<EnemyWeaponHandler>();
     }
-    
+
+    private void Start()
+    {
+        weaponHandler.Init(this);
+    }
+
     public void SetTarget(Transform target)
     {
         this.target = target;

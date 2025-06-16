@@ -657,7 +657,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5632590248030071680}
   - component: {fileID: 1689909025527273621}
-  - component: {fileID: 4045212521366188724}
+  - component: {fileID: 4251973049345965736}
   - component: {fileID: 1810071388816411344}
   - component: {fileID: 2871678874714045733}
   - component: {fileID: 2163060283811807229}
@@ -713,7 +713,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.9, z: 0}
---- !u!114 &4045212521366188724
+--- !u!114 &4251973049345965736
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -722,7 +722,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2899072078333946734}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 079025f2bbfb0dc43b5ad4bb4ac952e5, type: 3}
+  m_Script: {fileID: 11500000, guid: ea6625155f9449f48eb38b3bd99a31c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <Health>k__BackingField: 1
@@ -816,12 +816,13 @@ MonoBehaviour:
     attackParameterName: '@Attack'
     comboAttackParameterName: ComboAttack
     comboAttackIndex: Combo
+    shotParameterName: Shot
     deathParameterName: Dead
     hitParameterName: Hit
   <Animator>k__BackingField: {fileID: 3439992321258709547}
   <CharacterController>k__BackingField: {fileID: 1689909025527273621}
   <PlayerController>k__BackingField: {fileID: 2871678874714045733}
-  <PlayerCondition>k__BackingField: {fileID: 4045212521366188724}
+  <PlayerCondition>k__BackingField: {fileID: 4251973049345965736}
   <PlayerInteraction>k__BackingField: {fileID: 2914589697141439159}
   <PlayerInventory>k__BackingField: {fileID: 2163060283811807229}
   <PlayerGravity>k__BackingField: {fileID: 1810071388816411344}
