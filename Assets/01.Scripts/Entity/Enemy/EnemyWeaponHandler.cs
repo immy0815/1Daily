@@ -36,16 +36,23 @@ public class EnemyWeaponHandler : MonoBehaviour
 
     public void Attack()
     {
-        if (!attackReady)
-        {
-            if(attackReadyCoroutine == null)
-                attackReadyCoroutine = StartCoroutine(WaitUntilPostureReady());
-            return;
-        }
+        if (enemy.TargetPlayer.PlayerCondition.IsDead) return;
         switch (weapon)
         {
             case IShootable shootable:
+                if (!attackReady)
+                {
+                    if(attackReadyCoroutine == null)
+                        attackReadyCoroutine = StartCoroutine(WaitUntilPostureReady());
+                    return;
+                }
                 shootable.OnShoot(enemy);
+                if (!shootable.CanShoot())
+                {
+                    weapon.OnThrow(Vector3.down, false);
+                    weapon = null;
+                    enemy.Animator.SetBool(enemy.AnimationData.ShotParameterHash, false);
+                }
                 break;
             case IHittable hittable:
                 hittable.OnHit();

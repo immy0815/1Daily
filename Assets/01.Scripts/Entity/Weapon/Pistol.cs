@@ -78,11 +78,16 @@ public class Pistol : Weapon, IShootable
         bulletCount--;
         IsReady = false;
         
-        // TODO: Direction 결정 매커니즘 작성 부탁합니다
-        var direction = enemy.Target.transform.position + Vector3.up* 1.5f - firePoint.transform.position;
+        // direction 결정
+        var direction = enemy.Target.transform.position + Vector3.up * 1.5f - firePoint.transform.position; // 1.5f는 대략 눈높이 키
         
         bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
         return true;
+    }
+
+    public bool CanShoot()
+    {
+        return bulletCount != 0;
     }
 
     public override void OnThrow(Vector3 direction, bool isThrownByPlayer)
@@ -118,4 +123,5 @@ public class Pistol : Weapon, IShootable
         FillAmmo();
         StartCoroutine(MoveToPivot(pivot));
     }
+    
 }
