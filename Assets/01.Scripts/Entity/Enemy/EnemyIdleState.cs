@@ -21,6 +21,7 @@ public class EnemyIdleState : EnemyStateBase
     public override void Update()
     {
         if (!enemy.Target) return;
+        if (enemy.TargetPlayer.PlayerCondition.IsDead) return;
         
         enemy.Agent.SetDestination(enemy.Target.transform.position);
         if (!enemy.CanTouchTarget())

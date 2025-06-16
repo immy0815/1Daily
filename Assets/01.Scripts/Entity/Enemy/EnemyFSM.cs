@@ -51,6 +51,7 @@ public class EnemyFSM : MonoBehaviour
             else
             {
                 enemy.Animator.SetBool(enemy.AnimationData.ShotParameterHash, false);
+                enemy.WeaponHandler.CancelReady();
             }
         }
     }

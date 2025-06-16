@@ -79,6 +79,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewAngle: 60
   targetInSightRange: {fileID: 0}
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!135 &3867332313436272372
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -260,6 +263,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weapon: {fileID: 0}
   pivot: {fileID: 3688184087802483463}
+  attackReady: 0
 --- !u!1001 &115318725541081052
 PrefabInstance:
   m_ObjectHideFlags: 0

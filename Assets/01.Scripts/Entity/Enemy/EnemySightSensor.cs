@@ -8,13 +8,12 @@ public class EnemySightSensor : MonoBehaviour
     private Enemy enemy;
     private float maxDistance;
     [SerializeField] float viewAngle;
-    int detectLayer;
     [SerializeField] private Transform targetInSightRange;
-    private Vector3 TargetPos => targetInSightRange.position + Vector3.up * 1;  // 플레이어 발밑이 아닌 적당히 위로 레이를 쏘기 위함
+    [SerializeField] private LayerMask targetLayer;
+    private Vector3 TargetPos => targetInSightRange.position + Vector3.up * 1f;  // 플레이어 발밑이 아닌 적당히 위로 레이를 쏘기 위함
     private void Awake()
     {
         enemy = GetComponentInParent<Enemy>();
-        detectLayer = LayerMask.NameToLayer("Player");
         maxDistance = GetComponent<SphereCollider>().radius;
         targetInSightRange = null;
     }
@@ -25,18 +24,20 @@ public class EnemySightSensor : MonoBehaviour
         Vector3 posDiffDirection = (TargetPos - transform.position).normalized;
             
         // 1. 시야각 안에 있음
-        if (Vector3.Dot(transform.forward, posDiffDirection) < Mathf.Cos(viewAngle * Mathf.Deg2Rad))
+        if (Vector3.Dot(transform.forward, posDiffDirection) < Mathf.Cos(viewAngle / 2 * Mathf.Deg2Rad))
         {
+            Debug.Log(Mathf.Cos(viewAngle / 2 * Mathf.Deg2Rad));
             enemy.SetTarget(null);
             return;
         }
             
         // 2. 가리는 물체가 없음
         Ray ray = new Ray(transform.position, posDiffDirection);
-        if (Physics.Raycast(ray, out var hit, maxDistance))
+        if (Physics.Raycast(ray, out var hit, maxDistance, targetLayer))
         {
             if (hit.transform == targetInSightRange)
             {
+                
                 enemy.SetTarget(hit.transform);
             }
             else
@@ -44,11 +45,15 @@ public class EnemySightSensor : MonoBehaviour
                 enemy.SetTarget(null);
             }
         }
+        else
+        {
+            Debug.Log("Missing");
+        }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.layer == detectLayer)
+        if ((1 << other.gameObject.layer & targetLayer) != 0)
         {
             targetInSightRange = other.transform;
         }
@@ -56,7 +61,7 @@ public class EnemySightSensor : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer == detectLayer)
+        if ((1 << other.gameObject.layer & targetLayer) != 0)
         {
             enemy.SetTarget(null);
             targetInSightRange = null;
@@ -66,9 +71,12 @@ public class EnemySightSensor : MonoBehaviour
     {
         if (targetInSightRange != null)
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, TargetPos);
-            Gizmos.DrawSphere(TargetPos, 0.2f);
+            Vector3 posDiffDirection = (TargetPos - transform.position).normalized;
+
+            // 레이와 같은 방향으로 기즈모 선을 그림
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawRay(transform.position, posDiffDirection * maxDistance);
+
         }
     }
 }
