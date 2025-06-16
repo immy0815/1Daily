@@ -1,3 +1,4 @@
+using _01.Scripts.Entity.Player.Scripts;
 using _01.Scripts.Util;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class Pistol : Weapon, IShootable
     [SerializeField] private GameObject bullet;
     [SerializeField] private GameObject bulletPoolObj;
     [SerializeField] private GameObject firePoint;
+    [SerializeField] private LayerMask shootableLayer;
     [SerializeField] private int bulletCount = 6;
     [SerializeField] private float recoilTime = 1f;
     [SerializeField] private float throwForce = 10;
@@ -48,7 +50,7 @@ public class Pistol : Weapon, IShootable
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
     }
 
-    public bool OnShoot()
+    public bool OnShoot(Player player)
     {
         if (!IsReady || bulletCount < 1) return false;
         var bulletPool = bulletPoolObj?.GetComponent<BulletPool>();
@@ -59,7 +61,28 @@ public class Pistol : Weapon, IShootable
         bulletCount--;
         IsReady = false;
         
-        var direction = transform.forward;
+        var direction = Physics.Raycast(
+            player.MainCameraTransform.position,
+            player.MainCameraTransform.forward, out var hitInfo, float.MaxValue, shootableLayer)
+            ? (hitInfo.point - player.PlayerInventory.WeaponPivot.position).normalized
+            : player.MainCameraTransform.forward;
+        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
+        return true;
+    }
+
+    public bool OnShoot(Enemy enemy)
+    {
+        if (!IsReady || bulletCount < 1) return false;
+        var bulletPool = bulletPoolObj?.GetComponent<BulletPool>();
+        if (!bulletPool) return false;
+        bullet = bulletPool.GetBullet();
+        
+        if (!bullet) return false;
+        bulletCount--;
+        IsReady = false;
+        
+        // TODO: Direction 결정 매커니즘 작성 부탁합니다
+        var direction = firePoint.transform.forward;
         bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
         return true;
     }

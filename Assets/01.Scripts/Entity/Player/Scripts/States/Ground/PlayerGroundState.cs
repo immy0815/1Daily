@@ -73,7 +73,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             {
                 if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
                 AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
-                if (pistol.OnShoot())
+                if (pistol.OnShoot(stateMachine.Player))
                 {
                     // TODO: Animation 호출
                 }
@@ -104,7 +104,11 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             if (stateMachine.Player.PlayerInventory.CurrentWeapon)
             {
                 // TODO: Animation 호출?
-                stateMachine.Player.PlayerInventory.OnDropWeapon(stateMachine.Player.MainCameraTransform.forward);
+                stateMachine.Player.PlayerInventory.OnDropWeapon(Physics.Raycast(
+                    stateMachine.Player.MainCameraTransform.position,
+                    stateMachine.Player.MainCameraTransform.forward, out var hitInfo, float.MaxValue)
+                    ? (hitInfo.point - stateMachine.Player.PlayerInventory.WeaponPivot.position).normalized
+                    : stateMachine.Player.MainCameraTransform.forward);
                 return;
             }
 
