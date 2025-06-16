@@ -18,8 +18,8 @@ public class ResourceManager : MonoBehaviour
     private SceneLoader _sceneLoader;
     private StageLoader _stageLoader;
 
-    private SceneName _currentScene;
-    private GameObject _currentStage;
+    [SerializeField] private SceneName _currentScene;
+    [SerializeField] private GameObject _currentStage;
 
     private void Awake()
     {
@@ -41,6 +41,7 @@ public class ResourceManager : MonoBehaviour
 
     private void Start()
     {
+        _sceneLoader.Init();
         StartCoroutine(LoadAllResources());
     }
 
@@ -48,35 +49,43 @@ public class ResourceManager : MonoBehaviour
     {
         yield return Addressables.InitializeAsync();
 
-        StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Game));
-
         foreach (string key in _stageKeys)
         {
             yield return StartCoroutine(_stageLoader.LoadStageAsync(key));
         }
 
-        Debug.Log("All Resources Loaded");
+        Debug.Log("[ResourceManager] All Resources Loaded");
 
-        // SwitchScene(SceneName.Title);
+        // 임시
+        yield return StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Game));
+        InstantiateStage("Stage1", out _currentStage);
     }
 
-    // public void SwitchScene(SceneName targetScene)
-    // {
-    //     Scene current = _sceneLoader.GetScene(_currentScene);
-    //     Scene target = _sceneLoader.GetScene(targetScene);
-    //
-    //     SceneManager.SetActiveScene(target);
-    //
-    //     if (current.IsValid() && current != target)
-    //     {
-    //         SceneManager.UnloadSceneAsync(current);
-    //     }
-    //
-    //     _currentScene = targetScene;
-    //     Debug.Log($"[ResourceManager] Switched to scene: {targetScene}");
-    // }
+    public IEnumerator ReleaseAllResources()
+    {
+        Debug.Log("[ResourceManager] Releasing all resources...");
 
-    public void InstantiateStage(string stageKey)
+        _sceneLoader.ReleaseScenes();
+        _stageLoader.ReleaseStagePrefab();
+
+        if (_currentStage != null)
+        {
+            Destroy(_currentStage);
+            _currentStage = null;
+        }
+
+        yield return null;
+
+        Debug.Log("[ResourceManager] All resources released.");
+    }
+
+    public void SwitchScene(SceneName targetScene)
+    {
+        _currentScene = targetScene;
+        StartCoroutine(_sceneLoader.LoadSceneAsync(targetScene));
+    }
+
+    public bool InstantiateStage(string stageKey, out GameObject stagePrefab)
     {
         if (_currentStage != null)
         {
@@ -88,12 +97,16 @@ public class ResourceManager : MonoBehaviour
         if (prefab != null)
         {
             _currentStage = Instantiate(prefab);
+            stagePrefab = _currentStage;
 
             Debug.Log($"[ResourceManager] Instantiated stage: {stageKey}");
+            return true;
         }
         else
         {
             Debug.LogError($"[ResourceManager] Cannot instantiate stage. <{stageKey}> not found.");
+            stagePrefab = null;
+            return false;
         }
     }
 }
