@@ -52,8 +52,23 @@ public class Stage : MonoBehaviour
 
   private void Reset()
   {
-    var waveContainer = transform.GetChild(2);
+    Transform waveContainer = null;
 
+    for (var i = 0; i < transform.childCount; i++)
+    {
+      var child = transform.GetChild(i);
+      if (child.gameObject.name == "Wave")
+      {
+        waveContainer = child;
+        continue;
+      }
+      
+      if (child.gameObject.TryGetComponent<Player>(out var player))
+      {
+        this.player = player;
+      }
+    }
+    
     if (waveContainer)
     {
       waves.Clear();
@@ -70,15 +85,6 @@ public class Stage : MonoBehaviour
 
       if (waves.Count > 0)
         currentWave = waves[0];
-    }
-
-    for (var i = 0; i < transform.childCount; i++)
-    {
-      var child = transform.GetChild(i);
-      if (child.gameObject.TryGetComponent<Player>(out var player))
-      {
-        this.player = player;
-      }
     }
   }
   
