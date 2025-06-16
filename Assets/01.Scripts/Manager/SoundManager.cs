@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
@@ -49,7 +50,7 @@ using UnityEngine.SceneManagement;
     {
       get
       {
-        if(!mixer) mixer = Resources.Load<AudioMixer>("AudioMixer");
+        if(!mixer) mixer = Addressables.LoadAssetAsync<AudioMixer>("AudioMixer").WaitForCompletion();
 
         return mixer;
       }
