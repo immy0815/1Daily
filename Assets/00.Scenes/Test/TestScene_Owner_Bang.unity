@@ -823,6 +823,10 @@ PrefabInstance:
       propertyPath: bulletPoolObj
       value: 
       objectReference: {fileID: 1657170854}
+    - target: {fileID: 7464782269587529332, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 23800000, guid: 5ca0c91b328259042a29623b2111974a, type: 2}
     - target: {fileID: 8392984249151005675, guid: 6326b71661c324c44b88502d66609e05, type: 3}
       propertyPath: bulletPoolObj
       value: 
