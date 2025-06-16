@@ -9,7 +9,7 @@ namespace _01.Scripts.Entity.Player.Scripts
         [SerializeField] private float checkRate = 0.05f;
         [SerializeField] private float maxCheckDistance = 5f;
         [SerializeField] private LayerMask interactableLayers;
-        [SerializeField] private GameObject interactableObject;
+        [SerializeField] private GameObject detectedObject;
 
         // Fields
         [Header("Last Check Time")]
@@ -19,6 +19,7 @@ namespace _01.Scripts.Entity.Player.Scripts
         
         // Properties
         public IInteractable Interactable { get; private set; }
+        public IDamagable Damagable { get; private set; }
         
         // Start is called before the first frame update
         private void Start()
@@ -36,16 +37,18 @@ namespace _01.Scripts.Entity.Player.Scripts
             var ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
             if (Physics.Raycast(ray, out var hit, maxCheckDistance, interactableLayers))
             {
-                if (hit.collider.gameObject == interactableObject) return;
+                if (hit.collider.gameObject == detectedObject) return;
                 
-                interactableObject = hit.collider.gameObject;
-                if (!interactableObject.TryGetComponent<IInteractable>(out var interactable)) return;
-                Interactable = interactable;
+                detectedObject = hit.collider.gameObject;
+                if (detectedObject.TryGetComponent<IInteractable>(out var interactable)){ Interactable = interactable; Damagable = null; }
+                else if(detectedObject.TryGetComponent<IDamagable>(out var damagable)) { Interactable = null; Damagable = damagable; }
+                else { Interactable = null; Damagable = null; }
             }
             else
             {
-                interactableObject = null;
+                detectedObject = null;
                 Interactable = null;
+                Damagable = null;
             }
         }
 
@@ -60,10 +63,17 @@ namespace _01.Scripts.Entity.Player.Scripts
             ResetParameters();
         }
 
+        public void OnDamage(int damage)
+        {
+            Damagable.OnTakeDamage(damage);
+            ResetParameters();
+        }
+
         public void ResetParameters()
         {
-            interactableObject = null;
+            detectedObject = null;
             Interactable = null;
+            Damagable = null;
         }
     }
 }
