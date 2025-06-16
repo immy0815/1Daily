@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace _01.Scripts.Entity.Player.Scripts.States
 {
-    public class PlayerBaseState : MonoBehaviour, IState
+    public class PlayerBaseState : IState
     {
         protected readonly PlayerStateMachine stateMachine;
         protected readonly EntityCondition playerCondition;

@@ -84,7 +84,7 @@ namespace _01.Scripts.Entity.Player.Scripts
         private void OnDeath()
         {
             Animator.SetTrigger(AnimationData.DeathParameterHash);
-            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Move, 0.5f);
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Death, 0.5f);
         }
     }
 }

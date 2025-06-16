@@ -74,14 +74,14 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
             {
                 if (!pistol.OnShoot(stateMachine.Player)) return;
-                if (AttackCoroutine != null) StopCoroutine(AttackCoroutine); 
+                if (AttackCoroutine != null) stateMachine.Player.StopCoroutine(AttackCoroutine); 
                 AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
                 // TODO: Animation 호출
                 return;
             }
 
             if (stateMachine.Player.PlayerInteraction.Damagable is not Enemy) return;
-            if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
+            if (AttackCoroutine != null) stateMachine.Player.StopCoroutine(AttackCoroutine);
             AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(1f));
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
