@@ -15,18 +15,17 @@ public class Pistol : Weapon, IShootable
     [SerializeField] private GameObject bullet;
     [SerializeField] private GameObject bulletPoolObj;
     [SerializeField] private GameObject firePoint;
+    [SerializeField] private LayerMask shootableLayer;
     [SerializeField] private int bulletCount = 6;
     [SerializeField] private float recoilTime = 1f;
     [SerializeField] private float throwForce = 10;
     [SerializeField] private ParticleSystem muzzleFlash;
-    [SerializeField] private SoundHelper soundHelper;
-    public float recoilAngle = -70f;  
-    public float upTime  = 0.1f;         
-    public float downTime  = 0.15f;    
+    
+    private float recoilAngle = -70f;  
+    private float upTime  = 0.1f;         
+    private float downTime  = 0.15f;    
     private Quaternion originalRot;
     private Coroutine recoilRoutine;
-    
-     
     
     [field: Header("Pistol Condition")]
     [field: SerializeField] public float TimeSinceLastShoot { get; private set; }
@@ -36,18 +35,12 @@ public class Pistol : Weapon, IShootable
 
     protected override void Awake()
     {
-        originalRot = transform.localRotation;
         base.Awake();
         if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
-    }
-    
-    protected override void Start()
-    {
-        base.Start();
-
         if (!bulletPoolObj) bulletPoolObj = GameObject.Find("BulletPool");
 
+        originalRot = transform.localRotation;
         originalBulletCount = bulletCount;
     }
 
@@ -81,22 +74,16 @@ public class Pistol : Weapon, IShootable
 
         bullet = bulletPool.GetBullet();
         if (!bullet) return false;
-
         bulletCount--;
         IsReady = false;
+        
         PlayRecoil();  // 반동
-        var direction = transform.forward;
         
-        Vector3 targetPosRandomElement = new Vector3(
-            Random.Range(-0.15f, 0.15f),
-            Random.Range(-0.15f, 0.15f),
-            Random.Range(-0.15f, 0.15f)
-        );
-
-        Vector3 targetPos = enemy.Target.transform.position + targetPosRandomElement + Vector3.up * 1.5f; // 1.5f는 대략 플레이어 모델의 상체~머리
-        
-        // direction 결정
-        var direction = targetPos - firePoint.transform.position; 
+        var direction = Physics.Raycast(
+            player.MainCameraTransform.position,
+            player.MainCameraTransform.forward, out var hitInfo, float.MaxValue, shootableLayer)
+            ? (hitInfo.point - player.PlayerInventory.WeaponPivot.position).normalized
+            : player.MainCameraTransform.forward;
         
         bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
         return true;

@@ -67,12 +67,11 @@ public class Bullet : MonoBehaviour
     {
         if (!isActive) return;
         if (((1 << other.gameObject.layer) & hittableLayer.value) == 0) return;
-        
+
         var damagable = other.GetComponent<IDamagable>();
         if (damagable == null) { ReturnToPool(); return; }
         if (damagable is PlayerCondition && isShotByPlayer) return;
         damagable.OnTakeDamage(bulletDamage);
-        
         ReturnToPool();
     }
     
@@ -82,5 +81,5 @@ public class Bullet : MonoBehaviour
         gameObject.SetActive(false);
         _bulletPool.ReturnBullet(gameObject);
     } 
-    
 }
+
