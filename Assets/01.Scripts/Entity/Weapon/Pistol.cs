@@ -1,4 +1,5 @@
 using System.Collections;
+using _01.Scripts.Entity.Player.Scripts;
 using _01.Scripts.Util;
 using Retronia.Core;
 using UnityEngine;
@@ -9,7 +10,6 @@ public class Pistol : Weapon, IShootable
     [SerializeField] private Rigidbody rigidBody;
     [SerializeField] private BoxCollider boxCollider;
     [SerializeField] private AudioClip gunshotClip;
-     
     
     [Header("Pistol Settings")]
     [SerializeField] private GameObject bullet;
@@ -19,11 +19,13 @@ public class Pistol : Weapon, IShootable
     [SerializeField] private float recoilTime = 1f;
     [SerializeField] private float throwForce = 10;
     [SerializeField] private ParticleSystem muzzleFlash;
-    public float recoilAngle = -100f;  
+    [SerializeField] private SoundHelper soundHelper;
+    public float recoilAngle = -70f;  
     public float upTime  = 0.1f;         
     public float downTime  = 0.15f;    
     private Quaternion originalRot;
     private Coroutine recoilRoutine;
+    
      
     
     [field: Header("Pistol Condition")]
@@ -39,7 +41,7 @@ public class Pistol : Weapon, IShootable
         if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
     }
-
+    
     protected override void Start()
     {
         base.Start();
@@ -60,14 +62,19 @@ public class Pistol : Weapon, IShootable
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
     }
 
-    public bool OnShoot()
+    public bool OnShoot(Enemy enemy)
+    {
+        return true;
+    }
+
+    public bool OnShoot(Player player)
     {
         if (!IsReady || bulletCount < 1) return false;
         var bulletPool = bulletPoolObj?.GetComponent<BulletPool>();
         if (!bulletPool) return false;
         PlayMuzzleFlash();
-        SoundManager.Play(gunshotClip, AudioType.UI);
-        
+        SoundManager.Play(gunshotClip,gameObject);
+
         bullet = bulletPool.GetBullet();
         if (!bullet) return false;
         bulletCount--;

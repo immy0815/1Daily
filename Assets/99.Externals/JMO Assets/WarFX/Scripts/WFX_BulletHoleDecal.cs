@@ -29,7 +29,8 @@ public class WFX_BulletHoleDecal : MonoBehaviour
 	void Awake()
 	{
 		color = this.GetComponent<Renderer>().material.GetColor("_TintColor");
-		orgAlpha = color.a;
+		orgAlpha = 1f;
+		color.a = 1f;
 	}
 	
 	void OnEnable()
