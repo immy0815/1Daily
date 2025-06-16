@@ -10,6 +10,7 @@ public class EnemySightSensor : MonoBehaviour
     [SerializeField] float viewAngle;
     int detectLayer;
     [SerializeField] private Transform targetInSightRange;
+    private Vector3 TargetPos => targetInSightRange.position + Vector3.up * 1;  // 플레이어 발밑이 아닌 적당히 위로 레이를 쏘기 위함
     private void Awake()
     {
         enemy = GetComponentInParent<Enemy>();
@@ -21,7 +22,7 @@ public class EnemySightSensor : MonoBehaviour
     void Update()
     {
         if (!targetInSightRange) return;
-        Vector3 posDiffDirection = (targetInSightRange.transform.position - transform.position).normalized;
+        Vector3 posDiffDirection = (TargetPos - transform.position).normalized;
             
         // 1. 시야각 안에 있음
         if (Vector3.Dot(transform.forward, posDiffDirection) < Mathf.Cos(viewAngle * Mathf.Deg2Rad))
@@ -59,6 +60,15 @@ public class EnemySightSensor : MonoBehaviour
         {
             enemy.SetTarget(null);
             targetInSightRange = null;
+        }
+    }
+    private void OnDrawGizmos()
+    {
+        if (targetInSightRange != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, TargetPos);
+            Gizmos.DrawSphere(TargetPos, 0.2f);
         }
     }
 }

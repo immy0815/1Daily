@@ -24,7 +24,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
 
         protected override void OnSlowMotionPerformed(InputAction.CallbackContext context)
         {
-            Debug.Log("Changed Time scale to 0.3f");
+            //Debug.Log("Changed Time scale to 0.3f");
 
             base.OnSlowMotionPerformed(context);
             if (playerCondition.IsDead) return;
@@ -33,7 +33,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
 
         protected override void OnSlowMotionCanceled(InputAction.CallbackContext context)
         {
-            Debug.Log("Changed Time scale to 1f");
+            //Debug.Log("Changed Time scale to 1f");
 
             base.OnSlowMotionCanceled(context);
             if (playerCondition.IsDead) return;

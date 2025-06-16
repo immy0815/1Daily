@@ -40,6 +40,7 @@ public class Enemy : MonoBehaviour, IDamagable
     public bool IsHit { get; set; }
     public bool IsDead { get; private set; }
 
+    public event Action OnDeath;
 
     private void Awake()
     {
@@ -110,6 +111,8 @@ public class Enemy : MonoBehaviour, IDamagable
         fsm.enabled = false;
         characterController.enabled = false;
         enabled = false;
+        
+        OnDeath?.Invoke();
     }
 
     public Vector3 GetTargetDirection()
