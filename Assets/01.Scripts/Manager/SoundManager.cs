@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
@@ -49,7 +50,19 @@ using UnityEngine.SceneManagement;
     {
       get
       {
-        if(!mixer) mixer = Resources.Load<AudioMixer>("AudioMixer");
+        if(!mixer)
+        {
+          mixer = Addressables.LoadAssetAsync<AudioMixer>("AudioMixer").WaitForCompletion();
+          
+          MasterVolume = PlayerPrefs.GetFloat("MasterVolume", 80);
+          BgmVolume = PlayerPrefs.GetFloat("BgmVolume", 80);
+          UIVolume = PlayerPrefs.GetFloat("UIVolume", 80);
+          SfxVolume = PlayerPrefs.GetFloat("SfxVolume", 80);
+        
+          uiGroup = mixer.FindMatchingGroups("UI")[0];
+          bgmGroup = mixer.FindMatchingGroups("Bgm")[0];
+          sfxGroup = mixer.FindMatchingGroups("Sfx")[0];
+        }
 
         return mixer;
       }
@@ -62,10 +75,6 @@ using UnityEngine.SceneManagement;
         BgmVolume = PlayerPrefs.GetFloat("BgmVolume", 80);
         UIVolume = PlayerPrefs.GetFloat("UIVolume", 80);
         SfxVolume = PlayerPrefs.GetFloat("SfxVolume", 80);
-        
-        uiGroup = Mixer.FindMatchingGroups("UI")[0];
-        bgmGroup = Mixer.FindMatchingGroups("Bgm")[0];
-        sfxGroup = Mixer.FindMatchingGroups("Sfx")[0];
       }
     }
 
