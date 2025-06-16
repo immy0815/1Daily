@@ -789,8 +789,8 @@ MonoBehaviour:
   maxCheckDistance: 5
   interactableLayers:
     serializedVersion: 2
-    m_Bits: 256
-  interactableObject: {fileID: 0}
+    m_Bits: 384
+  detectedObject: {fileID: 0}
   timeSinceLastCheck: 0
 --- !u!114 &6416116590577898970
 MonoBehaviour:
@@ -822,7 +822,7 @@ MonoBehaviour:
   <Animator>k__BackingField: {fileID: 3439992321258709547}
   <CharacterController>k__BackingField: {fileID: 1689909025527273621}
   <PlayerController>k__BackingField: {fileID: 2871678874714045733}
-  <PlayerCondition>k__BackingField: {fileID: 4251973049345965736}
+  <PlayerCondition>k__BackingField: {fileID: 0}
   <PlayerInteraction>k__BackingField: {fileID: 2914589697141439159}
   <PlayerInventory>k__BackingField: {fileID: 2163060283811807229}
   <PlayerGravity>k__BackingField: {fileID: 1810071388816411344}
