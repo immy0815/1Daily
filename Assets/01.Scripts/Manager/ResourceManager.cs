@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public enum SceneName
 {
-    Title,
     Game,
 }
 
@@ -16,10 +15,11 @@ public class ResourceManager : MonoBehaviour
 
     [SerializeField] private List<string> _stageKeys;
 
-    // private SceneLoader _sceneLoader;
+    private SceneLoader _sceneLoader;
     private StageLoader _stageLoader;
 
-    // private SceneName _currentScene;
+    private SceneName _currentScene;
+    private GameObject _currentStage;
 
     private void Awake()
     {
@@ -27,9 +27,8 @@ public class ResourceManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            // _sceneLoader = new SceneLoader();
+            _sceneLoader = new SceneLoader();
             _stageLoader = new StageLoader();
-            // _sceneLoader.Init();
         }
         else
         {
@@ -47,10 +46,9 @@ public class ResourceManager : MonoBehaviour
 
     private IEnumerator LoadAllResources()
     {
-        //ield return Addressables.InitializeAsync();
+        yield return Addressables.InitializeAsync();
 
-        // StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Title));
-        // StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Game));
+        StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Game));
 
         foreach (string key in _stageKeys)
         {
@@ -80,15 +78,22 @@ public class ResourceManager : MonoBehaviour
 
     public void InstantiateStage(string stageKey)
     {
+        if (_currentStage != null)
+        {
+            Destroy(_currentStage);
+            _currentStage = null;
+        }
+
         GameObject prefab = _stageLoader.GetStagePrefab(stageKey);
         if (prefab != null)
         {
-            Instantiate(prefab);
+            _currentStage = Instantiate(prefab);
+
             Debug.Log($"[ResourceManager] Instantiated stage: {stageKey}");
         }
         else
         {
-            Debug.LogError($"[ResourceManager] Cannot instantiate stage. '{stageKey}' not found.");
+            Debug.LogError($"[ResourceManager] Cannot instantiate stage. <{stageKey}> not found.");
         }
     }
 }

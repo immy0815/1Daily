@@ -24,10 +24,12 @@ public class EnemyRunState : EnemyStateBase
 
     public override void Update()
     {
-        if (enemy.Agent.remainingDistance <= enemy.Agent.stoppingDistance && enemy.HasNoWeapon())
+        if (enemy.CanTouchTarget() || !enemy.Target)
         {
             fsm.ChangeState(fsm.idleState);
         }
+        if(enemy.Target) enemy.Agent.SetDestination(enemy.Target.transform.position); 
+        
     }
 
     public override string GetNameString()

@@ -60,7 +60,7 @@ public class Pistol : Weapon, IShootable
         IsReady = false;
         
         var direction = transform.forward;
-        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, IsOwnedByPlayer);
+        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
         return true;
     }
 

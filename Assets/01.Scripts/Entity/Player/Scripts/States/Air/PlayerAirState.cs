@@ -62,13 +62,13 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
                 // TODO: Animation 호출
-				katana.OnHit();
+				        katana.OnHit();
                 enemy.TakeDamage(katana.WeaponData.damage);
             }
             else
             {
                 // TODO: Animation 호출
-                enemy.TakeDamage(stateMachine.Player.PlayerCondition.Damage);
+                enemy.OnTakeDamage(stateMachine.Player.PlayerCondition.Damage);
             }
             stateMachine.Player.PlayerInteraction.ResetParameters();
         }

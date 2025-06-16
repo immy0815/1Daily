@@ -19,7 +19,11 @@ public class Bullet : MonoBehaviour
     [Header("Bullet State")]
     [SerializeField] private bool isShotByPlayer;
     
+    BulletPool _bulletPool;
     private bool isActive;
+
+    private const float lifeTime = 8f;
+    float elapsedTime;
 
     private void Awake()
     {
@@ -46,14 +50,18 @@ public class Bullet : MonoBehaviour
     private void Update()
     {
         if (!isActive) return;
+        elapsedTime += Time.deltaTime;
+        if(elapsedTime >= lifeTime) ReturnToPool();
     }
 
-    public void Init(Vector3 position, Vector3 direction, bool isShotByPlayer)
+    public void Init(Vector3 position, Vector3 direction, BulletPool bulletPool, bool isShotByPlayer)
     {
         transform.position = position;
         transform.rotation = Quaternion.LookRotation(direction);
         this.isShotByPlayer = isShotByPlayer;
         rigidBody.AddForce(direction * bulletSpeed, ForceMode.Impulse);
+        _bulletPool = bulletPool;
+        elapsedTime = 0f;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -66,9 +74,11 @@ public class Bullet : MonoBehaviour
         damagable.OnTakeDamage(bulletDamage);
         ReturnToPool();
     }
+    
     private void ReturnToPool()
     {
         isActive = false;
         gameObject.SetActive(false);
-    }
+        _bulletPool.ReturnBullet(gameObject);
+    } 
 }

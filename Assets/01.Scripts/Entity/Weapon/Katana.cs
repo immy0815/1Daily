@@ -61,7 +61,7 @@ public class Katana : Weapon, IHittable
         Enemy enemy = other.GetComponent<Enemy>();
         if (enemy != null)
         {
-            enemy.TakeDamage(WeaponData.damage);
+            enemy.OnTakeDamage(WeaponData.damage);
             //enemy.dropWeapon();
         }
     }
