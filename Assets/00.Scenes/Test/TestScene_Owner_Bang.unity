@@ -708,10 +708,22 @@ PrefabInstance:
       propertyPath: bulletPoolObj
       value: 
       objectReference: {fileID: 1657170854}
+    - target: {fileID: 5590011176649574321, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: <FirstPersonCamera>k__BackingField
+      value: 
+      objectReference: {fileID: 280440279}
     - target: {fileID: 6030355450700384450, guid: 6326b71661c324c44b88502d66609e05, type: 3}
       propertyPath: bulletPoolObj
       value: 
       objectReference: {fileID: 1657170854}
+    - target: {fileID: 7464782269587529332, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 23800000, guid: 5aa584755dae16c409bbcae857b2b498, type: 2}
+    - target: {fileID: 7464782269587529332, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: m_CollectObjects
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8392984249151005675, guid: 6326b71661c324c44b88502d66609e05, type: 3}
       propertyPath: bulletPoolObj
       value: 
