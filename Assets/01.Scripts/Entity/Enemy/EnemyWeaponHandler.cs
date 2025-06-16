@@ -12,10 +12,17 @@ public class EnemyWeaponHandler : MonoBehaviour
     [SerializeField] private Transform pivot;
 
     private Enemy enemy;
-    
+
+    [SerializeField] private bool attackReady;
+    private Coroutine attackReadyCoroutine;
     private void Awake()
     {
         weapon = GetComponentInChildren<Weapon>();
+        attackReady = false;
+    }
+
+    private void Start()
+    {
         if (weapon is IInteractable interactable)
         {
             interactable.OnInteract(pivot);
@@ -29,14 +36,43 @@ public class EnemyWeaponHandler : MonoBehaviour
 
     public void Attack()
     {
+        if (enemy.TargetPlayer.PlayerCondition.IsDead) return;
         switch (weapon)
         {
             case IShootable shootable:
+                if (!attackReady)
+                {
+                    if(attackReadyCoroutine == null)
+                        attackReadyCoroutine = StartCoroutine(WaitUntilPostureReady());
+                    return;
+                }
                 shootable.OnShoot(enemy);
+                if (!shootable.CanShoot())
+                {
+                    weapon.OnThrow(Vector3.down, false);
+                    weapon = null;
+                    enemy.Animator.SetBool(enemy.AnimationData.ShotParameterHash, false);
+                }
                 break;
             case IHittable hittable:
                 hittable.OnHit();
                 break;
+        }
+    }
+
+    IEnumerator WaitUntilPostureReady()
+    {
+        yield return new WaitForSeconds(0.25f); // 정자세에서 총구 준비 자세로 향하는 시간, 일단 상수로 설정
+        attackReady = true;
+    }
+
+    public void CancelReady()
+    {
+        attackReady = false;
+        if (attackReadyCoroutine != null)
+        {
+            StopCoroutine(attackReadyCoroutine);
+            attackReadyCoroutine = null;
         }
     }
 }

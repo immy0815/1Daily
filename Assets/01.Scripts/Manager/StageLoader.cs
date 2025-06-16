@@ -8,6 +8,7 @@ public class StageLoader
 {
     public Dictionary<string, GameObject> LoadedStages { get; private set; } = new();
 
+    // ResourceManager에서만 접근하는 메서드입니다!! ResourceManager의 InstantiateStage를 호출해주세요!
     public IEnumerator LoadStageAsync(string stageKey)
     {
         AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(stageKey);
@@ -24,11 +25,13 @@ public class StageLoader
         }
     }
 
+    // ResourceManager에서만 접근하는 메서드입니다!! ResourceManager의 InstantiateStage를 호출해주세요!
     public GameObject GetStagePrefab(string stageKey)
     {
         return LoadedStages.ContainsKey(stageKey) ? LoadedStages[stageKey] : null;
     }
 
+    // ResourceManager에서만 접근하는 메서드입니다!! ResourceManager의 ReleaseAllResources를 호출해주세요!
     public void ReleaseStagePrefab()
     {
         foreach (var kvp in LoadedStages)
