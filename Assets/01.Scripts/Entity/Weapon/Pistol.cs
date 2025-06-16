@@ -78,8 +78,16 @@ public class Pistol : Weapon, IShootable
         bulletCount--;
         IsReady = false;
         
+        Vector3 targetPosRandomElement = new Vector3(
+            Random.Range(-0.15f, 0.15f),
+            Random.Range(-0.15f, 0.15f),
+            Random.Range(-0.15f, 0.15f)
+        );
+
+        Vector3 targetPos = enemy.Target.transform.position + targetPosRandomElement + Vector3.up * 1.5f;
+        
         // direction 결정
-        var direction = enemy.Target.transform.position + Vector3.up * 1.5f - firePoint.transform.position; // 1.5f는 대략 눈높이 키
+        var direction = targetPos - firePoint.transform.position; // 1.5f는 대략 눈높이 키
         
         bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
         return true;
