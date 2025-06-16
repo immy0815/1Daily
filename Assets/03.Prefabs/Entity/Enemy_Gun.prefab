@@ -287,7 +287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebc32f9b134eb97488fc1a9e1ee3b8dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
+  weapon: {fileID: 757239168473487323}
   pivot: {fileID: 3688184087802483463}
 --- !u!1001 &115318725541081052
 PrefabInstance:
@@ -1353,6 +1353,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
+--- !u!114 &757239168473487323 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7136393713580456878, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
+  m_PrefabInstance: {fileID: 7605402499919703157}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a15e762f5bc013e4b95683206aba9ff1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4125215056930837108 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5815383501102415361, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
