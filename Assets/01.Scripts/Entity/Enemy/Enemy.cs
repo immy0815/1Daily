@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using _01.Scripts.Entity.Common.Scripts;
 using _01.Scripts.Entity.Player.Scripts;
+using _01.Scripts.Entity.Player.Scripts.Interface;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamagable
 {
     public AnimationData AnimationData { get; private set; }
     
@@ -81,18 +82,13 @@ public class Enemy : MonoBehaviour
     {
         return (target.position - transform.position).sqrMagnitude;
     }
-
-    public float GetPunchRange()
-    {
-        return 3;
-    }
-
+    
     public bool HasWeapon()
     {
         return weaponHandler.Weapon;
     }
 
-    public void TakeDamage(int damage)
+    public void OnTakeDamage(int damage)
     {
         if (IsDead) return;
         currentHP -= damage;

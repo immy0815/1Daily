@@ -53,7 +53,7 @@ public class Pistol : Weapon, IShootable
         IsReady = false;
         
         var direction = transform.forward;
-        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction);
+        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool);
         return true;
     }
 

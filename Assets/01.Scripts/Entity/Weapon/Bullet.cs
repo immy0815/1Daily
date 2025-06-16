@@ -15,8 +15,12 @@ public class Bullet : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Rigidbody rigidBody;
     [SerializeField] private MeshRenderer meshRenderer;
-    
+
+    BulletPool _bulletPool;
     private bool isActive;
+
+    private const float lifeTime = 8f;
+    float elapsedTime;
 
     private void Awake()
     {
@@ -43,14 +47,18 @@ public class Bullet : MonoBehaviour
     private void Update()
     {
         if (!isActive) return;
+        elapsedTime += Time.deltaTime;
+        if(elapsedTime >= lifeTime) ReturnToPool();
     }
 
-    public void Init(Vector3 position, Vector3 direction)
+    public void Init(Vector3 position, Vector3 direction, BulletPool bulletPool)
     {
         transform.position = position;
         transform.rotation = Quaternion.LookRotation(direction);
 
         rigidBody.AddForce(direction * bulletSpeed, ForceMode.Impulse);
+        _bulletPool = bulletPool;
+        elapsedTime = 0f;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -67,5 +75,6 @@ public class Bullet : MonoBehaviour
     {
         isActive = false;
         gameObject.SetActive(false);
-    }
+        _bulletPool.ReturnBullet(gameObject);
+    } 
 }

@@ -55,12 +55,12 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             {
                 // TODO: Animation 호출
                 katana.OnHit();
-                enemy.TakeDamage(katana.WeaponData.damage);
+                enemy.OnTakeDamage(katana.WeaponData.damage);
             }
             else
             {
                 // TODO: Animation 호출
-                enemy.TakeDamage(stateMachine.Player.PlayerCondition.Damage);
+                enemy.OnTakeDamage(stateMachine.Player.PlayerCondition.Damage);
             }
             stateMachine.Player.PlayerInteraction.ResetParameters();
         }

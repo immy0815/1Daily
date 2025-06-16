@@ -5,7 +5,20 @@ using UnityEngine;
 
 public class TestCanon : MonoBehaviour
 {
-    public GameObject bulletPrefab;
+    //public GameObject bulletPrefab;
+    [SerializeField] BulletPool bulletPool;
+
+    private void Awake()
+    {
+        if (!TryGetComponent(out BulletPool _bulletPool))
+        {
+            Debug.LogWarning("BulletPool component not found");
+        }
+        else
+        {
+            bulletPool = _bulletPool;
+        }
+    }
 
     private void Start()
     {
@@ -16,9 +29,9 @@ public class TestCanon : MonoBehaviour
     {
         while (true)
         {
-            GameObject bulletGO = Instantiate(bulletPrefab);
+            GameObject bulletGO = bulletPool.GetBullet();
             Bullet bullet = bulletGO.GetComponent<Bullet>();
-            bullet.Init(transform.position+transform.forward, transform.forward);
+            bullet.Init(transform.position + transform.forward / 2, transform.forward, bulletPool);
             yield return new WaitForSeconds(2f);
         }
     }
