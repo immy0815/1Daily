@@ -31,7 +31,7 @@ public class TestCanon : MonoBehaviour
         {
             GameObject bulletGO = bulletPool.GetBullet();
             Bullet bullet = bulletGO.GetComponent<Bullet>();
-            bullet.Init(transform.position + transform.forward / 2, transform.forward, bulletPool);
+            bullet.Init(transform.position + transform.forward / 2, transform.forward, bulletPool, false);
             yield return new WaitForSeconds(2f);
         }
     }

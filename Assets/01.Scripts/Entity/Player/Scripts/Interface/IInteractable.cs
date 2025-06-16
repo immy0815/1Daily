@@ -13,6 +13,6 @@ namespace _01.Scripts.Entity.Player.Scripts.Interface
         /// Used for Weapons
         /// </summary>
         /// <param name="pivot"></param>
-        void OnInteract(Transform pivot, bool isOwnedByPlayer);
+        void OnInteract(Transform pivot, bool isOwnedByPlayer = false);
     }
 }

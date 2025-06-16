@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _01.Scripts.Entity.Common.Scripts;
+using _01.Scripts.Entity.Player.Scripts;
 using _01.Scripts.Entity.Player.Scripts.Interface;
 using _01.Scripts.Util;
 using UnityEngine;
@@ -71,6 +73,7 @@ public class Bullet : MonoBehaviour
 
         var damagable = other.GetComponent<IDamagable>();
         if (damagable == null) { ReturnToPool(); return; }
+        if (damagable is PlayerCondition && isShotByPlayer) return;
         damagable.OnTakeDamage(bulletDamage);
         ReturnToPool();
     }
