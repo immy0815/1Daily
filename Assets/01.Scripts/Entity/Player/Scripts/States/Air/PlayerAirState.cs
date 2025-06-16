@@ -62,8 +62,8 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
                 // TODO: Animation 호출
-				        katana.OnHit();
-                enemy.TakeDamage(katana.WeaponData.damage);
+                katana.OnHit();
+                enemy.OnTakeDamage(katana.WeaponData.damage);
             }
             else
             {

@@ -63,6 +63,7 @@ namespace _01.Scripts.Entity.Common.Scripts
             ShotParameterHash = Animator.StringToHash(shotParameterName);
             
             DeathParameterHash = Animator.StringToHash(deathParameterName);
+            HitParameterHash = Animator.StringToHash(deathParameterName);
         }
     }
 }

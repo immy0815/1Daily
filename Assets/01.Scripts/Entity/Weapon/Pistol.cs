@@ -94,6 +94,7 @@ public class Pistol : Weapon, IShootable
         rigidBody.useGravity = false;
         boxCollider.isTrigger = true;
         IsOwnedByPlayer = isOwnedByPlayer;
+        FillAmmo();
         StartCoroutine(MoveToPivot(pivot));
     }
 }
