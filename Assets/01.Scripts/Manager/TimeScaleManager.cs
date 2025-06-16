@@ -17,7 +17,10 @@ namespace _01.Scripts.Manager
         // Properties
         [field: Header("TimeScale Values")]
         [field: SerializeField] public PriorityType PreviousUpdateType { get; private set; } = PriorityType.Move;
+        [field: SerializeField] public float MaxTimeScale { get; private set; } = 1f;
+        [field: SerializeField] public float MinTimeScale { get; private set; } = 0.01f;
         [field: SerializeField] public float TargetTimeScale { get; private set; } = 0.01f;
+        
         
         // Fields
         private Coroutine timeScaleCoroutine;
@@ -34,6 +37,7 @@ namespace _01.Scripts.Manager
 
         private void Start()
         {
+            TargetTimeScale = MinTimeScale;
             Time.timeScale = TargetTimeScale;
             originalFixedDeltaTime = Time.fixedDeltaTime;
         }

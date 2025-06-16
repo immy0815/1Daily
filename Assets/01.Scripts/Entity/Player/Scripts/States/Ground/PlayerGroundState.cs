@@ -46,7 +46,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             }
 
             if (Mathf.Approximately(Time.timeScale, 0.01f)) return;
-            if (stateMachine.Player.PlayerInventory.CurrentWeapon && AttackCoroutine != null) return;
+            if (AttackCoroutine != null) return;
             if (stateMachine.Player.PlayerInventory.ThrowCoroutine != null) return;
                 
             TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Move, 0.01f);
@@ -63,36 +63,38 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
         protected override void OnJumpStarted(InputAction.CallbackContext context)
         {
             base.OnJumpStarted(context);
+            if (playerCondition.IsDead) return;
             stateMachine.ChangeState(stateMachine.JumpState);
         }
 
         protected override void OnAttack(InputAction.CallbackContext context)
         {
             base.OnAttack(context);
+            if (playerCondition.IsDead) return;
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
             {
-                if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
+                if (!pistol.OnShoot(stateMachine.Player)) return;
+                if (AttackCoroutine != null) StopCoroutine(AttackCoroutine); 
                 AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
-                if (pistol.OnShoot(stateMachine.Player))
-                {
-                    // TODO: Animation 호출
-                }
+                // TODO: Animation 호출
                 return;
             }
 
-            if (stateMachine.Player.PlayerInteraction.Interactable is not Enemy enemy) return;
+            if (stateMachine.Player.PlayerInteraction.Damagable is not Enemy) return;
             if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
-            AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
+            AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(1f));
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
                 // TODO: Animation 호출
 				katana.OnHit();
-                enemy.OnTakeDamage(katana.WeaponData.damage);
+                Debug.Log("Katana Attack");
+                stateMachine.Player.PlayerInteraction.Damagable.OnTakeDamage(katana.WeaponData.damage);
             }
             else
             {
                 // TODO: Animation 호출
-                enemy.OnTakeDamage(stateMachine.Player.PlayerCondition.Damage);
+                Debug.Log("Fist Attack");
+                stateMachine.Player.PlayerInteraction.Damagable.OnTakeDamage(stateMachine.Player.PlayerCondition.Damage);
             }
             stateMachine.Player.PlayerInteraction.ResetParameters();
         }
@@ -100,7 +102,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
         protected override void OnPickOrThrow(InputAction.CallbackContext context)
         {
             base.OnPickOrThrow(context);
-
+            if (playerCondition.IsDead) return;
             if (stateMachine.Player.PlayerInventory.CurrentWeapon)
             {
                 // TODO: Animation 호출?

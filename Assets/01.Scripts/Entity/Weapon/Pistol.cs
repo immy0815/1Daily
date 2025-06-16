@@ -28,13 +28,8 @@ public class Pistol : Weapon, IShootable
         base.Awake();
         if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
-        originalBulletCount = bulletCount;
-    }
-
-    protected override void Start()
-    {
-        base.Start();
         
+        originalBulletCount = bulletCount;
     }
 
     private void Update()
