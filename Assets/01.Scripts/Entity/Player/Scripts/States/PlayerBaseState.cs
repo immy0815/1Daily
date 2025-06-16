@@ -115,14 +115,20 @@ namespace _01.Scripts.Entity.Player.Scripts.States
         protected IEnumerator ChangeTimeScaleForSeconds(float timeDuration)
         {
             var time = 0f;
-            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Attack, 1);
+            var startTimeScale = TimeScaleManager.Instance.MaxTimeScale;
+            var targetTimeScale = TimeScaleManager.Instance.MinTimeScale;
+            
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Attack, startTimeScale);
             while (time < timeDuration)
             {
                 time += Time.unscaledDeltaTime;
                 var t = time / timeDuration;
-                TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Attack,Mathf.Lerp(Time.timeScale, 0.01f, t));
+                var lerpScale = Mathf.Lerp(startTimeScale, targetTimeScale, t);
+                TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Attack, lerpScale);
                 yield return null;
             }
+            
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Attack, targetTimeScale);
             AttackCoroutine = null;
         }
 

@@ -23,6 +23,9 @@ public class Enemy : MonoBehaviour, IDamagable
 
     [SerializeField] private EnemyWeaponHandler weaponHandler;
     public EnemyWeaponHandler WeaponHandler => weaponHandler;
+
+    [SerializeField] private EnemySightSensor sightSensor;
+    public EnemySightSensor SightSensor => sightSensor;
     
     private CharacterController characterController;
 
@@ -51,6 +54,7 @@ public class Enemy : MonoBehaviour, IDamagable
         agent = GetComponent<NavMeshAgent>();
         characterController = GetComponent<CharacterController>();
         weaponHandler = GetComponent<EnemyWeaponHandler>();
+        sightSensor = GetComponentInChildren<EnemySightSensor>();
 
         IsDead = false;
         currentHP = enemyData.HP;
