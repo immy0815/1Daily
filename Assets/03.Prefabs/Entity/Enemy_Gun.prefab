@@ -78,11 +78,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02c377af323cc4b4bacb8c941194e16c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewAngle: 60
+  viewAngle: 160
   targetInSightRange: {fileID: 0}
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
+  sightLayer:
+    serializedVersion: 2
+    m_Bits: 1600
+  detectOverWall: 1
 --- !u!135 &3867332313436272372
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -207,6 +211,7 @@ MonoBehaviour:
   fsm: {fileID: 1168658905885510526}
   agent: {fileID: 0}
   weaponHandler: {fileID: 953323034799614643}
+  sightSensor: {fileID: 0}
   enemyData: {fileID: 11400000, guid: 8f176fa202158d047a9d189f85df3f0d, type: 2}
   currentHP: 3
   target: {fileID: 0}

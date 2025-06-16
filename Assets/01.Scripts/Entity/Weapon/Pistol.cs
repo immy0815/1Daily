@@ -79,7 +79,8 @@ public class Pistol : Weapon, IShootable
         IsReady = false;
         
         // TODO: Direction 결정 매커니즘 작성 부탁합니다
-        var direction = firePoint.transform.forward;
+        var direction = enemy.Target.transform.position + Vector3.up* 1.5f - firePoint.transform.position;
+        
         bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
         return true;
     }
