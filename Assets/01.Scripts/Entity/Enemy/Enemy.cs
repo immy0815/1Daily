@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _01.Scripts.Entity.Common.Scripts;
+using _01.Scripts.Entity.Player.Scripts;
+using _01.Scripts.Entity.Player.Scripts.Interface;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamagable
 {
     public AnimationData AnimationData { get; private set; }
     
@@ -15,10 +17,14 @@ public class Enemy : MonoBehaviour
     
     [SerializeField] private EnemyFSM fsm;
     public EnemyFSM FSM => fsm;
-    
      
     [SerializeField] private NavMeshAgent agent;
     public NavMeshAgent Agent => agent;
+
+    [SerializeField] private EnemyWeaponHandler weaponHandler;
+    public EnemyWeaponHandler WeaponHandler => weaponHandler;
+    
+    private CharacterController characterController;
 
     [Header("Stats")] 
     [SerializeField] private EnemyData enemyData;
@@ -28,7 +34,11 @@ public class Enemy : MonoBehaviour
     [Header("Runtime Info")] 
     [SerializeField] private Transform target;
     public Transform Target => target;
-    public bool IsHit { get; private set; }
+    [SerializeField] private Player targetPlayer;
+    public Player TargetPlayer => targetPlayer;
+    
+    public bool IsHit { get; set; }
+    public bool IsDead { get; private set; }
 
 
     private void Awake()
@@ -38,10 +48,11 @@ public class Enemy : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         fsm = GetComponent<EnemyFSM>();
         agent = GetComponent<NavMeshAgent>();
+        characterController = GetComponent<CharacterController>();
+        weaponHandler = GetComponent<EnemyWeaponHandler>();
 
+        IsDead = false;
         currentHP = enemyData.HP;
-        
-        Agent.SetDestination(Target.position);
     }
 
     private void Reset()
@@ -49,30 +60,37 @@ public class Enemy : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         fsm = GetComponent<EnemyFSM>();
         agent = GetComponent<NavMeshAgent>();
+        characterController = GetComponent<CharacterController>();
+        weaponHandler = GetComponent<EnemyWeaponHandler>();
     }
     
     public void SetTarget(Transform target)
     {
         this.target = target;
+
+        if (!target)
+        {
+            targetPlayer = null;
+        }
+        else if (!targetPlayer || targetPlayer.transform != target)
+        {
+            targetPlayer = target.GetComponent<Player>();
+        }
     }
 
     public float DistanceToTargetSQR()
     {
         return (target.position - transform.position).sqrMagnitude;
     }
-
-    public float GetCurrentRange()
+    
+    public bool HasWeapon()
     {
-        return 3;
+        return weaponHandler.Weapon;
     }
 
-    public bool HasNoWeapon()
+    public void OnTakeDamage(int damage)
     {
-        return true;
-    }
-
-    public void TakeDamage(int damage)
-    {
+        if (IsDead) return;
         currentHP -= damage;
         currentHP = Mathf.Max(currentHP, 0);
         if (currentHP != 0) IsHit = true;
@@ -81,15 +99,21 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        IsDead = true;
         Animator.SetTrigger(AnimationData.DeathParameterHash);
         agent.enabled = false;
         fsm.enabled = false;
+        characterController.enabled = false;
         enabled = false;
-        Debug.Log("죽음 (부족한부분 확인 필요)");
     }
 
     public Vector3 GetTargetDirection()
     {
         return (target.position - transform.position).normalized;
+    }
+
+    public bool CanTouchTarget()
+    {
+       return Target && DistanceToTargetSQR() < Mathf.Pow(Agent.stoppingDistance, 2);
     }
 }

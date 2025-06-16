@@ -14,7 +14,6 @@ public class SceneLoader
     {
         _sceneKeyMap = new Dictionary<SceneName, string>
         {
-            { SceneName.Title, "Scene_Title" },
             { SceneName.Game, "Scene_Game" }
         };
     }
@@ -27,7 +26,7 @@ public class SceneLoader
             yield break;
         }
 
-        var handle = Addressables.LoadSceneAsync(key, LoadSceneMode.Additive);
+        var handle = Addressables.LoadSceneAsync(key, LoadSceneMode.Single);
         yield return handle;
 
         if (handle.Status == AsyncOperationStatus.Succeeded)

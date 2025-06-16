@@ -46,7 +46,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             }
 
             if (Mathf.Approximately(Time.timeScale, 0.01f)) return;
-            if (stateMachine.Player.PlayerInventory.CurrentWeapon && stateMachine.Player.PlayerInventory.CurrentWeapon.AttackCoroutine != null) return;
+            if (stateMachine.Player.PlayerInventory.CurrentWeapon && AttackCoroutine != null) return;
             if (stateMachine.Player.PlayerInventory.ThrowCoroutine != null) return;
                 
             TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Move, 0.01f);
@@ -71,6 +71,8 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             base.OnAttack(context);
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
             {
+                if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
+                AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
                 if (pistol.OnShoot())
                 {
                     // TODO: Animation 호출
@@ -79,16 +81,18 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             }
 
             if (stateMachine.Player.PlayerInteraction.Interactable is not Enemy enemy) return;
+            if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
+            AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
                 // TODO: Animation 호출
 				katana.OnHit();
-                enemy.TakeDamage(katana.WeaponData.damage);
+                enemy.OnTakeDamage(katana.WeaponData.damage);
             }
             else
             {
                 // TODO: Animation 호출
-                enemy.TakeDamage(stateMachine.Player.PlayerCondition.Damage);
+                enemy.OnTakeDamage(stateMachine.Player.PlayerCondition.Damage);
             }
             stateMachine.Player.PlayerInteraction.ResetParameters();
         }

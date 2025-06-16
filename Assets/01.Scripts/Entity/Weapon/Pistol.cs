@@ -51,7 +51,6 @@ public class Pistol : Weapon, IShootable
     public bool OnShoot()
     {
         if (!IsReady || bulletCount < 1) return false;
-        AttackCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
         var bulletPool = bulletPoolObj?.GetComponent<BulletPool>();
         if (!bulletPool) return false;
         bullet = bulletPool.GetBullet();
@@ -61,13 +60,12 @@ public class Pistol : Weapon, IShootable
         IsReady = false;
         
         var direction = transform.forward;
-        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction);
+        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
         return true;
     }
 
     public override void OnThrow(Vector3 direction, bool isThrownByPlayer)
     {
-        if (AttackCoroutine != null) { StopCoroutine(AttackCoroutine); AttackCoroutine = null; } 
         transform.SetParent(null);
         rigidBody.isKinematic = false;
         rigidBody.useGravity = true;
@@ -76,7 +74,6 @@ public class Pistol : Weapon, IShootable
         IsReady = true;
         TimeSinceLastShoot = 0;
         IsThrownByPlayer = isThrownByPlayer;
-        IsThrownByEnemy = !isThrownByPlayer;
         
         rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
         thrownObject.enabled = true;
@@ -90,12 +87,14 @@ public class Pistol : Weapon, IShootable
         bulletCount = originalBulletCount;
     }
 
-    public override void OnInteract(Transform pivot)
+    public override void OnInteract(Transform pivot, bool isOwnedByPlayer)
     {
         if (IsThrownByPlayer) return;
         rigidBody.isKinematic = true;
         rigidBody.useGravity = false;
         boxCollider.isTrigger = true;
+        IsOwnedByPlayer = isOwnedByPlayer;
+        FillAmmo();
         StartCoroutine(MoveToPivot(pivot));
     }
 }

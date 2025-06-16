@@ -36,7 +36,7 @@ namespace _01.Scripts.Entity.Player.Scripts
         {
             if (weapon.IsThrownByPlayer) return;
             CurrentWeapon = weapon;
-            weapon.OnInteract(WeaponPivot);
+            weapon.OnInteract(WeaponPivot, true);
         }
         
         public void OnDropWeapon(Vector3 direction)

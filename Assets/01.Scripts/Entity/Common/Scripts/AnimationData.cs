@@ -21,6 +21,7 @@ namespace _01.Scripts.Entity.Common.Scripts
         [SerializeField] private string attackParameterName = "@Attack";
         [SerializeField] private string comboAttackParameterName = "ComboAttack";
         [SerializeField] private string comboAttackIndex = "Combo";
+        [SerializeField] private string shotParameterName = "Shot";
         
         [Header("Animation Parameter on death")]
         [SerializeField] private string deathParameterName = "Dead";
@@ -39,6 +40,7 @@ namespace _01.Scripts.Entity.Common.Scripts
         public int AttackParameterHash { get; private set; }
         public int ComboAttackParameterHash { get; private set; }
         public int ComboAttackIndexHash { get; private set; }
+        public int ShotParameterHash { get; private set; }
         public int DeathParameterHash { get; private set; }
         
         public int HitParameterHash { get; private set; }
@@ -58,8 +60,10 @@ namespace _01.Scripts.Entity.Common.Scripts
             AttackParameterHash = Animator.StringToHash(attackParameterName);
             ComboAttackParameterHash = Animator.StringToHash(comboAttackParameterName);
             ComboAttackIndexHash = Animator.StringToHash(comboAttackIndex);
+            ShotParameterHash = Animator.StringToHash(shotParameterName);
             
             DeathParameterHash = Animator.StringToHash(deathParameterName);
+            HitParameterHash = Animator.StringToHash(deathParameterName);
         }
     }
 }

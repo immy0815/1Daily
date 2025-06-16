@@ -43,7 +43,7 @@ namespace _01.Scripts.Manager
             if (PreviousUpdateType == PriorityType.Jump && type is PriorityType.Attack or PriorityType.Throw) return;
             
             if (Mathf.Approximately(TargetTimeScale, timeScale)) return; 
-            // Debug.Log($"Time Scale Changed from {TargetTimeScale} to {timeScale}");
+            Debug.Log($"Time Scale Changed from {TargetTimeScale} to {timeScale}");
             TargetTimeScale = timeScale;
             PreviousUpdateType = type;
             
