@@ -7,4 +7,6 @@ public interface IShootable
 {
     bool OnShoot(Player player);
     bool OnShoot(Enemy enemy);
+
+    bool CanShoot();
 }

@@ -28,11 +28,7 @@ public class Pistol : Weapon, IShootable
         base.Awake();
         if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
-    }
-
-    protected override void Start()
-    {
-        base.Start();
+        
         originalBulletCount = bulletCount;
     }
 
@@ -78,13 +74,28 @@ public class Pistol : Weapon, IShootable
         bullet = bulletPool.GetBullet();
         
         if (!bullet) return false;
+
         bulletCount--;
         IsReady = false;
         
-        // TODO: Direction 결정 매커니즘 작성 부탁합니다
-        var direction = firePoint.transform.forward;
+        Vector3 targetPosRandomElement = new Vector3(
+            Random.Range(-0.15f, 0.15f),
+            Random.Range(-0.15f, 0.15f),
+            Random.Range(-0.15f, 0.15f)
+        );
+
+        Vector3 targetPos = enemy.Target.transform.position + targetPosRandomElement + Vector3.up * 1.5f; // 1.5f는 대략 플레이어 모델의 상체~머리
+        
+        // direction 결정
+        var direction = targetPos - firePoint.transform.position; 
+        
         bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
         return true;
+    }
+
+    public bool CanShoot()
+    {
+        return bulletCount != 0;
     }
 
     public override void OnThrow(Vector3 direction, bool isThrownByPlayer)
@@ -98,8 +109,9 @@ public class Pistol : Weapon, IShootable
         TimeSinceLastShoot = 0;
         IsThrownByPlayer = isThrownByPlayer;
         
+        // TODO: 던지는 데미지를 적용해야 하는데 현재는 무기의 기본 데미지가 적용되어있음.(수정 필요!!!)
+        thrownObject.Init(WeaponData.damage);
         rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
-        thrownObject.enabled = true;
     }
 
     /// <summary>
@@ -120,4 +132,5 @@ public class Pistol : Weapon, IShootable
         FillAmmo();
         StartCoroutine(MoveToPivot(pivot));
     }
+    
 }
