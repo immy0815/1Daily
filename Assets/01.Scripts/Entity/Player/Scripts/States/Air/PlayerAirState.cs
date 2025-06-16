@@ -27,6 +27,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             Debug.Log("Changed Time scale to 0.3f");
 
             base.OnSlowMotionPerformed(context);
+            if (playerCondition.IsDead) return;
             TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Jump, 0.3f);
         }
 
@@ -35,12 +36,14 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             Debug.Log("Changed Time scale to 1f");
 
             base.OnSlowMotionCanceled(context);
+            if (playerCondition.IsDead) return;
             TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Jump, 1f);
         }
 
         protected override void OnAttack(InputAction.CallbackContext context)
         {
             base.OnAttack(context);
+            if (playerCondition.IsDead) return;
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
             {
                 if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
@@ -76,7 +79,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
         protected override void OnPickOrThrow(InputAction.CallbackContext context)
         {
             base.OnPickOrThrow(context);
-
+            if (playerCondition.IsDead) return;
             if (stateMachine.Player.PlayerInventory.CurrentWeapon)
             {
                 // TODO: Animation 호출?

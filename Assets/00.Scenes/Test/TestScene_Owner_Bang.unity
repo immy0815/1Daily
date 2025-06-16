@@ -881,6 +881,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6416116590577898970, guid: 94d1fa6dc21cfc14094889871bdb5b52, type: 3}
+      propertyPath: <PlayerCondition>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -950,9 +954,13 @@ PrefabInstance:
       propertyPath: bulletPoolObj
       value: 
       objectReference: {fileID: 1657170854}
+    - target: {fileID: 7136393713580456878, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
+      propertyPath: shootableLayer.m_Bits
+      value: 1728
+      objectReference: {fileID: 0}
     - target: {fileID: 8293249635332495934, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
       propertyPath: m_Mass
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8293249635332495934, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
       propertyPath: m_UseGravity

@@ -63,12 +63,14 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
         protected override void OnJumpStarted(InputAction.CallbackContext context)
         {
             base.OnJumpStarted(context);
+            if (playerCondition.IsDead) return;
             stateMachine.ChangeState(stateMachine.JumpState);
         }
 
         protected override void OnAttack(InputAction.CallbackContext context)
         {
             base.OnAttack(context);
+            if (playerCondition.IsDead) return;
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
             {
                 if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
@@ -100,7 +102,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
         protected override void OnPickOrThrow(InputAction.CallbackContext context)
         {
             base.OnPickOrThrow(context);
-
+            if (playerCondition.IsDead) return;
             if (stateMachine.Player.PlayerInventory.CurrentWeapon)
             {
                 // TODO: Animation 호출?
