@@ -19,11 +19,19 @@ public class Pistol : Weapon, IShootable
     [field: SerializeField] public float TimeSinceLastShoot { get; private set; }
     [field: SerializeField] public bool IsReady { get; private set; } = true;
     
+	private int originalBulletCount;
+
     protected override void Awake()
     {
         base.Awake();
         if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        originalBulletCount = bulletCount;
     }
 
     private void Update()
@@ -72,6 +80,14 @@ public class Pistol : Weapon, IShootable
         
         rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
         thrownObject.enabled = true;
+    }
+
+    /// <summary>
+    /// Enemy가 총을 쏠 때 재장전이 필요할 때 부르는 함수
+    /// </summary>
+	public void FillAmmo()
+    {
+        bulletCount = originalBulletCount;
     }
 
     public override void OnInteract(Transform pivot)
