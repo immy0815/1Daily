@@ -28,4 +28,15 @@ public class StageLoader
     {
         return LoadedStages.ContainsKey(stageKey) ? LoadedStages[stageKey] : null;
     }
+
+    public void ReleaseStagePrefab()
+    {
+        foreach (var kvp in LoadedStages)
+        {
+            Addressables.Release(kvp.Value);
+            Debug.Log($"[StageLoader] Stage <{kvp.Key}> released from memory.");
+        }
+
+        LoadedStages.Clear();
+    }
 }
