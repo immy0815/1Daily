@@ -154,6 +154,8 @@ MonoBehaviour:
   bulletDamage: 10
   rigidBody: {fileID: 3311273371585763449}
   meshRenderer: {fileID: 4187391197007119212}
+  bulletHolePrefab: {fileID: 5472233837527166050, guid: d996728c10d5bfa40937ed7153a6335f, type: 3}
+  isShotByPlayer: 0
 --- !u!96 &-8151685249325862513
 TrailRenderer:
   serializedVersion: 3
