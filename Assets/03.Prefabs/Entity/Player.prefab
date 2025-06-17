@@ -804,6 +804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddcf1236fa76ebc4eb2c507213e2f89b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <CartSpeed>k__BackingField: 3
   <AnimationData>k__BackingField:
     groundParameterName: '@Ground'
     idleParameterName: Idle
@@ -813,8 +814,7 @@ MonoBehaviour:
     airParameterName: '@Air'
     jumpParameterName: Jump
     fallParameterName: Fall
-    attackParameterName: '@Attack'
-    comboAttackParameterName: ComboAttack
+    attackParameter: '@NormalAttack'
     comboAttackIndex: Combo
     shotParameterName: Shot
     deathParameterName: Dead
@@ -827,6 +827,11 @@ MonoBehaviour:
   <PlayerInventory>k__BackingField: {fileID: 2163060283811807229}
   <PlayerGravity>k__BackingField: {fileID: 1810071388816411344}
   <MainCameraTransform>k__BackingField: {fileID: 0}
+  <CameraPivot>k__BackingField: {fileID: 0}
+  <FirstPersonCamera>k__BackingField: {fileID: 0}
+  <ThirdPersonCamera>k__BackingField: {fileID: 0}
+  <DollyCart>k__BackingField: {fileID: 0}
+  <DollyTrack>k__BackingField: {fileID: 0}
 --- !u!1 &2911242834350918119
 GameObject:
   m_ObjectHideFlags: 0

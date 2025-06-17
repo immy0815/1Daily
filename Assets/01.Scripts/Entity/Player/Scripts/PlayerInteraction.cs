@@ -15,7 +15,6 @@ namespace _01.Scripts.Entity.Player.Scripts
         [Header("Last Check Time")]
         [SerializeField, ReadOnly] private float timeSinceLastCheck;
         private Camera cam;
-        private Player player;
         
         // Properties
         public IInteractable Interactable { get; private set; }
@@ -50,11 +49,6 @@ namespace _01.Scripts.Entity.Player.Scripts
                 Interactable = null;
                 Damagable = null;
             }
-        }
-
-        public void Init(Player player)
-        {
-            this.player = player;
         }
 
         public void OnInteract()

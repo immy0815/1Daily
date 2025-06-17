@@ -56,7 +56,7 @@ public class StageManager : Singleton<StageManager>
         }
         case StageFinishState.Failure:
         {
-          StartStage(stageIndex);
+          //StartStage(stageIndex);
           break;
         }
       }
