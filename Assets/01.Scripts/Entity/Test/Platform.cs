@@ -7,29 +7,31 @@ public class Platform : MonoBehaviour
 {
     [SerializeField] LayerMask layerMask;
 
-    private List<GameObject> ridingObjs;
+    [SerializeField] private List<CharacterController> ridingObjs;
 
     Vector3 prevPosition;
     private void Awake()
     {
-        ridingObjs = new List<GameObject>();
+        ridingObjs = new List<CharacterController>();
         prevPosition = transform.position;
     }
 
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         Debug.Log(other.gameObject.name);
         if (((1 << other.gameObject.layer) & layerMask.value) != 0)
         {
-            ridingObjs.Add(other.gameObject);
+            CharacterController characterController = other.gameObject.GetComponent<CharacterController>();
+            if(characterController) ridingObjs.Add(characterController);
         }
     }
-    private void OnCollisionExit(Collision other)
+    private void OnTriggerExit(Collider other)
     {
         if (((1 << other.gameObject.layer) & layerMask.value) != 0)
         {
-            ridingObjs.Remove(other.gameObject);
+            CharacterController characterController = other.gameObject.GetComponent<CharacterController>();
+            if(characterController) ridingObjs.Remove(characterController);
         }
     }
 
@@ -38,7 +40,8 @@ public class Platform : MonoBehaviour
         Vector3 deltaPos = transform.position - prevPosition;
         foreach (var obj in ridingObjs)
         {
-            obj.transform.position += deltaPos;
+            obj.Move(deltaPos);
         }
+        prevPosition = transform.position;
     }
 }
