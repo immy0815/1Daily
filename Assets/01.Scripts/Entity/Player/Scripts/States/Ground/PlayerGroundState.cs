@@ -6,6 +6,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
 {
     public class PlayerGroundState : PlayerBaseState
     {
+        private bool jumpCall = false;
         public PlayerGroundState(PlayerStateMachine machine) : base(machine)
         {
         }
@@ -20,6 +21,16 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
         {
             base.Exit();
             StopAnimation(stateMachine.Player.AnimationData.GroundParameterHash);
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (jumpCall)
+            {
+                stateMachine.ChangeState(stateMachine.JumpState);
+                jumpCall = false;
+            }
         }
 
         public override void PhysicsUpdate()
@@ -64,7 +75,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
         {
             base.OnJumpStarted(context);
             if (playerCondition.IsDead) return;
-            stateMachine.ChangeState(stateMachine.JumpState);
+            jumpCall = true;
             TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Jump, 1f);
         }
 

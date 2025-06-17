@@ -1,3 +1,4 @@
+using System;
 using _01.Scripts.Entity.Common.Scripts;
 using _01.Scripts.Manager;
 using _01.Scripts.Util;
@@ -24,6 +25,8 @@ namespace _01.Scripts.Entity.Player.Scripts
         [field: SerializeField] public CinemachineVirtualCamera FirstPersonCamera { get; private set; }
         
         private PlayerStateMachine stateMachine;
+
+        public Vector3 accumulatedForce;
         
         private void Awake()
         {
@@ -37,6 +40,7 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!FirstPersonCamera) FirstPersonCamera = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
             if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
             
+            accumulatedForce = Vector3.zero;
             AnimationData.Initialize();
             PlayerInteraction.Init(this);
         }
@@ -80,7 +84,12 @@ namespace _01.Scripts.Entity.Player.Scripts
             stateMachine.HandleInput();
             stateMachine.Update();
         }
-        
+
+        private void LateUpdate()
+        {
+            stateMachine.LateUpdate();
+        }
+
         private void OnDeath()
         {
             Animator.SetTrigger(AnimationData.DeathParameterHash);
