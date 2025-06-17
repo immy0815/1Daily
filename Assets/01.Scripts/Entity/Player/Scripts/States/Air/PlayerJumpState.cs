@@ -11,9 +11,9 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
         
         public override void Enter()
         {
-            stateMachine.JumpForce = stateMachine.Player.PlayerCondition.JumpForce; 
-            stateMachine.Player.PlayerGravity.Jump(stateMachine.JumpForce);
             TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Jump, 1f);
+            stateMachine.JumpForce = stateMachine.Player.PlayerCondition.JumpForce;
+            stateMachine.Player.PlayerGravity.Jump(stateMachine.JumpForce);
             
             base.Enter();
             StartAnimation(stateMachine.Player.AnimationData.JumpParameterHash);

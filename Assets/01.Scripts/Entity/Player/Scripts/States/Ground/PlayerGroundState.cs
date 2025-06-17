@@ -6,7 +6,6 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
 {
     public class PlayerGroundState : PlayerBaseState
     {
-        private bool jumpCall = false;
         public PlayerGroundState(PlayerStateMachine machine) : base(machine)
         {
         }
@@ -23,22 +22,12 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             StopAnimation(stateMachine.Player.AnimationData.GroundParameterHash);
         }
 
-        public override void Update()
-        {
-            base.Update();
-            if (jumpCall)
-            {
-                stateMachine.ChangeState(stateMachine.JumpState);
-                jumpCall = false;
-            }
-        }
-
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
 
             if (!stateMachine.Player.CharacterController.isGrounded &&
-                stateMachine.Player.CharacterController.velocity.y < Physics.gravity.y * Time.deltaTime)
+                stateMachine.Player.CharacterController.velocity.y < Physics.gravity.y * Time.fixedDeltaTime)
             {
                 stateMachine.ChangeState(stateMachine.FallState);
             }
@@ -75,8 +64,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
         {
             base.OnJumpStarted(context);
             if (playerCondition.IsDead) return;
-            jumpCall = true;
-            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Jump, 1f);
+            stateMachine.ChangeState(stateMachine.JumpState);
         }
 
         protected override void OnAttack(InputAction.CallbackContext context)
