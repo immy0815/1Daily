@@ -32,7 +32,7 @@ namespace _01.Scripts.Entity.Player.Scripts
         [field: SerializeField] public GameObject DollyTrack { get; private set; }
         
         private PlayerStateMachine stateMachine;
-        private Camera cam;
+        public Camera cam { get; private set; }
         
         private void Awake()
         {
@@ -108,6 +108,7 @@ namespace _01.Scripts.Entity.Player.Scripts
 
         private IEnumerator MoveDollyCart_Coroutine()
         {
+            Animator.SetLayerWeight(1, 0);
             FirstPersonCamera.Priority = 5; 
             ThirdPersonCamera.Priority = 10; 
             cam.cullingMask |= 1 << gameObject.layer;
