@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
 public class SceneLoader
 {
     private Dictionary<SceneName, string> _sceneKeyMap;
-    private Dictionary<SceneName, Scene> _loadedScenes = new();
+    private AsyncOperationHandle<SceneInstance>? _currentSceneHandle;
 
     public void Init()
     {
@@ -21,6 +22,12 @@ public class SceneLoader
     // ResourceManager에서만 접근하는 메서드입니다!! ResourceManager의 SwitchScene을 호출해주세요!
     public IEnumerator LoadSceneAsync(SceneName name)
     {
+        if (_currentSceneHandle.HasValue)
+        {
+            Addressables.Release(_currentSceneHandle.Value);
+            _currentSceneHandle = null;
+        }
+
         if (!_sceneKeyMap.TryGetValue(name, out var sceneKey))
         {
             Debug.LogError($"[SceneLoader] No scene key mapped for {name}");
@@ -32,10 +39,8 @@ public class SceneLoader
 
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            Scene loadedScene = handle.Result.Scene;
-            _loadedScenes[name] = loadedScene;
-
-            Debug.Log($"[SceneLoader] Scene <{name}> loaded successfully with LoadSceneMode.Single.");
+            _currentSceneHandle = handle;
+            Debug.Log($"[SceneLoader] Scene <{name}> loaded successfully.");
         }
         else
         {
@@ -43,15 +48,29 @@ public class SceneLoader
         }
     }
 
-    // ResourceManager에서만 접근하는 메서드입니다!! ResourceManager의 ReleaseAllResources를 호출해주세요!
-    public void ReleaseScenes()
+    // ResourceManager에서만 접근하는 메서드입니다!! ResourceManager의 SwitchScene을 호출해주세요!
+    public IEnumerator UnloadSceneAsync(SceneName name)
     {
-        foreach (var scene in _loadedScenes)
-        {
-            SceneManager.UnloadSceneAsync(scene.Value);
-            Debug.Log($"[SceneLoader] Unloaded scene <{scene.Key}>");
-        }
+        var scene = SceneManager.GetSceneByName(name.ToString());
 
-        _loadedScenes.Clear();
+        if (scene.isLoaded)
+        {
+            var unloadOp = SceneManager.UnloadSceneAsync(scene);
+            yield return unloadOp;
+
+            if (unloadOp.isDone)
+            {
+                Debug.Log($"[SceneLoader] Scene <{name}> unloaded successfully.");
+            }
+            else
+            {
+                Debug.LogError($"[SceneLoader] Failed to unload scene <{name}>.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"[SceneLoader] Scene <{name}> is not currently loaded.");
+            yield return null;
+        }
     }
 }
