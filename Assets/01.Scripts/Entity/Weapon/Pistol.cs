@@ -1,5 +1,7 @@
+using System.Collections;
 using _01.Scripts.Entity.Player.Scripts;
 using _01.Scripts.Util;
+using Retronia.Core;
 using UnityEngine;
 
 public class Pistol : Weapon, IShootable
@@ -7,7 +9,9 @@ public class Pistol : Weapon, IShootable
     [Header("Components")] 
     [SerializeField] private Rigidbody rigidBody;
     [SerializeField] private BoxCollider boxCollider;
-    
+    [SerializeField] private AudioClip gunshotClip;
+    [SerializeField] private ParticleSystem muzzleFlash;
+
     [Header("Pistol Settings")]
     [SerializeField] private GameObject bullet;
     [SerializeField] private GameObject bulletPoolObj;
@@ -22,14 +26,20 @@ public class Pistol : Weapon, IShootable
     [field: SerializeField] public bool IsReady { get; private set; } = true;
     
 	private int originalBulletCount;
-
+    private float recoilAngle = -70f;  
+    private float upTime  = 0.1f;         
+    private float downTime  = 0.15f;    
+    private Quaternion originalRot;
+    private Coroutine recoilRoutine;
+    
     protected override void Awake()
     {
         base.Awake();
         if (!rigidBody) rigidBody = gameObject.GetComponent_Helper<Rigidbody>();
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
         if (!bulletPoolObj) bulletPoolObj = GameObject.Find("BulletPool");
-        
+
+        originalRot = transform.localRotation;
         originalBulletCount = bulletCount;
     }
 
@@ -48,18 +58,27 @@ public class Pistol : Weapon, IShootable
         if (!bulletPoolObj) bulletPoolObj = GameObject.Find("BulletPool");
     }
 
+    public bool OnShoot(Enemy enemy)
+    {
+        return true;
+    }
+
     public bool OnShoot(Player player)
     {
         if (!IsReady || bulletCount < 1) return false;
         var bulletPool = bulletPoolObj?.GetComponent<BulletPool>();
         if (!bulletPool) return false;
+        PlayMuzzleFlash();
+        SoundManager.Play(gunshotClip,gameObject);
+
         bullet = bulletPool.GetBullet();
-        
         if (!bullet) return false;
         bulletCount--;
         IsReady = false;
         
         // Direction 결정
+        PlayRecoil();  // 반동
+        
         var direction = Physics.Raycast(
             player.MainCameraTransform.position,
             player.MainCameraTransform.forward, out var hitInfo, float.MaxValue, shootableLayer)
@@ -146,5 +165,45 @@ public class Pistol : Weapon, IShootable
         IsCurrentlyOwned = true;
         FillAmmo();
         StartCoroutine(MoveToPivot(pivot));
+    }
+
+    private void PlayMuzzleFlash()
+    {
+        if (muzzleFlash == null) return;
+        
+        muzzleFlash.transform.position = firePoint.transform.position;
+        muzzleFlash.transform.rotation = firePoint.transform.rotation;
+        muzzleFlash.Play(); 
+    }
+    
+    public void PlayRecoil()
+    {
+        if (recoilRoutine != null)
+            StopCoroutine(recoilRoutine);
+
+        recoilRoutine = StartCoroutine(DoRecoil());
+    }
+
+    private IEnumerator DoRecoil()
+    {
+        Quaternion recoilRot = Quaternion.Euler(recoilAngle, 0f, 0f);
+
+        float t = 0;
+        while (t < 1f)
+        {
+            t += Time.deltaTime / upTime;
+            transform.localRotation = Quaternion.Slerp(originalRot, recoilRot, t);
+            yield return null;
+        }
+
+        t = 0;
+        while (t < 1f)
+        {
+            t += Time.deltaTime / downTime;
+            transform.localRotation = Quaternion.Slerp(recoilRot, originalRot, t);
+            yield return null;
+        }
+
+        transform.localRotation = originalRot;
     }
 }
