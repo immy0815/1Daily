@@ -1,6 +1,13 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public enum SceneType
+{
+    Start,
+    Loading,
+    Game
+}
 
 public class UIManager : MonoBehaviour
 {
@@ -17,15 +24,18 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private UIOption uiOption;
     [SerializeField] private UIStartScene uiStartScene;
+    [SerializeField] private UILoading uiLoading;
 
     // 로딩 할 때, progressBar UI 업데이트 시, 호출
     public Action<float> onUpdateLoadingProgress;
     
     private void Reset()
     {
-        // 이후 Initialization할 때 해주기
+        // Resource Manager에서 GetResource와 같이 Resource를 꺼내주는 메서드가 있을 시,
+        // Initialization할 때 해주기
         uiOption = GetComponentInChildren<UIOption>();
         uiStartScene = GetComponentInChildren<UIStartScene>();
+        uiLoading = GetComponentInChildren<UILoading>();
     }
 
     private void Awake()
@@ -64,7 +74,38 @@ public class UIManager : MonoBehaviour
         {
             uiStartScene.Initialization();
         }
+
+        if (uiLoading == null)
+        {
+            Debug.Log("UI Loading is null");
+        }
+        else
+        {
+            uiLoading.Initialization();
+        }
     }
 
     public void OpenOption(Action closeCallback) => uiOption.Open(closeCallback);
+
+    public void UpdateGUIByEnterScene(SceneType type)
+    {
+        switch (type)
+        {
+            case SceneType.Start:
+                SceneManager.LoadScene("StartScene");
+                uiStartScene.Open();
+                break;
+            case SceneType.Loading:
+                SceneManager.LoadScene("LoadingScene");
+                uiStartScene.Close();
+                uiLoading.Open();
+                break;
+            case SceneType.Game:
+                uiLoading.Close();
+                break;
+            default:
+                Debug.Log($"SceneType {type} is not exist.");
+                break;
+        }
+    }
 }

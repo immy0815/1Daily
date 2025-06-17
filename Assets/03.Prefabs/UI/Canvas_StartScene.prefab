@@ -509,6 +509,7 @@ GameObject:
   - component: {fileID: 4093765008133875237}
   - component: {fileID: 7944410262240794946}
   - component: {fileID: 689282038605480453}
+  - component: {fileID: 8521768058514818888}
   - component: {fileID: 8717458504325933751}
   m_Layer: 5
   m_Name: Canvas_StartScene
@@ -602,6 +603,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!225 &8521768058514818888
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2503838868750706359}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &8717458504325933751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -614,6 +627,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59a6c664f122b184cb42d33969266c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 8521768058514818888}
   btnStart: {fileID: 2294083467454416992}
   btnOption: {fileID: 6867672719722149103}
   btnExit: {fileID: 8031888427661218909}

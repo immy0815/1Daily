@@ -13,12 +13,14 @@ public enum LoadType
 
 public class UILoading : MonoBehaviour
 {
+    [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Slider sliderLoading;
     [SerializeField] private TextMeshProUGUI tmpLoadingTitle;
     [SerializeField] private TextMeshProUGUI tmpLoadingStatus;
 
     private void Reset()
     {
+        canvasGroup = GetComponent<CanvasGroup>();
         sliderLoading = transform.FindChildByName<Slider>("Slider_Loading");
         tmpLoadingTitle = transform.FindChildByName<TextMeshProUGUI>("Tmp_SliderTitle");
         tmpLoadingStatus = transform.FindChildByName<TextMeshProUGUI>("Tmp_SliderStatus");
@@ -26,6 +28,8 @@ public class UILoading : MonoBehaviour
 
     public void Initialization()
     {
+        canvasGroup.SetAlpha(0);
+        
         SetProgressBar(0);
         tmpLoadingTitle.text = string.Empty;
         tmpLoadingStatus.text = string.Empty;
@@ -36,12 +40,12 @@ public class UILoading : MonoBehaviour
 
     public void Open()
     {
-        gameObject.SetActive(true);
+        canvasGroup.SetAlpha(1);
     }
     
     public void Close()
     {
-        gameObject.SetActive(false);
+        canvasGroup.SetAlpha(0);
     }
     
     public void SetProgressTitle(LoadType type)
