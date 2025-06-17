@@ -48,14 +48,12 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             {
                 if (!pistol.OnShoot(stateMachine.Player)) return;
                 if (AttackCoroutine != null) stateMachine.Player.StopCoroutine(AttackCoroutine); 
-                AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
                 // TODO: Animation 호출
                 return;
             }
 
             if (stateMachine.Player.PlayerInteraction.Damagable is not Enemy) return;
             if (AttackCoroutine != null) stateMachine.Player.StopCoroutine(AttackCoroutine);
-            AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(1f));
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
                 // TODO: Animation 호출

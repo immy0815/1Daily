@@ -34,7 +34,7 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!PlayerInteraction) PlayerInteraction = gameObject.GetComponent_Helper<PlayerInteraction>();
             if (!PlayerInventory) PlayerInventory = gameObject.GetComponent_Helper<PlayerInventory>();
             if (!PlayerGravity) PlayerGravity = gameObject.GetComponent_Helper<PlayerGravity>();
-            if (!FirstPersonCamera) FirstPersonCamera = gameObject.FindObjectAndGetComponentInChildren_Helper<CinemachineVirtualCamera>("FirstPersonCamera");
+            if (!FirstPersonCamera) FirstPersonCamera = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
             if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
             
             AnimationData.Initialize();

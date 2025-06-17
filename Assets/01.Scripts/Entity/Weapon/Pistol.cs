@@ -19,7 +19,7 @@ public class Pistol : Weapon, IShootable
     [SerializeField] private LayerMask shootableLayer;
     [SerializeField] private int bulletCount = 6;
     [SerializeField] private float recoilTime = 1f;
-    [SerializeField] private float throwForce = 6;
+    [SerializeField] private float throwForce = 10;
     
     [field: Header("Pistol Condition")]
     [field: SerializeField] public float TimeSinceLastShoot { get; private set; }
@@ -39,7 +39,7 @@ public class Pistol : Weapon, IShootable
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
         if (!bulletPoolObj) bulletPoolObj = GameObject.Find("BulletPool");
 
-        originalRot = transform.localRotation;
+        originalRot = Quaternion.Euler(0, 0, 0);
         originalBulletCount = bulletCount;
     }
 
@@ -58,27 +58,23 @@ public class Pistol : Weapon, IShootable
         if (!bulletPoolObj) bulletPoolObj = GameObject.Find("BulletPool");
     }
 
-    public bool OnShoot(Enemy enemy)
-    {
-        return true;
-    }
-
     public bool OnShoot(Player player)
     {
         if (!IsReady || bulletCount < 1) return false;
         var bulletPool = bulletPoolObj?.GetComponent<BulletPool>();
         if (!bulletPool) return false;
-        PlayMuzzleFlash();
-        SoundManager.Play(gunshotClip,gameObject);
+        
 
         bullet = bulletPool.GetBullet();
         if (!bullet) return false;
         bulletCount--;
         IsReady = false;
         
-        // Direction 결정
         PlayRecoil();  // 반동
+        PlayMuzzleFlash();
+        SoundManager.Play(gunshotClip,gameObject);
         
+        // Direction 결정
         var direction = Physics.Raycast(
             player.MainCameraTransform.position,
             player.MainCameraTransform.forward, out var hitInfo, float.MaxValue, shootableLayer)

@@ -65,6 +65,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             base.OnJumpStarted(context);
             if (playerCondition.IsDead) return;
             stateMachine.ChangeState(stateMachine.JumpState);
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Jump, 1f);
         }
 
         protected override void OnAttack(InputAction.CallbackContext context)
