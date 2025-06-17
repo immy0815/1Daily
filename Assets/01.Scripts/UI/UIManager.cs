@@ -25,6 +25,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private UIOption uiOption;
     [SerializeField] private UIStartScene uiStartScene;
     [SerializeField] private UILoading uiLoading;
+    [SerializeField] private UICrosshair uiCrosshair;
 
     // 로딩 할 때, progressBar UI 업데이트 시, 호출
     public Action<float> onUpdateLoadingProgress;
@@ -36,6 +37,7 @@ public class UIManager : MonoBehaviour
         uiOption = GetComponentInChildren<UIOption>();
         uiStartScene = GetComponentInChildren<UIStartScene>();
         uiLoading = GetComponentInChildren<UILoading>();
+        uiCrosshair = GetComponentInChildren<UICrosshair>();
     }
 
     private void Awake()
@@ -83,6 +85,15 @@ public class UIManager : MonoBehaviour
         {
             uiLoading.Initialization();
         }
+
+        if (uiCrosshair == null)
+        {
+            Debug.Log("UI Crosshair is null");
+        }
+        else
+        {
+            uiCrosshair.Initialization();
+        }
     }
 
     public void OpenOption(Action closeCallback) => uiOption.Open(closeCallback);
@@ -94,6 +105,7 @@ public class UIManager : MonoBehaviour
             case SceneType.Start:
                 SceneManager.LoadScene("StartScene");
                 uiStartScene.Open();
+                uiCrosshair.Close();
                 break;
             case SceneType.Loading:
                 SceneManager.LoadScene("LoadingScene");
@@ -102,6 +114,7 @@ public class UIManager : MonoBehaviour
                 break;
             case SceneType.Game:
                 uiLoading.Close();
+                uiCrosshair.Open();
                 break;
             default:
                 Debug.Log($"SceneType {type} is not exist.");
