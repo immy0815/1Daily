@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using _01.Scripts.Entity.Player.Scripts;
 using UnityEngine;
+using UnityEngine.Events;
 
+[ AddComponentMenu( "Stage/Stage" )]
 public class Stage : MonoBehaviour
 {
   #region Inspector
   
+  [SerializeField, ReadOnly, Tooltip("현재 메인 카메라입니다.")] private new Camera camera;
   [SerializeField, ReadOnly, Tooltip("현재 웨이브의 순서입니다.")] private int currentWaveIndex = 0; 
   [SerializeField, ReadOnly, Tooltip("현재 진행중인 웨이브입니다. Reset시 자동으로 설정됩니다.")] private WaveGroup currentWave;
   /// <summary>
@@ -38,12 +41,12 @@ public class Stage : MonoBehaviour
   /// <summary>
   /// 적 웨이브가 클리어됬을 때 호출되는 이벤트입니다.
   /// </summary>
-  public event Action<WaveGroup> OnWaveClear;
+  public UnityEvent<WaveGroup> OnWaveClear;
   
   /// <summary>
   /// 스테이지가 끝났을 때 호출되는 이벤트입니다.
   /// </summary>
-  public event Action<StageFinishState> OnStageEnd;
+  public UnityEvent<StageFinishState> OnStageEnd;
   private Coroutine timer = null;
   
   #region Unity Event
@@ -89,8 +92,34 @@ public class Stage : MonoBehaviour
   }
   
   #endif
-  
+
   #endregion
+
+  private void Awake()
+  {
+    camera = Camera.main;
+  }
+
+  private void Update()
+  {
+    if (Input.GetMouseButtonUp(0))
+    {
+      if (Physics.Raycast(camera.ScreenPointToRay(new(camera.pixelWidth / 2, camera.pixelHeight / 2)), out var hit) &&
+          hit.transform.TryGetComponent<TriggerObject>(out var obj))
+      {
+        obj.Trigger(TriggerType.LeftClick);
+      }
+    }
+    
+    if (Input.GetMouseButtonUp(1))
+    {
+      if (Physics.Raycast(camera.ScreenPointToRay(new(camera.pixelWidth / 2, camera.pixelHeight / 2)), out var hit) &&
+          hit.transform.TryGetComponent<TriggerObject>(out var obj))
+      {
+        obj.Trigger(TriggerType.RightClick);
+      }
+    }
+  }
   
   #region Feature
   
@@ -100,11 +129,14 @@ public class Stage : MonoBehaviour
   public void StartStage()
   {
     if (timer != null) return;
-    OnStageEnd += (_) =>
+    OnStageEnd.AddListener((_) =>
     {
-      StopCoroutine(timer);
+      if (timer != null)
+      {
+        StopCoroutine(timer);
+      }
       timer = null;
-    };
+    });
     timer = StartCoroutine(StartTimer());
     currentWave = waves[currentWaveIndex];
     currentWave.OnClear += StartNextWave;
@@ -114,12 +146,20 @@ public class Stage : MonoBehaviour
 
   /// <summary>
   /// 스테이지를 강제로 중지시킬 수 있습니다.
-  /// OnStageEnd 이벤트를 Cancel 매개변수로 호출합니다.
+  /// OnStageEnd 이벤트를 state 매개변수로 호출합니다.
   /// </summary>
-  public void StopStage()
+  public void StopStage(StageFinishState state = StageFinishState.Cancel)
   {
-    OnStageEnd?.Invoke(StageFinishState.Cancel);
+    OnStageEnd?.Invoke(state);
   }
+
+  #region Use for binding
+  [ContextMenu("Clear Stage")]
+  public void StageClear() => StopStage(StageFinishState.Clear);
+  public void StageFailure() => StopStage(StageFinishState.Failure);
+  public void StageCancel() => StopStage(StageFinishState.Cancel);
+  
+  #endregion
   
   private void OnPlayerDeath()
   {

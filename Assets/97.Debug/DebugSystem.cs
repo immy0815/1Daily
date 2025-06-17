@@ -15,5 +15,10 @@ public class DebugSystem : EditorWindow
         {
             // ResourceManager.Instance.InstantiateStage("Stage1");
         }
+
+        if (GUILayout.Button("Effect UI Text"))
+        {
+            UIManager.Instance.PlayEffectText();
+        }
     }
 }

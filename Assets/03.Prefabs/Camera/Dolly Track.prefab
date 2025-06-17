@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Path: {fileID: 3493683777400209435}
   m_UpdateMethod: 0
-  m_PositionUnits: 0
+  m_PositionUnits: 2
   m_Speed: 0
   m_Position: 0
 --- !u!1 &1459015787813746454
@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 40
     OrthographicSize: 10
-    NearClipPlane: 0.1
+    NearClipPlane: 0.3
     FarClipPlane: 5000
     Dutch: 0
     ModeOverride: 0
