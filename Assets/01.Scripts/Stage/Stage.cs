@@ -97,27 +97,6 @@ public class Stage : MonoBehaviour
   {
     camera = Camera.main;
   }
-
-  private void Update()
-  {
-    if (Input.GetMouseButtonUp(0))
-    {
-      if (Physics.Raycast(camera.ScreenPointToRay(new(camera.pixelWidth / 2, camera.pixelHeight / 2)), out var hit) &&
-          hit.transform.TryGetComponent<TriggerObject>(out var obj))
-      {
-        obj.Trigger(TriggerType.LeftClick);
-      }
-    }
-    
-    if (Input.GetMouseButtonUp(1))
-    {
-      if (Physics.Raycast(camera.ScreenPointToRay(new(camera.pixelWidth / 2, camera.pixelHeight / 2)), out var hit) &&
-          hit.transform.TryGetComponent<TriggerObject>(out var obj))
-      {
-        obj.Trigger(TriggerType.RightClick);
-      }
-    }
-  }
   
   #endregion
 
