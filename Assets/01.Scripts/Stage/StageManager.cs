@@ -51,12 +51,16 @@ public class StageManager : Singleton<StageManager>
         case StageFinishState.Clear:
         {
           stageIndex++;
-          // StartStage(stageIndex);
+          // 마지막 스테이인지 판단하는
+          // if()
+          // {
+          // 엔딩 씬 연결 -> 최영임
+          // }
           break;
         }
         case StageFinishState.Failure:
         {
-          //StartStage(stageIndex);
+          // 죽었을 때 → 노이즈 → 인트로 (화면 전환 느낌)
           break;
         }
       }
@@ -82,14 +86,14 @@ public class StageManager : Singleton<StageManager>
 
     UnityAction<Scene,LoadSceneMode> action = null;
     
-    action = (_, _) =>
+    action = (scene, _) =>
     {
+      if (scene.name != "GameScene") return;
       var origin = Addressables.LoadAssetAsync<GameObject>($"Stage{stageIndex}").WaitForCompletion();
       var obj = Object.Instantiate(origin);
       
       if (obj)
       {
-        // UIManager.Instance.gameObject.SetActive(false);
         var stage = obj.GetComponent<Stage>();
         obj.transform.position = Vector3.zero;
         currentStage = stage;
@@ -118,8 +122,7 @@ public class StageManager : Singleton<StageManager>
 
     SceneManager.sceneLoaded += action;
     
-    // ResourceManager.Instance.SwitchScene(SceneName.Game);
-    SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+    UIManager.Instance.UpdateGUIByEnterScene(SceneType.Game);
   }
 
   /// <summary>

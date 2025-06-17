@@ -69,8 +69,6 @@ public class ResourceManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         StageManager.StartStageStatic();
-
-        UIManager.Instance.UpdateGUIByEnterScene(SceneType.Game);
     }
 
     public IEnumerator ReleaseAllResources()

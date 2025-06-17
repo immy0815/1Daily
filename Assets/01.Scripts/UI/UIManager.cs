@@ -106,6 +106,7 @@ public class UIManager : MonoBehaviour
                 uiLoading.Open();
                 break;
             case SceneType.Game:
+                SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
                 uiLoading.Close();
                 uiCrosshair.Open();
                 break;
