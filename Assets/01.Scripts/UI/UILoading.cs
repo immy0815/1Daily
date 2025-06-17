@@ -4,31 +4,24 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum LoadType
+public class UILoading : UIBase
 {
-    Scene,
-    GUI,
-    Resource
-}
-
-public class UILoading : MonoBehaviour
-{
-    [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Slider sliderLoading;
     [SerializeField] private TextMeshProUGUI tmpLoadingTitle;
     [SerializeField] private TextMeshProUGUI tmpLoadingStatus;
 
-    private void Reset()
+    protected override void Reset()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
+        base.Reset();
+        
         sliderLoading = transform.FindChildByName<Slider>("Slider_Loading");
         tmpLoadingTitle = transform.FindChildByName<TextMeshProUGUI>("Tmp_SliderTitle");
         tmpLoadingStatus = transform.FindChildByName<TextMeshProUGUI>("Tmp_SliderStatus");
     }
 
-    public void Initialization()
+    public override void Initialization()
     {
-        canvasGroup.SetAlpha(0);
+        base.Initialization();
         
         SetProgressBar(0);
         tmpLoadingTitle.text = string.Empty;
@@ -36,46 +29,17 @@ public class UILoading : MonoBehaviour
 
         UIManager.Instance.onUpdateLoadingProgress -= SetProgressBar;
         UIManager.Instance.onUpdateLoadingProgress += SetProgressBar;
+        UIManager.Instance.onUpdateLoadingProgress -= SetProgressStatus;
+        UIManager.Instance.onUpdateLoadingProgress += SetProgressStatus;
     }
 
-    public void Open()
+    private void SetProgressStatus(float progress)
     {
-        canvasGroup.SetAlpha(1);
+        float progress0To100 = progress * 100;
+        tmpLoadingStatus.text = $"{progress0To100:N0}%";
     }
     
-    public void Close()
-    {
-        canvasGroup.SetAlpha(0);
-    }
-    
-    public void SetProgressTitle(LoadType type)
-    {
-        string text = string.Empty;
-        switch (type)
-        {
-            case LoadType.GUI:
-                text = "UI 로드 중...";
-                break;
-            case LoadType.Resource:
-                text = "리소스 로드 중...";
-                break;
-            case LoadType.Scene:
-                text = "씬 전환 중...";
-                break;
-            default:
-                text = "뭐하는 지 모름...";
-                break;
-        }
-
-        tmpLoadingTitle.text = text;
-    }
-
-    public void SetProgressStatus(float curProgress, float maxProgressCount = 0)
-    {
-        tmpLoadingStatus.text = maxProgressCount <= 0 ? $"{curProgress}%" : $"{curProgress}/{maxProgressCount}";
-    }
-    
-    public void SetProgressBar(float normalizedValue)
+    private void SetProgressBar(float normalizedValue)
     {
         float value = Mathf.Clamp01(normalizedValue);
 

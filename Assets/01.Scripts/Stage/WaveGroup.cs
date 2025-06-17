@@ -54,9 +54,14 @@ public class WaveGroup : MonoBehaviour
       void OnEnemyDeath()
       {
         enemy.OnDeath -= OnEnemyDeath;
-        if (enemies.Any(e => e.gameObject.activeSelf))
-          return;
-    
+        foreach (var enemy in enemies)
+        {
+          if (!enemy.IsDead)
+          {
+            return;
+          }
+        }
+
         OnClear?.Invoke();
       }
     }

@@ -351,7 +351,7 @@ Canvas:
   m_GameObject: {fileID: 2918510391331047983}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -430,6 +430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasGroup: {fileID: 20169955783041639}
+  canvas: {fileID: 4650338444439989153}
   sliderLoading: {fileID: 5020666325712774063}
   tmpLoadingTitle: {fileID: 3160537323416948505}
   tmpLoadingStatus: {fileID: 4779294690337479328}

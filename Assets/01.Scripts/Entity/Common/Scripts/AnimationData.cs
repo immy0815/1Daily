@@ -18,15 +18,13 @@ namespace _01.Scripts.Entity.Common.Scripts
         [SerializeField, ReadOnly] private string fallParameterName = "Fall";
         
         [Header("Animation Parameters on attack")] 
-        [SerializeField, ReadOnly] private string attackParameterName = "@Attack";
-        [SerializeField, ReadOnly] private string comboAttackParameterName = "ComboAttack";
-        [SerializeField, ReadOnly] private string comboAttackIndex = "Combo";
+        [SerializeField, ReadOnly] private string attackParameter = "@NormalAttack";
+        [SerializeField, ReadOnly] private string comboAttackIndex = "NormalCombo";
         [SerializeField, ReadOnly] private string shotParameterName = "Shot";
         
         [Header("Animation Parameter on death")]
         [SerializeField, ReadOnly] private string deathParameterName = "Dead";
         [SerializeField, ReadOnly] private string hitParameterName = "Hit";
-        
         
         // Properties of parameter hash
         public int GroundParameterHash { get; private set; }
@@ -38,11 +36,9 @@ namespace _01.Scripts.Entity.Common.Scripts
         public int JumpParameterHash { get; private set; }
         public int FallParameterHash { get; private set; }
         public int AttackParameterHash { get; private set; }
-        public int ComboAttackParameterHash { get; private set; }
-        public int ComboAttackIndexHash { get; private set; }
+        public int ComboIndexHash { get; private set; }
         public int ShotParameterHash { get; private set; }
         public int DeathParameterHash { get; private set; }
-        
         public int HitParameterHash { get; private set; }
         
         public void Initialize()
@@ -57,9 +53,8 @@ namespace _01.Scripts.Entity.Common.Scripts
             JumpParameterHash = Animator.StringToHash(jumpParameterName);
             FallParameterHash = Animator.StringToHash(fallParameterName);
             
-            AttackParameterHash = Animator.StringToHash(attackParameterName);
-            ComboAttackParameterHash = Animator.StringToHash(comboAttackParameterName);
-            ComboAttackIndexHash = Animator.StringToHash(comboAttackIndex);
+            AttackParameterHash = Animator.StringToHash(attackParameter);
+            ComboIndexHash = Animator.StringToHash(comboAttackIndex);
             ShotParameterHash = Animator.StringToHash(shotParameterName);
             
             DeathParameterHash = Animator.StringToHash(deathParameterName);
