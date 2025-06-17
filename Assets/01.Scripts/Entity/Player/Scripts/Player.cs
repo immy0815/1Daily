@@ -103,6 +103,7 @@ namespace _01.Scripts.Entity.Player.Scripts
 
         private void OnDeath()
         {
+            PlayerInventory.OnDropWeapon(Vector3.zero);
             StartCoroutine(MoveDollyCart_Coroutine());
         }
 

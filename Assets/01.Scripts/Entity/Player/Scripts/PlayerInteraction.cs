@@ -57,6 +57,11 @@ namespace _01.Scripts.Entity.Player.Scripts
             ResetParameters();
         }
 
+        /// <summary>
+        /// Damage detected object
+        /// </summary>
+        /// <param name="damage"></param>
+        /// <remarks>Deprecated</remarks>
         public void OnDamage(int damage)
         {
             Damagable.OnTakeDamage(damage);
