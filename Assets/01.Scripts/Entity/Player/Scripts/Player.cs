@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using _01.Scripts.Entity.Common.Scripts;
 using _01.Scripts.Manager;
 using _01.Scripts.Util;
@@ -9,6 +10,9 @@ namespace _01.Scripts.Entity.Player.Scripts
 {
     public class Player : MonoBehaviour
     {
+        [field: Header("Dolly Card Settings")]
+        [field: SerializeField] public float CartSpeed { get; private set; } = 3f;
+        
         [field: Header("Animation Data")]
         [field: SerializeField] public AnimationData AnimationData { get; private set; }
 
@@ -101,6 +105,11 @@ namespace _01.Scripts.Entity.Player.Scripts
 
         private void OnDeath()
         {
+            StartCoroutine(MoveDollyCart_Coroutine());
+        }
+
+        private IEnumerator MoveDollyCart_Coroutine()
+        {
             FirstPersonCamera.Priority = 5; 
             ThirdPersonCamera.Priority = 10; 
             cam.cullingMask |= 1 << gameObject.layer;
@@ -109,7 +118,20 @@ namespace _01.Scripts.Entity.Player.Scripts
             Animator.SetTrigger(AnimationData.DeathParameterHash);
             TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Death, 0.5f);
             
-            DollyCart.m_Speed = 3f;
+            DollyCart.m_Position = 0f;
+            
+            
+            while (DollyCart.m_Position < 0.999f)
+            {
+                if (DollyCart.m_Position >= 0.5f)
+                {
+                    var speed = Mathf.Lerp(CartSpeed, 0f, Mathf.SmoothStep(0, 1, (DollyCart.m_Position - 0.5f) * 2f));
+                    DollyCart.m_Position += Time.deltaTime * speed;
+                } else DollyCart.m_Position += Time.deltaTime * CartSpeed;
+                yield return null;
+            }
+            
+            DollyCart.m_Position = 1f;
         }
     }
 }
