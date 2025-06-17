@@ -14,6 +14,7 @@ public class DeathScreenFX : MonoBehaviour
     private float noiseDensity;
     private Material noiseMat;
 
+    private float elapsedTime;
     private void Awake()
     {
         noise = GetComponentInChildren<RawImage>();
@@ -24,18 +25,27 @@ public class DeathScreenFX : MonoBehaviour
     {
         noise = GetComponentInChildren<RawImage>();
         noiseMat = noise.material;
+        noiseSpeed = -2;
+        noiseDuration = 15;
     }
 
     private void OnEnable()
     {
         noiseDensity = 0;
         noiseMat.SetFloat(Opacity, noiseDensity);
+        elapsedTime = 0;
     }
 
     private void Update()
     {
-        noiseDensity += Time.unscaledDeltaTime * noiseSpeed;
-        noiseMat.SetFloat(Opacity, noiseDensity);
+        elapsedTime += Time.unscaledDeltaTime;
+        
+        if (elapsedTime <= noiseDuration)
+        {
+            noiseDensity += Time.unscaledDeltaTime * noiseSpeed;
+
+            noiseMat.SetFloat(Opacity, noiseDensity);
+        }
     }
 
     private void OnDisable()
