@@ -41,12 +41,12 @@ public class Stage : MonoBehaviour
   /// <summary>
   /// 적 웨이브가 클리어됬을 때 호출되는 이벤트입니다.
   /// </summary>
-  public UnityEvent<WaveGroup> OnWaveClear;
+  public UnityEvent<WaveGroup> OnWaveClear = new();
   
   /// <summary>
   /// 스테이지가 끝났을 때 호출되는 이벤트입니다.
   /// </summary>
-  public UnityEvent<StageFinishState> OnStageEnd;
+  public UnityEvent<StageFinishState> OnStageEnd = new();
   private Coroutine timer = null;
   
   #region Unity Event
