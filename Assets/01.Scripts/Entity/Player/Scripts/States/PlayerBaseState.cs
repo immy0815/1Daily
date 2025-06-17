@@ -33,6 +33,12 @@ namespace _01.Scripts.Entity.Player.Scripts.States
 
         public virtual void Update()
         {
+            
+           
+        }
+
+        public virtual void LateUpdate()
+        {
             if (playerCondition.IsDead) { return; }
             Move();
             Rotate(stateMachine.Player.MainCameraTransform.forward);
