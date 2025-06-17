@@ -2,13 +2,14 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class UICrosshair : MonoBehaviour
+public class UICrosshair : UIBase
 {
     [SerializeField] private RectTransform crosshair;
-    [SerializeField] private CanvasGroup canvasGroup;
-    
-    private void Reset()
+
+    protected override void Reset()
     {
+        base.Reset();
+        
         crosshair = transform.Find("Crosshair")?.GetComponent<RectTransform>();
     }
 
@@ -20,20 +21,6 @@ public class UICrosshair : MonoBehaviour
     private void OnDisable()
     {
         Pistol.OnReloadStart -= PlayReloadAnimation;
-    }
-    public void Initialization()
-    {
-        canvasGroup.SetAlpha(0);
-    }
-
-    public void Open()
-    {
-        canvasGroup.SetAlpha(1);
-    }
-
-    public void Close()
-    {
-        canvasGroup.SetAlpha(0);
     }
 
     public void PlayReloadAnimation()
