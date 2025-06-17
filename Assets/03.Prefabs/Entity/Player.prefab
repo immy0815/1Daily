@@ -822,11 +822,13 @@ MonoBehaviour:
   <Animator>k__BackingField: {fileID: 3439992321258709547}
   <CharacterController>k__BackingField: {fileID: 1689909025527273621}
   <PlayerController>k__BackingField: {fileID: 2871678874714045733}
-  <PlayerCondition>k__BackingField: {fileID: 0}
+  <PlayerCondition>k__BackingField: {fileID: 4251973049345965736}
   <PlayerInteraction>k__BackingField: {fileID: 2914589697141439159}
   <PlayerInventory>k__BackingField: {fileID: 2163060283811807229}
   <PlayerGravity>k__BackingField: {fileID: 1810071388816411344}
   <MainCameraTransform>k__BackingField: {fileID: 0}
+  <CameraPivot>k__BackingField: {fileID: 6312346090052736190}
+  <FirstPersonCamera>k__BackingField: {fileID: 0}
 --- !u!1 &2911242834350918119
 GameObject:
   m_ObjectHideFlags: 0
