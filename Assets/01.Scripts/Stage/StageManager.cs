@@ -24,13 +24,13 @@ public class StageManager : Singleton<StageManager>
   /// 스테이지 시작시 이벤트입니다.
   /// 인자로 시작하려는 스테이지를 넘겨줍니다.
   /// </summary>
-  public UnityEvent<Stage> OnStageStart;
+  public UnityEvent<Stage> OnStageStart = new UnityEvent<Stage>();
   
   /// <summary>
   /// 스테이지 종료 시 이벤트입니다.
   /// 해당 이벤트 호출 시점에는 currentStage가 null이 아닙닌다.
   /// </summary>
-  public UnityEvent<StageFinishState> OnStageEnd;
+  public UnityEvent<StageFinishState> OnStageEnd = new UnityEvent<StageFinishState>();
 
   /// <summary>
   /// 스테이지를 시작할 수 있습니다.
