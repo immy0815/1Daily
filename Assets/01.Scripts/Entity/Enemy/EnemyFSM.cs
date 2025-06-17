@@ -40,6 +40,7 @@ public class EnemyFSM : MonoBehaviour
     private void HandleLightWeapon()
     {
         if (currentState != idleState && currentState != runState) return;
+        if (!enemy.SightSensor.CanAimTarget()) return;
         
         if (enemy.WeaponHandler.Weapon is IShootable)
         {
@@ -51,6 +52,7 @@ public class EnemyFSM : MonoBehaviour
             else
             {
                 enemy.Animator.SetBool(enemy.AnimationData.ShotParameterHash, false);
+                enemy.WeaponHandler.CancelReady();
             }
         }
     }

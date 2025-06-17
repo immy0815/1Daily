@@ -13,7 +13,8 @@ public class Bullet : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Rigidbody rigidBody;
     [SerializeField] private MeshRenderer meshRenderer;
-
+    [SerializeField] GameObject bulletHolePrefab;
+    
     [Header("Bullet State")]
     [SerializeField] private bool isShotByPlayer;
     
@@ -81,3 +82,4 @@ public class Bullet : MonoBehaviour
         _bulletPool.ReturnBullet(gameObject);
     } 
 }
+
