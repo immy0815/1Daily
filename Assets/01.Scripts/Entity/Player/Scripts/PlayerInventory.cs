@@ -34,7 +34,7 @@ namespace _01.Scripts.Entity.Player.Scripts
         // Methods
         public void OnEquipWeapon(Weapon weapon)
         {
-            if (weapon.IsThrownByPlayer) return;
+            if (weapon.IsThrownByPlayer || weapon.IsCurrentlyOwned) return;
             CurrentWeapon = weapon;
             weapon.OnInteract(WeaponPivot, true);
         }

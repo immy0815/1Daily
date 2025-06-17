@@ -1,5 +1,7 @@
 using _01.Scripts.Entity.Common.Scripts;
+using _01.Scripts.Manager;
 using _01.Scripts.Util;
+using Cinemachine;
 using UnityEngine;
 
 namespace _01.Scripts.Entity.Player.Scripts
@@ -18,6 +20,8 @@ namespace _01.Scripts.Entity.Player.Scripts
         [field: SerializeField] public PlayerInventory PlayerInventory { get; private set; }
         [field: SerializeField] public PlayerGravity PlayerGravity { get; private set; }
         [field: SerializeField] public Transform MainCameraTransform { get; private set; }
+        [field: SerializeField] public Transform CameraPivot { get; private set; }
+        [field: SerializeField] public CinemachineVirtualCamera FirstPersonCamera { get; private set; }
         
         private PlayerStateMachine stateMachine;
         
@@ -30,6 +34,8 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!PlayerInteraction) PlayerInteraction = gameObject.GetComponent_Helper<PlayerInteraction>();
             if (!PlayerInventory) PlayerInventory = gameObject.GetComponent_Helper<PlayerInventory>();
             if (!PlayerGravity) PlayerGravity = gameObject.GetComponent_Helper<PlayerGravity>();
+            if (!FirstPersonCamera) FirstPersonCamera = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
+            if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
             
             AnimationData.Initialize();
             PlayerInteraction.Init(this);
@@ -44,6 +50,8 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!PlayerInteraction) PlayerInteraction = gameObject.GetComponent_Helper<PlayerInteraction>();
             if (!PlayerInventory) PlayerInventory = gameObject.GetComponent_Helper<PlayerInventory>();
             if (!PlayerGravity) PlayerGravity = gameObject.GetComponent_Helper<PlayerGravity>();
+            if (!FirstPersonCamera) FirstPersonCamera = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
+            if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
             
             AnimationData.Initialize();
             PlayerInteraction.Init(this);
@@ -52,6 +60,7 @@ namespace _01.Scripts.Entity.Player.Scripts
         // Start is called before the first frame update
         private void Start()
         {
+            FirstPersonCamera.Follow = CameraPivot;
             MainCameraTransform = Camera.main?.transform;
             
             Cursor.lockState = CursorLockMode.Locked;
@@ -75,6 +84,7 @@ namespace _01.Scripts.Entity.Player.Scripts
         private void OnDeath()
         {
             Animator.SetTrigger(AnimationData.DeathParameterHash);
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Death, 0.5f);
         }
     }
 }

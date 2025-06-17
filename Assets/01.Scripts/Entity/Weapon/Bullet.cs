@@ -66,7 +66,7 @@ public class Bullet : MonoBehaviour
         transform.position = position;
         transform.rotation = Quaternion.LookRotation(direction);
         this.isShotByPlayer = isShotByPlayer;
-        rigidBody.AddForce(direction * bulletSpeed, ForceMode.Impulse);
+        rigidBody.AddForce(direction.normalized * bulletSpeed, ForceMode.Impulse);
         _bulletPool = bulletPool;
         elapsedTime = 0f;
     }

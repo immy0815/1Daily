@@ -132,22 +132,22 @@ MonoBehaviour:
   duration: 0.5
   thrownObject: {fileID: 2969448868185744027}
   <WeaponData>k__BackingField: {fileID: 11400000, guid: 3d61f78d06630c5469f2d0df5daa134e, type: 2}
+  <IsCurrentlyOwned>k__BackingField: 0
   <IsOwnedByPlayer>k__BackingField: 0
   <IsThrownByPlayer>k__BackingField: 0
   rigidBody: {fileID: 8293249635332495934}
   boxCollider: {fileID: 6979269650190680963}
   gunshotClip: {fileID: 8300000, guid: 3003ad3fa9f86b84db5531a588d8c750, type: 3}
-  soundHelper: {fileID: 0}
+  muzzleFlash: {fileID: 3230729828462239561}
   bullet: {fileID: 5148502391975629586, guid: ae98e24746652ee41b86806f28adae9b, type: 3}
   bulletPoolObj: {fileID: 0}
   firePoint: {fileID: 1404909240147758454}
-  bulletCount: 10000
+  shootableLayer:
+    serializedVersion: 2
+    m_Bits: 1728
+  bulletCount: 6
   recoilTime: 1
   throwForce: 10
-  muzzleFlash: {fileID: 3230729828462239561}
-  recoilAngle: -50
-  upTime: 0.1
-  downTime: 0.1
   <TimeSinceLastShoot>k__BackingField: 0
   <IsReady>k__BackingField: 1
 --- !u!114 &2969448868185744027

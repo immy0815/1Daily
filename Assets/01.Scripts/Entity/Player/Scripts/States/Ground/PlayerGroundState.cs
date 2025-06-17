@@ -38,7 +38,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             base.ReadMovementInput();
             if (stateMachine.MovementDirection != Vector2.zero)
             {
-                stateMachine.Player.PlayerInventory.CurrentWeapon?.ResetAttackCoroutine();
+                if (AttackCoroutine != null){ stateMachine.Player.StopCoroutine(AttackCoroutine); AttackCoroutine = null; }
                 stateMachine.Player.PlayerInventory.ResetThrowCoroutine();
                 if(!Mathf.Approximately(Time.timeScale, 1))
                     TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Move, 1f);
@@ -65,6 +65,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             base.OnJumpStarted(context);
             if (playerCondition.IsDead) return;
             stateMachine.ChangeState(stateMachine.JumpState);
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Jump, 1f);
         }
 
         protected override void OnAttack(InputAction.CallbackContext context)
@@ -74,14 +75,14 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
             {
                 if (!pistol.OnShoot(stateMachine.Player)) return;
-                if (AttackCoroutine != null) StopCoroutine(AttackCoroutine); 
+                if (AttackCoroutine != null) stateMachine.Player.StopCoroutine(AttackCoroutine); 
                 AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
                 // TODO: Animation 호출
                 return;
             }
 
             if (stateMachine.Player.PlayerInteraction.Damagable is not Enemy) return;
-            if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
+            if (AttackCoroutine != null) stateMachine.Player.StopCoroutine(AttackCoroutine);
             AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(1f));
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
