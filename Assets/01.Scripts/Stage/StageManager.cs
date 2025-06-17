@@ -10,36 +10,36 @@ using Object = UnityEngine.Object;
 using UnityEditor.SceneManagement;
 #endif
 
-public static class StageManager
+public class StageManager : Singleton<StageManager>
 {
-  private static int stageIndex = 1;
-  private static Stage currentStage = null;
+  [SerializeField, ReadOnly] private int stageIndex = 1;
+  [SerializeField, ReadOnly] private Stage currentStage = null;
   
   /// <summary>
   /// 현재 진행중인 스테이지입니다.
   /// 스테이지가 진행중이 아닐경우 null을 반환합니다.
   /// </summary>
-  public static Stage CurrentStage => currentStage;
+  public static Stage CurrentStage => Instance.currentStage;
   /// <summary>
   /// 스테이지 시작시 이벤트입니다.
   /// 인자로 시작하려는 스테이지를 넘겨줍니다.
   /// </summary>
-  public static event Action<Stage> OnStageStart;
+  public UnityEvent<Stage> OnStageStart;
   
   /// <summary>
   /// 스테이지 종료 시 이벤트입니다.
   /// 해당 이벤트 호출 시점에는 currentStage가 null이 아닙닌다.
   /// </summary>
-  public static event Action<StageFinishState> OnStageEnd;
+  public UnityEvent<StageFinishState> OnStageEnd;
 
   /// <summary>
   /// 스테이지를 시작할 수 있습니다.
   /// 게임씬을 로딩 후 시작시킵니다.
   /// </summary>
   /// <returns></returns>
-  public static void StartStage()
+  public void StartStage()
   {
-    OnStageEnd += (state) =>
+    OnStageEnd.AddListener((state) =>
     {
       switch (state)
       {
@@ -60,10 +60,13 @@ public static class StageManager
           break;
         }
       }
-    };
+    });
     
     StartStage(stageIndex);
   }
+  
+  public static void StartStageStatic() => Instance.StartStage();
+  public static void StartStageStatic(int stageIndex) => Instance.StartStage(stageIndex);
   
   /// <summary>
   /// 스테이지를 시작할 수 있습니다.
@@ -71,7 +74,7 @@ public static class StageManager
   /// </summary>
   /// <param name="stageIndex">시작할 스테이지의 번호입니다.</param>
   /// <returns>시작한 스테이지를 </returns>
-  public static Stage StartStage(int stageIndex)
+  public void StartStage(int stageIndex)
   {
     var sceneName = SceneManager.GetActiveScene().name;
     
@@ -104,7 +107,7 @@ public static class StageManager
       }
       else
       {
-        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
 #if UNITY_EDITOR
         Debug.LogError("Stage not found");
 #endif
@@ -116,15 +119,13 @@ public static class StageManager
     SceneManager.sceneLoaded += action;
     
     // ResourceManager.Instance.SwitchScene(SceneName.Game);
-    SceneManager.LoadSceneAsync("GameScene", LoadSceneMode.Single);
-    
-    return currentStage;
+    SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
   }
 
   /// <summary>
   /// 현재 진행중인 스테이지가 있다면 강제로 종료시킵니다.
   /// </summary>
-  public static void StopStage()
+  public void StopStage()
   {
     if(currentStage)
     {
@@ -134,7 +135,7 @@ public static class StageManager
     }
   }
 
-  private static void OnStageFinish(StageFinishState state)
+  private void OnStageFinish(StageFinishState state)
   {
     currentStage.OnStageEnd.RemoveListener(OnStageFinish);
     OnStageEnd?.Invoke(state);

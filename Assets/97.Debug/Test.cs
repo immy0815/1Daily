@@ -6,7 +6,7 @@ namespace _97.Debug
   {
     public void Run()
     {
-      StageManager.StartStage(1);
+      StageManager.StartStageStatic(1);
     }
   }
 }

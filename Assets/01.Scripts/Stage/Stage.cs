@@ -93,8 +93,6 @@ public class Stage : MonoBehaviour
   
   #endif
 
-  #endregion
-
   private void Awake()
   {
     camera = Camera.main;
@@ -121,6 +119,8 @@ public class Stage : MonoBehaviour
     }
   }
   
+  #endregion
+
   #region Feature
   
   /// <summary>
@@ -163,7 +163,7 @@ public class Stage : MonoBehaviour
 
   public void StartStage(int stageIndex)
   {
-    StageManager.StartStage(stageIndex);
+    StageManager.StartStageStatic(stageIndex);
   }
   
   private void OnPlayerDeath()
@@ -177,13 +177,13 @@ public class Stage : MonoBehaviour
     currentWave.OnClear -= StartNextWave;
     OnWaveClear?.Invoke(currentWave);
 
-    if (currentWaveIndex < waves.Count - 1)
+    if (currentWaveIndex < waves.Count - 2)
     {
       currentWave = waves[++currentWaveIndex];
       currentWave.OnClear += StartNextWave;
       currentWave.Spawn();
     }
-    else if (currentWaveIndex == waves.Count - 1)
+    else if (currentWaveIndex == waves.Count - 2)
     {
       OnStageEnd?.Invoke(StageFinishState.Clear);
     }
