@@ -82,8 +82,9 @@ public class StageManager : Singleton<StageManager>
 
     UnityAction<Scene,LoadSceneMode> action = null;
     
-    action = (_, _) =>
+    action = (scene, _) =>
     {
+      if (scene.name != "GameScene") return;
       var origin = Addressables.LoadAssetAsync<GameObject>($"Stage{stageIndex}").WaitForCompletion();
       var obj = Object.Instantiate(origin);
       

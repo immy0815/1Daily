@@ -92,7 +92,6 @@ public class UIStartScene : UIBase
 
     private void StartGame()
     {
-        StageManager.Instance.StartStage();
         UIManager.Instance.UpdateGUIByEnterScene(SceneType.Loading);
     }
 }
