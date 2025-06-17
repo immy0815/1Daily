@@ -1,6 +1,7 @@
 using System;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
@@ -10,6 +11,7 @@ using UnityEditor.SceneManagement;
 
 public static class StageManager
 {
+  private static int stageIndex = 1;
   private static Stage currentStage = null;
   
   /// <summary>
@@ -28,6 +30,34 @@ public static class StageManager
   /// 해당 이벤트 호출 시점에는 currentStage가 null이 아닙닌다.
   /// </summary>
   public static event Action<StageFinishState> OnStageEnd;
+
+  public static void StartStage()
+  {
+    OnStageEnd += (state) =>
+    {
+      switch (state)
+      {
+        case StageFinishState.Cancel:
+        {
+          SceneManager.LoadScene("StartScene");
+          break;
+        }
+        case StageFinishState.Clear:
+        {
+          stageIndex++;
+          StartStage(stageIndex);
+          break;
+        }
+        case StageFinishState.Failure:
+        {
+          StartStage(stageIndex);
+          break;
+        }
+      }
+    };
+    
+    StartStage(stageIndex);
+  }
   
   /// <summary>
   /// 스테이지를 시작할 수 있습니다.
@@ -40,36 +70,38 @@ public static class StageManager
     var sceneName = SceneManager.GetActiveScene().name;
     
     if (sceneName == "GameScene") StopStage();
-    
-    #if UNITY_EDITOR
-    EditorSceneManager.OpenScene("Assets/00.Scenes/GameScene.unity", OpenSceneMode.Single);
-    #else
-    SceneManager.LoadScene("GameScene");
-    #endif
-    
-    if (ResourceManager.Instance.InstantiateStage($"Stage{stageIndex}", out var obj))
-    {
-      var stage = obj.GetComponent<Stage>();
-      obj.transform.position = Vector3.zero;
-      currentStage = stage;
-      stage.StartStage();
-      OnStageStart?.Invoke(stage);
-      stage.OnStageEnd += OnStageFinish;
 
-      var vCam = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
-      vCam.Follow = stage.Player.transform;
-      vCam.LookAt = stage.Player.transform;
-    }
-    else
+    UnityAction<Scene,LoadSceneMode> action = null;
+    
+    action = (_, _) =>
     {
-      SceneManager.LoadScene(sceneName);
+      if (ResourceManager.Instance.InstantiateStage($"Stage{stageIndex}", out var obj))
+      {
+        var stage = obj.GetComponent<Stage>();
+        obj.transform.position = Vector3.zero;
+        currentStage = stage;
+        stage.StartStage();
+        OnStageStart?.Invoke(stage);
+        stage.OnStageEnd += OnStageFinish;
+
+        var vCam = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
+        vCam.Follow = stage.Player.transform;
+        vCam.LookAt = stage.Player.transform;
+      }
+      else
+      {
+        SceneManager.LoadScene(sceneName);
 #if UNITY_EDITOR
-      EditorSceneManager.OpenScene("00.Scenes/GameScene", OpenSceneMode.Single);
-      Debug.LogError("Stage not found");
-#else
-      SceneManager.LoadScene("GameScene");
+        Debug.LogError("Stage not found");
 #endif
-    }
+      }
+      
+      SceneManager.sceneLoaded -= action;
+    };
+
+    SceneManager.sceneLoaded += action;
+    
+    ResourceManager.Instance.SwitchScene(SceneName.Game);
     
     return currentStage;
   }
