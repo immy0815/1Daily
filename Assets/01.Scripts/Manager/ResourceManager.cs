@@ -17,6 +17,7 @@ public class ResourceManager : MonoBehaviour
 
     private SceneLoader _sceneLoader;
     private StageLoader _stageLoader;
+    
 
     [SerializeField] private SceneName _currentScene;
     [SerializeField] private GameObject _currentStage;
@@ -56,10 +57,8 @@ public class ResourceManager : MonoBehaviour
 
         Debug.Log("[ResourceManager] All Resources Loaded");
 
-        // 임시
-        yield return StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Game));
+        StageManager.StartStage();
         UIManager.Instance.UpdateGUIByEnterScene(SceneType.Game);
-        InstantiateStage("Stage1", out _currentStage);
     }
 
     public IEnumerator ReleaseAllResources()
