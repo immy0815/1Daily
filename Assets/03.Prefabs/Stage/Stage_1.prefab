@@ -429,6 +429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f16f899914f45889c6e5eb999d94876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camera: {fileID: 0}
   currentWaveIndex: 0
   currentWave: {fileID: 4751794638452995980}
   takenTime: 0
@@ -437,6 +438,12 @@ MonoBehaviour:
   - {fileID: 276433656842111099}
   - {fileID: 605202522250496940}
   player: {fileID: 3789078709218344826}
+  OnWaveClear:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStageEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &835296415436950466
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2051,6 +2058,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7245191215711559959, guid: cb78db174ac67104fbc3df6a915f5d1a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2039691857574674250}
+    - targetCorrespondingSourceObject: {fileID: 7245191215711559959, guid: cb78db174ac67104fbc3df6a915f5d1a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6986162520423190966}
   m_SourcePrefab: {fileID: 100100000, guid: cb78db174ac67104fbc3df6a915f5d1a, type: 3}
 --- !u!1 &1512139328389860363 stripped
 GameObject:
@@ -2106,6 +2116,34 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &6986162520423190966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512139328389860363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77a3b1a1831044f28715376bc91856a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  onTrigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 595217281212917487}
+        m_TargetAssemblyTypeName: Stage, Assembly-CSharp
+        m_MethodName: StageClear
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &8645394844466449143 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cb78db174ac67104fbc3df6a915f5d1a, type: 3}

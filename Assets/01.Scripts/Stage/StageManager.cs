@@ -31,6 +31,11 @@ public static class StageManager
   /// </summary>
   public static event Action<StageFinishState> OnStageEnd;
 
+  /// <summary>
+  /// 스테이지를 시작할 수 있습니다.
+  /// 게임씬을 로딩 후 시작시킵니다.
+  /// </summary>
+  /// <returns></returns>
   public static void StartStage()
   {
     OnStageEnd += (state) =>
@@ -63,8 +68,8 @@ public static class StageManager
   /// 스테이지를 시작할 수 있습니다.
   /// 게임씬을 로딩 후 시작시킵니다.
   /// </summary>
-  /// <param name="stageIndex"></param>
-  /// <returns></returns>
+  /// <param name="stageIndex">시작할 스테이지의 번호입니다.</param>
+  /// <returns>시작한 스테이지를 </returns>
   public static Stage StartStage(int stageIndex)
   {
     var sceneName = SceneManager.GetActiveScene().name;
@@ -82,7 +87,7 @@ public static class StageManager
         currentStage = stage;
         stage.StartStage();
         OnStageStart?.Invoke(stage);
-        stage.OnStageEnd += OnStageFinish;
+        stage.OnStageEnd.AddListener(OnStageFinish);
 
         var vCam = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
         vCam.Follow = stage.Player.transform;
@@ -101,7 +106,8 @@ public static class StageManager
 
     SceneManager.sceneLoaded += action;
     
-    ResourceManager.Instance.SwitchScene(SceneName.Game);
+    // ResourceManager.Instance.SwitchScene(SceneName.Game);
+    SceneManager.LoadScene("GameScene");
     
     return currentStage;
   }
@@ -121,7 +127,7 @@ public static class StageManager
 
   private static void OnStageFinish(StageFinishState state)
   {
-    currentStage.OnStageEnd -= OnStageFinish;
+    currentStage.OnStageEnd.RemoveListener(OnStageFinish);
     OnStageEnd?.Invoke(state);
   }
 }
