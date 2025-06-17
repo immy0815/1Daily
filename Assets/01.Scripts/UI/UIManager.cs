@@ -157,10 +157,8 @@ public class UIManager : MonoBehaviour
 
     }
 
-#if UNITY_EDITOR
-    public void PlayEffectText()
+    public void PlayEffectText(string text)
     {
-        uiEffectText.Open();
+        uiEffectText.Open(text);
     }
-#endif
 }

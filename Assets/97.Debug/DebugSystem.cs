@@ -18,7 +18,7 @@ public class DebugSystem : EditorWindow
 
         if (GUILayout.Button("Effect UI Text"))
         {
-            UIManager.Instance.PlayEffectText();
+            UIManager.Instance.PlayEffectText("COOL");
         }
     }
 }
