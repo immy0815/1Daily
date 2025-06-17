@@ -38,7 +38,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             base.ReadMovementInput();
             if (stateMachine.MovementDirection != Vector2.zero)
             {
-                stateMachine.Player.PlayerInventory.CurrentWeapon?.ResetAttackCoroutine();
+                if (AttackCoroutine != null){ stateMachine.Player.StopCoroutine(AttackCoroutine); AttackCoroutine = null; }
                 stateMachine.Player.PlayerInventory.ResetThrowCoroutine();
                 if(!Mathf.Approximately(Time.timeScale, 1))
                     TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Move, 1f);

@@ -15,7 +15,7 @@ public class Pistol : Weapon, IShootable
     [SerializeField] private LayerMask shootableLayer;
     [SerializeField] private int bulletCount = 6;
     [SerializeField] private float recoilTime = 1f;
-    [SerializeField] private float throwForce = 10;
+    [SerializeField] private float throwForce = 6;
     
     [field: Header("Pistol Condition")]
     [field: SerializeField] public float TimeSinceLastShoot { get; private set; }
@@ -59,12 +59,15 @@ public class Pistol : Weapon, IShootable
         bulletCount--;
         IsReady = false;
         
+        // Direction 결정
         var direction = Physics.Raycast(
             player.MainCameraTransform.position,
             player.MainCameraTransform.forward, out var hitInfo, float.MaxValue, shootableLayer)
             ? (hitInfo.point - player.PlayerInventory.WeaponPivot.position).normalized
             : player.MainCameraTransform.forward;
-        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
+        
+        if (!bullet.TryGetComponent<Bullet>(out var obj)) return false;
+        obj.Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
         return true;
     }
 
@@ -80,18 +83,19 @@ public class Pistol : Weapon, IShootable
         bulletCount--;
         IsReady = false;
         
-        Vector3 targetPosRandomElement = new Vector3(
+        var targetPosRandomElement = new Vector3(
             Random.Range(-0.15f, 0.15f),
             Random.Range(-0.15f, 0.15f),
             Random.Range(-0.15f, 0.15f)
         );
 
-        Vector3 targetPos = enemy.Target.transform.position + targetPosRandomElement + Vector3.up * 1.5f; // 1.5f는 대략 플레이어 모델의 상체~머리
+        var targetPos = enemy.Target.transform.position + targetPosRandomElement + Vector3.up * 1.5f; // 1.5f는 대략 플레이어 모델의 상체~머리
         
-        // direction 결정
-        var direction = targetPos - firePoint.transform.position; 
-        
-        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
+        // Direction 결정
+        var direction = targetPos - firePoint.transform.position;
+
+        if (!bullet.TryGetComponent<Bullet>(out var obj)) return false;
+        obj.Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
         return true;
     }
 
@@ -110,10 +114,18 @@ public class Pistol : Weapon, IShootable
         IsReady = true;
         TimeSinceLastShoot = 0;
         IsThrownByPlayer = isThrownByPlayer;
+        IsCurrentlyOwned = false;
         
         // TODO: 던지는 데미지를 적용해야 하는데 현재는 무기의 기본 데미지가 적용되어있음.(수정 필요!!!)
-        thrownObject.Init(WeaponData.damage);
-        rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
+        if (IsThrownByPlayer)
+        {
+            thrownObject.Init(WeaponData.damage);
+            rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
+        }
+        else
+        {
+            rigidBody.AddForce(direction, ForceMode.Impulse);
+        }
     }
 
     /// <summary>
@@ -126,13 +138,13 @@ public class Pistol : Weapon, IShootable
 
     public override void OnInteract(Transform pivot, bool isOwnedByPlayer)
     {
-        if (IsThrownByPlayer) return;
+        if (IsThrownByPlayer || IsCurrentlyOwned) return;
         rigidBody.isKinematic = true;
         rigidBody.useGravity = false;
         boxCollider.isTrigger = true;
         IsOwnedByPlayer = isOwnedByPlayer;
+        IsCurrentlyOwned = true;
         FillAmmo();
         StartCoroutine(MoveToPivot(pivot));
     }
-    
 }
