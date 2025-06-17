@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIStartScene : UIBase
@@ -91,6 +92,7 @@ public class UIStartScene : UIBase
 
     private void StartGame()
     {
+        StageManager.Instance.StartStage();
         UIManager.Instance.UpdateGUIByEnterScene(SceneType.Loading);
     }
 }

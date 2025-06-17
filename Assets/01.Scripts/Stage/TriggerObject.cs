@@ -3,31 +3,11 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [ AddComponentMenu( "Stage/Trigger Object" )]
-public class TriggerObject : MonoBehaviour
+public class TriggerObject : MonoBehaviour, IInteractable
 {
-  public TriggerType type;
-  public UnityEvent onTrigger;
+  public UnityEvent onTrigger = new();
   
-  private void OnTriggerEnter( Collider other )
-  {
-    if (other.CompareTag("Player") && type == TriggerType.TriggerEnter)
-    {
-      onTrigger.Invoke();
-    }
-  }
+  public void OnInteract() => onTrigger.Invoke();
 
-  public void Trigger(TriggerType type)
-  {
-    if (type == this.type)
-    {
-      onTrigger.Invoke();
-    }
-  }
-}
-
-public enum TriggerType
-{
-  TriggerEnter,
-  RightClick,
-  LeftClick
+  public void OnInteract(Transform pivot, bool isOwnedByPlayer = false) { }
 }
