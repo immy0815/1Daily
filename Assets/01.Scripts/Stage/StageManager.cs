@@ -61,6 +61,7 @@ public class StageManager : Singleton<StageManager>
         case StageFinishState.Failure:
         {
           // 죽었을 때 → 노이즈 → 인트로 (화면 전환 느낌)
+          UIManager.Instance.onUpdateDeathAnimation.Invoke();
           break;
         }
       }
@@ -122,7 +123,7 @@ public class StageManager : Singleton<StageManager>
 
     SceneManager.sceneLoaded += action;
     
-    UIManager.Instance.UpdateGUIByEnterScene(SceneType.Game);
+    UIManager.Instance.EnterScene(SceneType.Game);
   }
 
   /// <summary>

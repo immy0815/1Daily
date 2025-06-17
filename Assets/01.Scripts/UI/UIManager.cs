@@ -35,11 +35,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private UILoading uiLoading;
     [SerializeField] private UICrosshair uiCrosshair;
     [SerializeField] private UIEffectText uiEffectText;
+    [SerializeField] private UIDeathScreenFX uiDeathScreenFX;
 
     private List<UIBase> curUIList;
 
     // 로딩 할 때, progressBar UI 업데이트 시, 호출
     public Action<float> onUpdateLoadingProgress;
+    
+    // 플레이어 죽었을 때, 실행
+    public Action onUpdateDeathAnimation;
     
     private void Reset()
     {
@@ -53,6 +57,7 @@ public class UIManager : MonoBehaviour
         uiLoading = GetComponentInChildren<UILoading>();
         uiCrosshair = GetComponentInChildren<UICrosshair>();
         uiEffectText = GetComponentInChildren<UIEffectText>();
+        uiDeathScreenFX = GetComponentInChildren<UIDeathScreenFX>();
     }
 
     private void Awake()
@@ -80,6 +85,7 @@ public class UIManager : MonoBehaviour
         curUIList.Add(uiLoading);
         curUIList.Add(uiCrosshair);
         curUIList.Add(uiEffectText);
+        curUIList.Add(uiDeathScreenFX);
         
         // 최초 실행
         SetUICamera();
@@ -88,30 +94,47 @@ public class UIManager : MonoBehaviour
 
     public void OpenOption(Action closeCallback) => uiOption.PopupOpen(closeCallback);
 
-    public void UpdateGUIByEnterScene(SceneType type)
+    public void EnterScene(SceneType type)
     {
-        // 씬 변경 시, 카메라 재할당
-        SetUICamera();
-        
+        SceneManager.sceneLoaded += UpdateGUIAfterSceneLoad;
+
         switch (type)
         {
             case SceneType.Start:
                 SceneManager.LoadScene("StartScene");
-                uiStartScene.Open();
-                uiCrosshair.Close();
                 break;
             case SceneType.Loading:
                 SceneManager.LoadScene("LoadingScene");
-                uiStartScene.Close();
-                uiLoading.Open();
                 break;
             case SceneType.Game:
                 SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
-                uiLoading.Close();
-                uiCrosshair.Open();
                 break;
             default:
                 Debug.Log($"SceneType {type} is not exist.");
+                break;
+        }
+    }
+    
+    private void UpdateGUIAfterSceneLoad(Scene scene, LoadSceneMode mode)
+    {
+        SceneManager.sceneLoaded -= UpdateGUIAfterSceneLoad;
+        
+        SetUICamera();
+
+        switch (scene.name)
+        {
+            case "StartScene":
+                uiStartScene.Open();
+                uiCrosshair.Close();
+                uiDeathScreenFX.Close();
+                break;
+            case "LoadingScene":
+                uiStartScene.Close();
+                uiLoading.Open();
+                break;
+            case "GameScene":
+                uiLoading.Close();
+                uiCrosshair.Open();
                 break;
         }
     }
