@@ -23,10 +23,11 @@ namespace _01.Scripts.Entity.Player.Scripts
         [field: SerializeField] public Transform MainCameraTransform { get; private set; }
         [field: SerializeField] public Transform CameraPivot { get; private set; }
         [field: SerializeField] public CinemachineVirtualCamera FirstPersonCamera { get; private set; }
+        [field: SerializeField] public CinemachineVirtualCamera ThirdPersonCamera { get; private set; }
         
         private PlayerStateMachine stateMachine;
+        private Camera cam;
 
-        public Vector3 accumulatedForce;
         
         private void Awake()
         {
@@ -38,9 +39,9 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!PlayerInventory) PlayerInventory = gameObject.GetComponent_Helper<PlayerInventory>();
             if (!PlayerGravity) PlayerGravity = gameObject.GetComponent_Helper<PlayerGravity>();
             if (!FirstPersonCamera) FirstPersonCamera = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
+            if (!ThirdPersonCamera) ThirdPersonCamera = GameObject.Find("ThirdPersonCamera").GetComponent<CinemachineVirtualCamera>();
             if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
             
-            accumulatedForce = Vector3.zero;
             AnimationData.Initialize();
             PlayerInteraction.Init(this);
         }
@@ -55,6 +56,7 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!PlayerInventory) PlayerInventory = gameObject.GetComponent_Helper<PlayerInventory>();
             if (!PlayerGravity) PlayerGravity = gameObject.GetComponent_Helper<PlayerGravity>();
             if (!FirstPersonCamera) FirstPersonCamera = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
+            if (!ThirdPersonCamera) ThirdPersonCamera = GameObject.Find("ThirdPersonCamera").GetComponent<CinemachineVirtualCamera>();
             if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
             
             AnimationData.Initialize();
@@ -65,7 +67,10 @@ namespace _01.Scripts.Entity.Player.Scripts
         private void Start()
         {
             FirstPersonCamera.Follow = CameraPivot;
-            MainCameraTransform = Camera.main?.transform;
+            ThirdPersonCamera.Follow = CameraPivot;
+            ThirdPersonCamera.LookAt = CameraPivot;
+            cam = Camera.main;
+            MainCameraTransform = cam?.transform;
             
             Cursor.lockState = CursorLockMode.Locked;
             stateMachine = new PlayerStateMachine(this);
@@ -94,6 +99,10 @@ namespace _01.Scripts.Entity.Player.Scripts
         {
             Animator.SetTrigger(AnimationData.DeathParameterHash);
             TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Death, 0.5f);
+            FirstPersonCamera.Priority = 5;
+            ThirdPersonCamera.Priority = 10;
+            Debug.Log(gameObject.layer);
+            cam.cullingMask |= 1 << gameObject.layer;
         }
     }
 }

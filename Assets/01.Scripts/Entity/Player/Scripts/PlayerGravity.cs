@@ -30,7 +30,7 @@ namespace _01.Scripts.Entity.Player.Scripts
         
         public void Jump(float jumpForce)
         {
-            verticalVelocity += jumpForce;
+            verticalVelocity = jumpForce;
         }
     }
 }
