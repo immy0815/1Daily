@@ -16,11 +16,11 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] private List<string> _stageKeys;
 
     private SceneLoader _sceneLoader;
-    private StageLoader _stageLoader;
-    
+    private StageLoader _stageLoader;    
 
-    [SerializeField] private SceneName _currentScene;
     [SerializeField] private GameObject _currentStage;
+
+    private float progress;
 
     private void Awake()
     {
@@ -50,14 +50,26 @@ public class ResourceManager : MonoBehaviour
     {
         yield return Addressables.InitializeAsync();
 
+        int total = _stageKeys.Count;
+        int loaded = 0;
+
         foreach (string key in _stageKeys)
         {
             yield return StartCoroutine(_stageLoader.LoadStageAsync(key));
+
+            loaded++;
+            progress = (float)loaded / total;
+            UIManager.Instance.onUpdateLoadingProgress.Invoke(progress);
         }
 
         Debug.Log("[ResourceManager] All Resources Loaded");
 
+
+        // 로딩을 보여주기 위해 임시로 3초 정지
+        yield return new WaitForSeconds(3f);
+
         StageManager.StartStage();
+
         UIManager.Instance.UpdateGUIByEnterScene(SceneType.Game);
     }
 
@@ -65,7 +77,6 @@ public class ResourceManager : MonoBehaviour
     {
         Debug.Log("[ResourceManager] Releasing all resources...");
 
-        _sceneLoader.ReleaseScenes();
         _stageLoader.ReleaseStagePrefab();
 
         if (_currentStage != null)
@@ -79,10 +90,9 @@ public class ResourceManager : MonoBehaviour
         Debug.Log("[ResourceManager] All resources released.");
     }
 
-    public void SwitchScene(SceneName targetScene)
+    public IEnumerator SwitchScene(SceneName targetScene)
     {
-        _currentScene = targetScene;
-        StartCoroutine(_sceneLoader.LoadSceneAsync(targetScene));
+        yield return _sceneLoader.LoadSceneAsync(targetScene);
     }
 
     public bool InstantiateStage(string stageKey, out GameObject stagePrefab)
