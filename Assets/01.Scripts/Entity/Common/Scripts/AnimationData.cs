@@ -6,26 +6,26 @@ namespace _01.Scripts.Entity.Common.Scripts
     [Serializable] public class AnimationData
     {
         [Header("Animation Parameters on ground")]
-        [SerializeField] private string groundParameterName = "@Ground";
-        [SerializeField] private string idleParameterName = "Idle";
-        [SerializeField] private string walkParameterName = "Walk";
-        [SerializeField] private string runParameterName = "Run";
-        [SerializeField] private string punchParameterName = "Punch";
+        [SerializeField, ReadOnly] private string groundParameterName = "@Ground";
+        [SerializeField, ReadOnly] private string idleParameterName = "Idle";
+        [SerializeField, ReadOnly] private string walkParameterName = "Walk";
+        [SerializeField, ReadOnly] private string runParameterName = "Run";
+        [SerializeField, ReadOnly] private string punchParameterName = "Punch";
         
         [Header("Animation Parameters on air")]
-        [SerializeField] private string airParameterName = "@Air";
-        [SerializeField] private string jumpParameterName = "Jump";
-        [SerializeField] private string fallParameterName = "Fall";
+        [SerializeField, ReadOnly] private string airParameterName = "@Air";
+        [SerializeField, ReadOnly] private string jumpParameterName = "Jump";
+        [SerializeField, ReadOnly] private string fallParameterName = "Fall";
         
         [Header("Animation Parameters on attack")] 
-        [SerializeField] private string attackParameterName = "@Attack";
-        [SerializeField] private string comboAttackParameterName = "ComboAttack";
-        [SerializeField] private string comboAttackIndex = "Combo";
-        [SerializeField] private string shotParameterName = "Shot";
+        [SerializeField, ReadOnly] private string attackParameterName = "@Attack";
+        [SerializeField, ReadOnly] private string comboAttackParameterName = "ComboAttack";
+        [SerializeField, ReadOnly] private string comboAttackIndex = "Combo";
+        [SerializeField, ReadOnly] private string shotParameterName = "Shot";
         
         [Header("Animation Parameter on death")]
-        [SerializeField] private string deathParameterName = "Dead";
-        [SerializeField] private string hitParameterName = "Hit";
+        [SerializeField, ReadOnly] private string deathParameterName = "Dead";
+        [SerializeField, ReadOnly] private string hitParameterName = "Hit";
         
         
         // Properties of parameter hash

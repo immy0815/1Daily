@@ -10,6 +10,7 @@ namespace _01.Scripts.Manager
         Attack,
         Throw,
         Jump,
+        Death,
     }
     
     public class TimeScaleManager : MonoBehaviour
@@ -44,6 +45,7 @@ namespace _01.Scripts.Manager
 
         public void ChangeTimeScale(PriorityType type, float timeScale)
         {
+            if (PreviousUpdateType == PriorityType.Death) return;
             if (PreviousUpdateType == PriorityType.Jump && type is PriorityType.Attack or PriorityType.Throw) return;
             
             if (Mathf.Approximately(TargetTimeScale, timeScale)) return; 

@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace _01.Scripts.Entity.Player.Scripts.States
 {
-    public class PlayerBaseState : MonoBehaviour, IState
+    public class PlayerBaseState : IState
     {
         protected readonly PlayerStateMachine stateMachine;
         protected readonly EntityCondition playerCondition;
@@ -33,6 +33,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States
 
         public virtual void Update()
         {
+            if (playerCondition.IsDead) { return; }
             Move();
             Rotate(stateMachine.Player.MainCameraTransform.forward);
         }
@@ -99,6 +100,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States
 
         private void Rotate(Vector3 direction)
         {
+            if (playerCondition.IsDead) return;
             if (direction == Vector3.zero) return;
             
             var unitTransform = stateMachine.Player.transform;
