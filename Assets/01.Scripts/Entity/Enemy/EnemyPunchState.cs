@@ -63,6 +63,8 @@ public class EnemyPunchState : EnemyStateBase
 
     bool TargetIsInRange()
     {
+        if (!enemy.Target)
+            return false;
         float distance = (enemy.Target.transform.position - enemy.transform.position).sqrMagnitude;
         return distance < enemy.EnemyData.BaseRange;
     }

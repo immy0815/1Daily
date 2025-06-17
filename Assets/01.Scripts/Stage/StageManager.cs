@@ -89,7 +89,7 @@ public class StageManager : Singleton<StageManager>
       
       if (obj)
       {
-        UIManager.Instance.gameObject.SetActive(false);
+        // UIManager.Instance.gameObject.SetActive(false);
         var stage = obj.GetComponent<Stage>();
         obj.transform.position = Vector3.zero;
         currentStage = stage;
