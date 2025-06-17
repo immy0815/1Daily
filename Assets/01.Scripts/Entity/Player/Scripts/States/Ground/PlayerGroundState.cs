@@ -27,7 +27,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             base.PhysicsUpdate();
 
             if (!stateMachine.Player.CharacterController.isGrounded &&
-                stateMachine.Player.CharacterController.velocity.y < Physics.gravity.y * Time.deltaTime)
+                stateMachine.Player.CharacterController.velocity.y < Physics.gravity.y * Time.fixedDeltaTime)
             {
                 stateMachine.ChangeState(stateMachine.FallState);
             }
@@ -65,7 +65,6 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             base.OnJumpStarted(context);
             if (playerCondition.IsDead) return;
             stateMachine.ChangeState(stateMachine.JumpState);
-            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Jump, 1f);
         }
 
         protected override void OnAttack(InputAction.CallbackContext context)

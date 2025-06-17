@@ -6,6 +6,7 @@
         void HandleInput();
         void PhysicsUpdate();
         void Update();
+        void LateUpdate();
         void Exit();
     }
 }

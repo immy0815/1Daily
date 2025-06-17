@@ -38,6 +38,11 @@ namespace _01.Scripts.Entity.Player.Scripts.States
             Rotate(stateMachine.Player.MainCameraTransform.forward);
         }
 
+        public virtual void LateUpdate()
+        {
+            
+        }
+
         public virtual void PhysicsUpdate()
         {
             

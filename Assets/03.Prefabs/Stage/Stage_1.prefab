@@ -221,7 +221,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -515,7 +515,7 @@ PrefabInstance:
     - target: {fileID: 6367923018259523607, guid: cc749c39a39816c40abd3419d16a869a, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
     - target: {fileID: 8232997860439057273, guid: cc749c39a39816c40abd3419d16a869a, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -653,7 +653,7 @@ PrefabInstance:
     - target: {fileID: 5700927034973799013, guid: 8f535dd4b139ef94da932b427796e31f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -787,7 +787,7 @@ PrefabInstance:
     - target: {fileID: -6645169524924626171, guid: fff5114dc6feb8b48a985432a9addc54, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
     - target: {fileID: 919132149155446097, guid: fff5114dc6feb8b48a985432a9addc54, type: 3}
       propertyPath: m_Name
       value: construction-barrier (1)
@@ -933,7 +933,7 @@ PrefabInstance:
     - target: {fileID: -6645169524924626171, guid: fff5114dc6feb8b48a985432a9addc54, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
     - target: {fileID: 919132149155446097, guid: fff5114dc6feb8b48a985432a9addc54, type: 3}
       propertyPath: m_Name
       value: construction-barrier
@@ -1249,7 +1249,7 @@ PrefabInstance:
     - target: {fileID: -4399443442167222753, guid: 7a1ada3f52b338b48bee7587b9629c73, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
     - target: {fileID: 919132149155446097, guid: 7a1ada3f52b338b48bee7587b9629c73, type: 3}
       propertyPath: m_Name
       value: detail-overhang
@@ -1399,7 +1399,7 @@ PrefabInstance:
     - target: {fileID: 4242851142430907742, guid: ab461dcb3ba28a04e9cd18a26cdb42e2, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
     - target: {fileID: 7617499542399276426, guid: ab461dcb3ba28a04e9cd18a26cdb42e2, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -1525,7 +1525,7 @@ PrefabInstance:
     - target: {fileID: -6434888859956260163, guid: 801543d59d95b044fae8934942a77167, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
     - target: {fileID: 919132149155446097, guid: 801543d59d95b044fae8934942a77167, type: 3}
       propertyPath: m_Name
       value: building-j
@@ -1667,7 +1667,7 @@ PrefabInstance:
     - target: {fileID: 6367923018259523607, guid: cc749c39a39816c40abd3419d16a869a, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
     - target: {fileID: 8232997860439057273, guid: cc749c39a39816c40abd3419d16a869a, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -1805,7 +1805,7 @@ PrefabInstance:
     - target: {fileID: 3051733963577981089, guid: 0fff8d83baeb54341a203b218ce0bdf7, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1939,7 +1939,7 @@ PrefabInstance:
     - target: {fileID: 7443213387514493094, guid: 4ddc7eb9bbd9bb34dacd743b4866ab13, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2142,7 +2142,7 @@ PrefabInstance:
     - target: {fileID: -3809753343883682364, guid: cb78db174ac67104fbc3df6a915f5d1a, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
     - target: {fileID: 919132149155446097, guid: cb78db174ac67104fbc3df6a915f5d1a, type: 3}
       propertyPath: m_Name
       value: detail-parasol-b
@@ -2276,7 +2276,7 @@ PrefabInstance:
     - target: {fileID: -807189940080502863, guid: addb4287e43d3ac4196d58e8b49f5e62, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
     - target: {fileID: 919132149155446097, guid: addb4287e43d3ac4196d58e8b49f5e62, type: 3}
       propertyPath: m_Name
       value: building-h
@@ -2410,7 +2410,7 @@ PrefabInstance:
     - target: {fileID: -6452289790366667254, guid: 48a0551ac243a9e46aaa9de48a024542, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
     - target: {fileID: 919132149155446097, guid: 48a0551ac243a9e46aaa9de48a024542, type: 3}
       propertyPath: m_Name
       value: building-b
@@ -2576,7 +2576,7 @@ PrefabInstance:
     - target: {fileID: 2669178372590520146, guid: 80beaff1d856cb84a910f07e7b188486, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 6a1f3eddce97a8c448ea992c052de3a3, type: 2}
     - target: {fileID: 7009324033351590333, guid: 80beaff1d856cb84a910f07e7b188486, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647

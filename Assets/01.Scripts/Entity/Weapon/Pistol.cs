@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using _01.Scripts.Entity.Player.Scripts;
 using _01.Scripts.Util;
 using Retronia.Core;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Pistol : Weapon, IShootable
 {
@@ -11,6 +13,7 @@ public class Pistol : Weapon, IShootable
     [SerializeField] private BoxCollider boxCollider;
     [SerializeField] private AudioClip gunshotClip;
     [SerializeField] private ParticleSystem muzzleFlash;
+    
 
     [Header("Pistol Settings")]
     [SerializeField] private GameObject bullet;
@@ -24,6 +27,8 @@ public class Pistol : Weapon, IShootable
     [field: Header("Pistol Condition")]
     [field: SerializeField] public float TimeSinceLastShoot { get; private set; }
     [field: SerializeField] public bool IsReady { get; private set; } = true;
+    
+    public static event Action OnReloadStart;
     
 	private int originalBulletCount;
     private float recoilAngle = -70f;  
@@ -70,6 +75,7 @@ public class Pistol : Weapon, IShootable
         bulletCount--;
         IsReady = false;
         
+        OnReloadStart?.Invoke();
         PlayRecoil();  // 반동
         PlayMuzzleFlash();
         SoundManager.Play(gunshotClip,gameObject);
