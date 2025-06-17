@@ -229,7 +229,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.1
+  near clip plane: 0.3
   far clip plane: 5000
   field of view: 40
   orthographic: 0
@@ -278,13 +278,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ShowDebugText: 0
   m_ShowCameraFrustum: 1
-  m_IgnoreTimeScale: 0
+  m_IgnoreTimeScale: 1
   m_WorldUpOverride: {fileID: 0}
   m_UpdateMethod: 2
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
-    m_Style: 1
-    m_Time: 2
+    m_Style: 0
+    m_Time: 1
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 40
     OrthographicSize: 10
-    NearClipPlane: 0.1
+    NearClipPlane: 0.3
     FarClipPlane: 5000
     Dutch: 0
     ModeOverride: 0
@@ -636,6 +636,78 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Damping: 0
+--- !u!1001 &949147993524997676
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1738789441376432123, guid: 1a886ee3fff2a2940b6395fef889686a, type: 3}
+      propertyPath: m_LookAt
+      value: 
+      objectReference: {fileID: 1261093310}
+    - target: {fileID: 5771952454858124739, guid: 1a886ee3fff2a2940b6395fef889686a, type: 3}
+      propertyPath: m_Name
+      value: Dolly Track
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479257938361295803, guid: 1a886ee3fff2a2940b6395fef889686a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479257938361295803, guid: 1a886ee3fff2a2940b6395fef889686a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479257938361295803, guid: 1a886ee3fff2a2940b6395fef889686a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479257938361295803, guid: 1a886ee3fff2a2940b6395fef889686a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479257938361295803, guid: 1a886ee3fff2a2940b6395fef889686a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479257938361295803, guid: 1a886ee3fff2a2940b6395fef889686a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479257938361295803, guid: 1a886ee3fff2a2940b6395fef889686a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479257938361295803, guid: 1a886ee3fff2a2940b6395fef889686a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479257938361295803, guid: 1a886ee3fff2a2940b6395fef889686a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479257938361295803, guid: 1a886ee3fff2a2940b6395fef889686a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1a886ee3fff2a2940b6395fef889686a, type: 3}
+--- !u!114 &1516981738417693143 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1738789441376432123, guid: 1a886ee3fff2a2940b6395fef889686a, type: 3}
+  m_PrefabInstance: {fileID: 949147993524997676}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7282113808312785144
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -712,18 +784,14 @@ PrefabInstance:
       propertyPath: <FirstPersonCamera>k__BackingField
       value: 
       objectReference: {fileID: 280440279}
+    - target: {fileID: 5590011176649574321, guid: 6326b71661c324c44b88502d66609e05, type: 3}
+      propertyPath: <ThirdPersonCamera>k__BackingField
+      value: 
+      objectReference: {fileID: 1516981738417693143}
     - target: {fileID: 6030355450700384450, guid: 6326b71661c324c44b88502d66609e05, type: 3}
       propertyPath: bulletPoolObj
       value: 
       objectReference: {fileID: 1657170854}
-    - target: {fileID: 7464782269587529332, guid: 6326b71661c324c44b88502d66609e05, type: 3}
-      propertyPath: m_NavMeshData
-      value: 
-      objectReference: {fileID: 23800000, guid: 5aa584755dae16c409bbcae857b2b498, type: 2}
-    - target: {fileID: 7464782269587529332, guid: 6326b71661c324c44b88502d66609e05, type: 3}
-      propertyPath: m_CollectObjects
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 8392984249151005675, guid: 6326b71661c324c44b88502d66609e05, type: 3}
       propertyPath: bulletPoolObj
       value: 
@@ -739,6 +807,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 208300633}
   - {fileID: 280440280}
+  - {fileID: 949147993524997676}
   - {fileID: 1519113172}
   - {fileID: 7282113808312785144}
   - {fileID: 1657170856}

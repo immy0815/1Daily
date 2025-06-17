@@ -12,6 +12,8 @@ namespace _01.Scripts.Entity.Player.Scripts.States
         protected readonly PlayerStateMachine stateMachine;
         protected readonly EntityCondition playerCondition;
         protected Coroutine AttackCoroutine;
+        protected Coroutine normalAttackCoroutine;
+        private int comboIndex = -1;
 
         public PlayerBaseState(PlayerStateMachine machine)
         {
@@ -33,15 +35,14 @@ namespace _01.Scripts.Entity.Player.Scripts.States
 
         public virtual void Update()
         {
-            
-           
+            if (playerCondition.IsDead) { return; }
+            Move();
+            Rotate(stateMachine.Player.MainCameraTransform.forward);
         }
 
         public virtual void LateUpdate()
         {
-            if (playerCondition.IsDead) { return; }
-            Move();
-            Rotate(stateMachine.Player.MainCameraTransform.forward);
+            
         }
 
         public virtual void PhysicsUpdate()
@@ -53,7 +54,6 @@ namespace _01.Scripts.Entity.Player.Scripts.States
         {
             RemoveInputActionCallbacks();
         }
-
         
         protected void StartAnimation(int animatorHash)
         {
@@ -138,6 +138,14 @@ namespace _01.Scripts.Entity.Player.Scripts.States
             
             TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Attack, targetTimeScale);
             AttackCoroutine = null;
+        }
+        
+        protected IEnumerator PlayFistAttackAnimation()
+        {
+            StartAnimation(stateMachine.Player.AnimationData.AttackParameterHash);
+            stateMachine.Player.Animator.SetInteger("NormalCombo", comboIndex = comboIndex++ % 2);
+            yield return new WaitForSecondsRealtime(1f);
+            StopAnimation(stateMachine.Player.AnimationData.AttackParameterHash);
         }
 
         private void AddInputActionCallbacks()

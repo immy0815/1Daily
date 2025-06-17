@@ -65,6 +65,8 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             {
                 // TODO: Animation 호출
                 Debug.Log("Fist Attack");
+                if(normalAttackCoroutine != null){ stateMachine.Player.StopCoroutine(normalAttackCoroutine); StopAnimation(stateMachine.Player.AnimationData.AttackParameterHash); }
+                normalAttackCoroutine = stateMachine.Player.StartCoroutine(PlayFistAttackAnimation());
                 stateMachine.Player.PlayerInteraction.Damagable.OnTakeDamage(stateMachine.Player.PlayerCondition.Damage);
             }
             stateMachine.Player.PlayerInteraction.ResetParameters();
