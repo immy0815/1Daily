@@ -1,7 +1,12 @@
 using System;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
+
+#if UNITY_EDITOR
+using UnityEditor.SceneManagement;
+#endif
 
 public static class StageManager
 {
@@ -36,7 +41,11 @@ public static class StageManager
     
     if (sceneName == "GameScene") StopStage();
     
+    #if UNITY_EDITOR
+    EditorSceneManager.OpenScene("Assets/00.Scenes/GameScene.unity", OpenSceneMode.Single);
+    #else
     SceneManager.LoadScene("GameScene");
+    #endif
     
     if (ResourceManager.Instance.InstantiateStage($"Stage{stageIndex}", out var obj))
     {
@@ -46,12 +55,19 @@ public static class StageManager
       stage.StartStage();
       OnStageStart?.Invoke(stage);
       stage.OnStageEnd += OnStageFinish;
+
+      var vCam = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
+      vCam.Follow = stage.Player.transform;
+      vCam.LookAt = stage.Player.transform;
     }
     else
     {
       SceneManager.LoadScene(sceneName);
 #if UNITY_EDITOR
+      EditorSceneManager.OpenScene("00.Scenes/GameScene", OpenSceneMode.Single);
       Debug.LogError("Stage not found");
+#else
+      SceneManager.LoadScene("GameScene");
 #endif
     }
     

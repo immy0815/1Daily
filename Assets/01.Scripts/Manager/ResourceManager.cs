@@ -58,6 +58,7 @@ public class ResourceManager : MonoBehaviour
 
         // 임시
         yield return StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Game));
+        UIManager.Instance.UpdateGUIByEnterScene(SceneType.Game);
         InstantiateStage("Stage1", out _currentStage);
     }
 

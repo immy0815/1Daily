@@ -28,5 +28,10 @@ namespace _01.Scripts.Entity.Common.Scripts
        {
            CurrentState?.Update();
        }
+
+       public void LateUpdate()
+       {
+           CurrentState?.LateUpdate();
+       }
     }
 }

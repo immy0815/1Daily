@@ -48,6 +48,14 @@ public class Bullet : MonoBehaviour
 
     private void Update()
     {
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, 0.5f))
+        {
+            int hitLayer = hit.collider.gameObject.layer;
+            if (hitLayer == LayerMask.NameToLayer("Wall") || hitLayer == LayerMask.NameToLayer("Ground"))
+            {
+                Instantiate(bulletHolePrefab, hit.point + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal));
+            }
+        }
         if (!isActive) return;
         elapsedTime += Time.deltaTime;
         if(elapsedTime >= lifeTime) ReturnToPool();
@@ -67,7 +75,7 @@ public class Bullet : MonoBehaviour
     {
         if (!isActive) return;
         if (((1 << other.gameObject.layer) & hittableLayer.value) == 0) return;
-
+        
         var damagable = other.GetComponent<IDamagable>();
         if (damagable == null) { ReturnToPool(); return; }
         if (damagable is PlayerCondition && isShotByPlayer) return;
