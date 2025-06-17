@@ -50,7 +50,6 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
             
             AnimationData.Initialize();
-            PlayerInteraction.Init(this);
         }
 
         private void Reset()
@@ -69,7 +68,6 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
             
             AnimationData.Initialize();
-            PlayerInteraction.Init(this);
         }
 
         // Start is called before the first frame update
