@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using _01.Scripts.Entity.Player.Scripts;
 using UnityEngine;
 
+[ AddComponentMenu( "Stage/Stage" )]
 public class Stage : MonoBehaviour
 {
   #region Inspector
