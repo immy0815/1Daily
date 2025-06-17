@@ -135,6 +135,8 @@ GameObject:
   - component: {fileID: 88097283}
   - component: {fileID: 88097282}
   - component: {fileID: 88097281}
+  - component: {fileID: 88097285}
+  - component: {fileID: 88097286}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -225,6 +227,32 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &88097285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88097280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04de549965039eb49be77b20e6f133fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crosshair: {fileID: 837626837}
+  canvasGroup: {fileID: 0}
+--- !u!225 &88097286
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88097280}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &223428006
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5010,7 +5038,6 @@ GameObject:
   - component: {fileID: 837626837}
   - component: {fileID: 837626839}
   - component: {fileID: 837626838}
-  - component: {fileID: 837626840}
   m_Layer: 5
   m_Name: Crosshair
   m_TagString: Untagged
@@ -5075,19 +5102,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 837626836}
   m_CullTransparentMesh: 1
---- !u!114 &837626840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 837626836}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04de549965039eb49be77b20e6f133fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  crosshair: {fileID: 837626837}
 --- !u!1 &939011443
 GameObject:
   m_ObjectHideFlags: 0
@@ -15394,6 +15408,10 @@ PrefabInstance:
       propertyPath: soundHelper
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7136393713580456878, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
+      propertyPath: uiCrosshair
+      value: 
+      objectReference: {fileID: 88097285}
     - target: {fileID: 7136393713580456878, guid: ab7fa2671b2df1446bc2e644982a932e, type: 3}
       propertyPath: bulletPoolObj
       value: 
