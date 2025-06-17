@@ -1,6 +1,7 @@
 using System;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -80,14 +81,22 @@ public static class StageManager
     
     action = (_, _) =>
     {
-      if (ResourceManager.Instance.InstantiateStage($"Stage{stageIndex}", out var obj))
+      var origin = Addressables.LoadAssetAsync<GameObject>($"Stage{stageIndex}").WaitForCompletion();
+      var obj = Object.Instantiate(origin);
+      
+      if (obj)
       {
+        UIManager.Instance.gameObject.SetActive(false);
         var stage = obj.GetComponent<Stage>();
         obj.transform.position = Vector3.zero;
         currentStage = stage;
         stage.StartStage();
         OnStageStart?.Invoke(stage);
         stage.OnStageEnd.AddListener(OnStageFinish);
+        stage.OnStageEnd.AddListener((_) =>
+        {
+          Addressables.ReleaseInstance(origin);
+        });
 
         var vCam = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
         vCam.Follow = stage.Player.transform;
@@ -95,7 +104,7 @@ public static class StageManager
       }
       else
       {
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
 #if UNITY_EDITOR
         Debug.LogError("Stage not found");
 #endif
@@ -107,7 +116,7 @@ public static class StageManager
     SceneManager.sceneLoaded += action;
     
     // ResourceManager.Instance.SwitchScene(SceneName.Game);
-    SceneManager.LoadScene("GameScene");
+    SceneManager.LoadSceneAsync("GameScene", LoadSceneMode.Single);
     
     return currentStage;
   }

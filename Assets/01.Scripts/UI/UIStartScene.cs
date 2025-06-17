@@ -38,8 +38,8 @@ public class UIStartScene : MonoBehaviour
         canvasGroupButtons.SetAlpha(1);
         
         // Start
-        btnStart.onClick.RemoveAllListeners();
-        btnStart.onClick.AddListener(StartGame);
+        // btnStart.onClick.RemoveAllListeners();
+        // btnStart.onClick.AddListener(StartGame);
         
         // Option
         btnOption.onClick.RemoveAllListeners();

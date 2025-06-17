@@ -160,6 +160,11 @@ public class Stage : MonoBehaviour
   public void StageCancel() => StopStage(StageFinishState.Cancel);
   
   #endregion
+
+  public void StartStage(int stageIndex)
+  {
+    StageManager.StartStage(stageIndex);
+  }
   
   private void OnPlayerDeath()
   {

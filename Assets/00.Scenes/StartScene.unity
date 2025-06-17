@@ -207,6 +207,23 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
+--- !u!1 &527192703 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8453020941890925578, guid: 617e5b40580660449a48f68e3b7058cf, type: 3}
+  m_PrefabInstance: {fileID: 728154527}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &527192708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527192703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bbcd7aeb3094eb3b5da3ac346ab260f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &728154527
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -295,6 +312,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2294083467454416992, guid: 617e5b40580660449a48f68e3b7058cf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2294083467454416992, guid: 617e5b40580660449a48f68e3b7058cf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2294083467454416992, guid: 617e5b40580660449a48f68e3b7058cf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 527192708}
+    - target: {fileID: 2294083467454416992, guid: 617e5b40580660449a48f68e3b7058cf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2294083467454416992, guid: 617e5b40580660449a48f68e3b7058cf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Run
+      objectReference: {fileID: 0}
+    - target: {fileID: 2294083467454416992, guid: 617e5b40580660449a48f68e3b7058cf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: _97.Debug.Test, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2294083467454416992, guid: 617e5b40580660449a48f68e3b7058cf, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2503838868750706359, guid: 617e5b40580660449a48f68e3b7058cf, type: 3}
       propertyPath: m_Name
       value: Canvas_StartScene
@@ -347,10 +392,17 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8717458504325933751, guid: 617e5b40580660449a48f68e3b7058cf, type: 3}
+      propertyPath: btnStart
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8453020941890925578, guid: 617e5b40580660449a48f68e3b7058cf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 527192708}
   m_SourcePrefab: {fileID: 100100000, guid: 617e5b40580660449a48f68e3b7058cf, type: 3}
 --- !u!224 &728154528 stripped
 RectTransform:
@@ -982,6 +1034,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2063440354}
   - component: {fileID: 2063440353}
+  - component: {fileID: 2063440355}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -1066,6 +1119,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &2063440355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063440352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!4 &8191150358675140051
 Transform:
   m_ObjectHideFlags: 0
