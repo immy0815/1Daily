@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class BulletPool : MonoBehaviour
 {
+    public static BulletPool Instance { get; private set; }
+    
     [SerializeField] private GameObject bulletPrefab;
     public int poolSize = 20;
     public Queue<GameObject> pool = new Queue<GameObject>();
 
     void Awake()
     {
+        if (Instance != null && Instance != this)
+            Destroy(gameObject);
+        else
+            Instance = this;
+        
         for (int i = 0; i < poolSize; i++)
         {
             GameObject bullet = Instantiate(bulletPrefab);

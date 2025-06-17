@@ -24,7 +24,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
 
         protected override void OnSlowMotionPerformed(InputAction.CallbackContext context)
         {
-            //Debug.Log("Changed Time scale to 0.3f");
+            // Debug.Log("Changed Time scale to 0.3f");
 
             base.OnSlowMotionPerformed(context);
             if (playerCondition.IsDead) return;
@@ -33,7 +33,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
 
         protected override void OnSlowMotionCanceled(InputAction.CallbackContext context)
         {
-            //Debug.Log("Changed Time scale to 1f");
+            // Debug.Log("Changed Time scale to 1f");
 
             base.OnSlowMotionCanceled(context);
             if (playerCondition.IsDead) return;
@@ -46,32 +46,28 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             if (playerCondition.IsDead) return;
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
             {
-                if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
-                AttackCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
-                if (pistol.OnShoot(stateMachine.Player))
-                {
-                    // TODO: Animation 호출
-                }
-                else
-                {
-                    // TODO: 탄환 없음 UI 출력
-                }
+                if (!pistol.OnShoot(stateMachine.Player)) return;
+                if (AttackCoroutine != null) StopCoroutine(AttackCoroutine); 
+                AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
+                // TODO: Animation 호출
                 return;
             }
 
-            if (stateMachine.Player.PlayerInteraction.Interactable is not Enemy enemy) return;
+            if (stateMachine.Player.PlayerInteraction.Damagable is not Enemy) return;
             if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
-            AttackCoroutine = StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
+            AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(1f));
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
                 // TODO: Animation 호출
                 katana.OnHit();
-                enemy.OnTakeDamage(katana.WeaponData.damage);
+                Debug.Log("Katana Attack");
+                stateMachine.Player.PlayerInteraction.Damagable.OnTakeDamage(katana.WeaponData.damage);
             }
             else
             {
                 // TODO: Animation 호출
-                enemy.OnTakeDamage(stateMachine.Player.PlayerCondition.Damage);
+                Debug.Log("Fist Attack");
+                stateMachine.Player.PlayerInteraction.Damagable.OnTakeDamage(stateMachine.Player.PlayerCondition.Damage);
             }
             stateMachine.Player.PlayerInteraction.ResetParameters();
         }
@@ -83,7 +79,11 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Air
             if (stateMachine.Player.PlayerInventory.CurrentWeapon)
             {
                 // TODO: Animation 호출?
-                stateMachine.Player.PlayerInventory.OnDropWeapon(stateMachine.Player.MainCameraTransform.forward);
+                stateMachine.Player.PlayerInventory.OnDropWeapon(Physics.Raycast(
+                    stateMachine.Player.MainCameraTransform.position,
+                    stateMachine.Player.MainCameraTransform.forward, out var hitInfo, float.MaxValue)
+                    ? (hitInfo.point - stateMachine.Player.PlayerInventory.WeaponPivot.position).normalized
+                    : stateMachine.Player.MainCameraTransform.forward);
                 return;
             }
 
