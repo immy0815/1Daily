@@ -24,10 +24,11 @@ namespace _01.Scripts.Entity.Player.Scripts
         [field: SerializeField] public Transform CameraPivot { get; private set; }
         [field: SerializeField] public CinemachineVirtualCamera FirstPersonCamera { get; private set; }
         [field: SerializeField] public CinemachineVirtualCamera ThirdPersonCamera { get; private set; }
+        [field: SerializeField] public CinemachineDollyCart DollyCart { get; private set; }
+        [field: SerializeField] public GameObject DollyTrack { get; private set; }
         
         private PlayerStateMachine stateMachine;
         private Camera cam;
-
         
         private void Awake()
         {
@@ -40,6 +41,8 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!PlayerGravity) PlayerGravity = gameObject.GetComponent_Helper<PlayerGravity>();
             if (!FirstPersonCamera) FirstPersonCamera = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
             if (!ThirdPersonCamera) ThirdPersonCamera = GameObject.Find("ThirdPersonCamera").GetComponent<CinemachineVirtualCamera>();
+            if (!DollyCart) DollyCart = GameObject.Find("Dolly Cart").GetComponent<CinemachineDollyCart>();
+            if (!DollyTrack) DollyTrack = GameObject.Find("Dolly Track");
             if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
             
             AnimationData.Initialize();
@@ -57,6 +60,8 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!PlayerGravity) PlayerGravity = gameObject.GetComponent_Helper<PlayerGravity>();
             if (!FirstPersonCamera) FirstPersonCamera = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
             if (!ThirdPersonCamera) ThirdPersonCamera = GameObject.Find("ThirdPersonCamera").GetComponent<CinemachineVirtualCamera>();
+            if (!DollyCart) DollyCart = GameObject.Find("Dolly Cart").GetComponent<CinemachineDollyCart>();
+            if (!DollyTrack) DollyTrack = GameObject.Find("Dolly Track");
             if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
             
             AnimationData.Initialize();
@@ -67,7 +72,6 @@ namespace _01.Scripts.Entity.Player.Scripts
         private void Start()
         {
             FirstPersonCamera.Follow = CameraPivot;
-            ThirdPersonCamera.Follow = CameraPivot;
             ThirdPersonCamera.LookAt = CameraPivot;
             cam = Camera.main;
             MainCameraTransform = cam?.transform;
@@ -97,12 +101,15 @@ namespace _01.Scripts.Entity.Player.Scripts
 
         private void OnDeath()
         {
+            FirstPersonCamera.Priority = 5; 
+            ThirdPersonCamera.Priority = 10; 
+            cam.cullingMask |= 1 << gameObject.layer;
+            DollyTrack.transform.SetPositionAndRotation(new Vector3(transform.position.x, DollyTrack.transform.position.y, transform.position.z), transform.rotation);
+            
             Animator.SetTrigger(AnimationData.DeathParameterHash);
             TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Death, 0.5f);
-            FirstPersonCamera.Priority = 5;
-            ThirdPersonCamera.Priority = 10;
-            Debug.Log(gameObject.layer);
-            cam.cullingMask |= 1 << gameObject.layer;
+            
+            DollyCart.m_Speed = 3f;
         }
     }
 }
