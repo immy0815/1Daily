@@ -18,4 +18,10 @@ public class UIEffectText : UIBase
         base.Open();
         textRectTr.ZoomOut();
     }
+    
+    public void Open(string text)
+    {
+        tmpText.text = text;
+        Open();
+    }
 }
