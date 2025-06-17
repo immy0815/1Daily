@@ -22,6 +22,8 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] private SceneName _currentScene;
     [SerializeField] private GameObject _currentStage;
 
+    private float progress;
+
     private void Awake()
     {
         if (Instance == null)
@@ -50,12 +52,23 @@ public class ResourceManager : MonoBehaviour
     {
         yield return Addressables.InitializeAsync();
 
+        int total = _stageKeys.Count;
+        int loaded = 0;
+
         foreach (string key in _stageKeys)
         {
             yield return StartCoroutine(_stageLoader.LoadStageAsync(key));
+
+            loaded++;
+            progress = (float)loaded / total;
+            UIManager.Instance.onUpdateLoadingProgress.Invoke(progress);
         }
 
         Debug.Log("[ResourceManager] All Resources Loaded");
+
+
+        // 로딩을 보여주기 위해 임시로 3초 정지
+        yield return new WaitForSeconds(3f);
 
         StageManager.StartStage();
         UIManager.Instance.UpdateGUIByEnterScene(SceneType.Game);
