@@ -154,6 +154,7 @@ public class Stage : MonoBehaviour
   }
 
   #region Use for binding
+  [ContextMenu("Clear Stage")]
   public void StageClear() => StopStage(StageFinishState.Clear);
   public void StageFailure() => StopStage(StageFinishState.Failure);
   public void StageCancel() => StopStage(StageFinishState.Cancel);
