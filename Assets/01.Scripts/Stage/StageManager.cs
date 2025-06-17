@@ -55,7 +55,7 @@ public static class StageManager
         }
         case StageFinishState.Failure:
         {
-          StartStage(stageIndex);
+          //StartStage(stageIndex);
           break;
         }
       }
