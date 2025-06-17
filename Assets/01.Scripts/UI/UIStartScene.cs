@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class UIStartScene : MonoBehaviour
 {
+    [SerializeField] private CanvasGroup canvasGroup;
+    
     [SerializeField] private Button btnStart;
     [SerializeField] private Button btnOption;
     [SerializeField] private Button btnExit;
@@ -16,6 +18,8 @@ public class UIStartScene : MonoBehaviour
     
     private void Reset()
     {
+        canvasGroup = GetComponent<CanvasGroup>();
+        
         btnStart = transform.FindChildByName<Button>("Btn_Start");
         btnOption = transform.FindChildByName<Button>("Btn_Option");
         btnExit = transform.FindChildByName<Button>("Btn_Exit");
@@ -35,7 +39,7 @@ public class UIStartScene : MonoBehaviour
         
         // Start
         btnStart.onClick.RemoveAllListeners();
-        // btnStart.onClick.AddListener();
+        btnStart.onClick.AddListener(StartGame);
         
         // Option
         btnOption.onClick.RemoveAllListeners();
@@ -54,6 +58,17 @@ public class UIStartScene : MonoBehaviour
         
         btnYes.onClick.RemoveAllListeners();
         btnYes.onClick.AddListener(ExitGame);
+    }
+
+    public void Open()
+    {
+        Initialization();
+        canvasGroup.SetAlpha(1);
+    }
+    
+    public void Close()
+    {
+        canvasGroup.SetAlpha(0);
     }
 
     private void ButtonGroupActive()
@@ -76,5 +91,10 @@ public class UIStartScene : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    private void StartGame()
+    {
+        UIManager.Instance.UpdateGUIByEnterScene(SceneType.Loading);
     }
 }
