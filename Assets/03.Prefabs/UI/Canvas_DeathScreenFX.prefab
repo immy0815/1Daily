@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4304624789307259566}
   - component: {fileID: 711502875503198918}
   - component: {fileID: 2606568023885662063}
+  - component: {fileID: 766064331898256204}
   - component: {fileID: 5552985761117413366}
   m_Layer: 5
   m_Name: Canvas_DeathScreenFX
@@ -103,6 +104,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!225 &766064331898256204
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2353153019555497157}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &5552985761117413366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,9 +128,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50876f606351b28438c90eb4e36b57bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 766064331898256204}
+  canvas: {fileID: 4304624789307259566}
   noise: {fileID: 596679808170975565}
-  noiseSpeed: -2
-  noiseDuration: 15
+  noiseSpeed: 0
+  noiseDuration: 0
 --- !u!1 &3549294924562082325
 GameObject:
   m_ObjectHideFlags: 0
