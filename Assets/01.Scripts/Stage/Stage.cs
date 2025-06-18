@@ -156,14 +156,15 @@ public class Stage : MonoBehaviour
     currentWave.OnClear -= StartNextWave;
     OnWaveClear?.Invoke(currentWave);
 
-    if (currentWaveIndex < waves.Count - 2)
+    if (currentWaveIndex < waves.Count - 1)
     {
       currentWave = waves[++currentWaveIndex];
       currentWave.OnClear += StartNextWave;
       currentWave.Spawn();
     }
-    else if (currentWaveIndex == waves.Count - 2)
+    else if (currentWaveIndex == waves.Count - 1)
     {
+      Debug.Log("Stage Clear");
       OnStageEnd?.Invoke(StageFinishState.Clear);
     }
   }
