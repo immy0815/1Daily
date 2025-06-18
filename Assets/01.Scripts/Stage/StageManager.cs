@@ -12,6 +12,7 @@ using UnityEditor.SceneManagement;
 
 public class StageManager : Singleton<StageManager>
 {
+  public const int LastStageIndex = 3;
   [SerializeField, ReadOnly] private int stageIndex = 1;
   [SerializeField, ReadOnly] private Stage currentStage = null;
   
@@ -45,17 +46,16 @@ public class StageManager : Singleton<StageManager>
       {
         case StageFinishState.Cancel:
         {
-          SceneManager.LoadScene("StartScene");
+          UIManager.Instance.EnterScene(SceneType.Start);
           break;
         }
         case StageFinishState.Clear:
         {
+          if (stageIndex == LastStageIndex)
+          {
+            // 마지막 스테이지 클리어시
+          }
           stageIndex++;
-          // 마지막 스테이인지 판단하는
-          // if()
-          // {
-          // 엔딩 씬 연결 -> 최영임
-          // }
           break;
         }
         case StageFinishState.Failure:
@@ -85,9 +85,7 @@ public class StageManager : Singleton<StageManager>
     
     if (sceneName == "GameScene") StopStage();
 
-    UnityAction<Scene,LoadSceneMode> action = null;
-    
-    action = (scene, _) =>
+    void OnSceneLoad(Scene scene, LoadSceneMode _)
     {
       if (scene.name != "GameScene") return;
       var origin = Addressables.LoadAssetAsync<GameObject>($"Stage{stageIndex}").WaitForCompletion();
@@ -118,10 +116,10 @@ public class StageManager : Singleton<StageManager>
 #endif
       }
       
-      SceneManager.sceneLoaded -= action;
+      SceneManager.sceneLoaded -= OnSceneLoad;
     };
 
-    SceneManager.sceneLoaded += action;
+    SceneManager.sceneLoaded += OnSceneLoad;
     
     UIManager.Instance.EnterScene(SceneType.Game);
   }
