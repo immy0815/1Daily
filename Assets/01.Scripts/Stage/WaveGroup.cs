@@ -66,6 +66,16 @@ public class WaveGroup : MonoBehaviour
       }
     }
   }
+
+  [ContextMenu("Clear Wave")]
+  public void ClearWave()
+  {
+    foreach (var enemy in enemies)
+    {
+      if(enemy.IsDead) continue;
+      enemy.OnTakeDamage(int.MaxValue);
+    }
+  }
   
   #endregion
 }
