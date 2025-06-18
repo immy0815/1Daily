@@ -611,6 +611,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas_Loading
       objectReference: {fileID: 0}
+    - target: {fileID: 6759996248217608830, guid: 1e82c632b790d8248bc2eaf0b4e0c1ae, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.00012207031
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
