@@ -57,6 +57,7 @@ public class StageManager : Singleton<StageManager>
       {
         case StageFinishState.Cancel:
         {
+          // Destroy(gameObject);
           UIManager.Instance.EnterScene(SceneType.Start);
           break;
         }
@@ -66,6 +67,7 @@ public class StageManager : Singleton<StageManager>
         }
         case StageFinishState.Failure:
         {
+          // Destroy(gameObject);
           // 죽었을 때 → 노이즈 → 인트로 (화면 전환 느낌)
           UIManager.Instance.EnterScene(SceneType.Start);
           break;
@@ -116,10 +118,9 @@ public class StageManager : Singleton<StageManager>
     void OnSceneLoad(Scene scene, LoadSceneMode _)
     {
       if (scene.name != "GameScene") return;
-      var origin = Addressables.LoadAssetAsync<GameObject>($"Stage{stageIndex}").WaitForCompletion();
-      var obj = Object.Instantiate(origin);
       
-      if (obj)
+      
+      if (ResourceManager.Instance.InstantiateStage($"Stage{stageIndex}", out var obj))
       {
         var stage = obj.GetComponent<Stage>();
         obj.transform.position = Vector3.zero;
@@ -127,10 +128,6 @@ public class StageManager : Singleton<StageManager>
         stage.StartStage();
         OnStageStart?.Invoke(stage);
         stage.OnStageEnd.AddListener(OnStageFinish);
-        stage.OnStageEnd.AddListener((_) =>
-        {
-          Addressables.ReleaseInstance(origin);
-        });
 
         var vCam = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
         vCam.Follow = stage.Player.transform;
