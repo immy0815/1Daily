@@ -8,6 +8,8 @@ using UnityEngine.Events;
 [ AddComponentMenu( "Stage/Stage" )]
 public class Stage : MonoBehaviour
 {
+  private static GameObject ClearOrb => StageManager.ClearOrb;
+
   #region Inspector
   
   [SerializeField, ReadOnly, Tooltip("현재 메인 카메라입니다.")] private new Camera camera;
@@ -96,6 +98,18 @@ public class Stage : MonoBehaviour
   private void Awake()
   {
     camera = Camera.main;
+    
+    OnStageEnd.AddListener(state =>
+    {
+      if (state == StageFinishState.Clear)
+      {
+        var spawnPos = player.transform.position + camera.transform.forward * 3;
+        // 소환 위치 계산: 카메라 위치 + (전방 방향 벡터 * 거리)
+        var orb = Instantiate(ClearOrb, spawnPos.Y(camera.transform.position.y), Quaternion.identity);
+        orb.transform.parent = transform;
+        orb.SetActive(true);
+      }
+    });
   }
   
   #endregion
@@ -164,7 +178,6 @@ public class Stage : MonoBehaviour
     }
     else if (currentWaveIndex == waves.Count - 1)
     {
-      Debug.Log("Stage Clear");
       OnStageEnd?.Invoke(StageFinishState.Clear);
     }
   }

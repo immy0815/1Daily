@@ -60,7 +60,7 @@ public class EnemyWeaponHandler : MonoBehaviour
 
     public void DropWeapon()
     {
-        weapon.OnThrow(Vector3.down, false);
+        if (weapon) weapon.OnThrow(Vector3.down, false);
         weapon = null;
         enemy.Animator.SetBool(enemy.AnimationData.ShotParameterHash, false);
     }
