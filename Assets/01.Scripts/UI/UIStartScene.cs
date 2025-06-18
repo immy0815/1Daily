@@ -77,7 +77,14 @@ public class UIStartScene : UIBase
     {
         float endValue = canvasGroupButtons.alpha > 0.5f ? 0 : 1;
 
-        canvasGroupButtons.FadeAnimation(endValue);
+        if (endValue < 0.1f)
+        {
+            canvasGroupButtons.SetAlpha(endValue);
+        }
+        else
+        {
+            canvasGroupButtons.FadeAnimation(endValue);
+        }
     }
     
     private void ExitPopupActive()

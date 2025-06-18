@@ -170,35 +170,51 @@ public class UIManager : MonoBehaviour
     public void IntroAnimation()
     {
         Sequence introSequence = DOTween.Sequence();
-
-        float duration = 0.1f;
+        
+        // intensity 0.5, Scale 0.8
+        float duration = 0.5f;
         float initIntensity = 0;
         float endIntensity = 0.5f;
         float initScaleValue = 1;
         float endScaleValue = 0.8f;
         
-        // intensity 0.5, Scale 0.8
+        // 1번 애니메이션 시퀀스: 화면 축소 및 노이즈
         introSequence.Append(lensDistortionController.DOSetIntensity(endIntensity, duration));
         introSequence.JoinCallback(uiIntro.Open);
         introSequence.JoinCallback(uiStartScene.Open);
-        introSequence.JoinCallback(uiDeathScreenFX.Open);
+        introSequence.JoinCallback(() => uiDeathScreenFX.Open(0));
         introSequence.Join(lensDistortionController.DOSetScale(endScaleValue, duration));
         introSequence.Join(uiIntro.SetScale(endScaleValue, duration));
         introSequence.Join(uiDeathScreenFX.SetScale(endScaleValue, duration));
         introSequence.Join(uiStartScene.SetScale(endScaleValue, duration));
         
-        introSequence.AppendInterval(6f); // uiDeathScreenFX의 애니메이션이 끝날 때까지 대기
+        // 대기: uiDeathScreenFX의 애니메이션이 끝날 때까지
+        introSequence.AppendInterval(3f);
+        
+        // 2번째 애니메이션 시퀀스: 노이즈 Fade out
+        introSequence.AppendCallback(() => uiDeathScreenFX.Close(0));
+        
+        // 대기: 2번째 애니메이션
+        introSequence.AppendInterval(1f);
+        
+        // 3번째 애니메니션 시퀀스: 초기값으로 돌리기
+        introSequence.Append(lensDistortionController.DOSetIntensity(initIntensity));
+        introSequence.Join(lensDistortionController.DOSetScale(initScaleValue));
+        introSequence.Join(uiIntro.SetScale(initScaleValue, 0.1f));
+        introSequence.Join(uiDeathScreenFX.SetScale(initScaleValue, 0.1f));
+        introSequence.Join(uiStartScene.SetScale(initScaleValue, 0.1f));
+        
+        // 대기: 3번째 애니메이션
+        introSequence.AppendInterval(0.5f);
         
         introSequence.AppendCallback(uiIntro.Close);
-        introSequence.JoinCallback(() => uiDeathScreenFX.Close(0));
         
-        // 초기값으로 돌리기
-        introSequence.Append(lensDistortionController.DOSetIntensity(initIntensity, duration));
-        introSequence.Join(lensDistortionController.DOSetScale(initScaleValue, duration));
-        introSequence.Join(uiIntro.SetScale(initScaleValue, duration));
-        introSequence.Join(uiDeathScreenFX.SetScale(initScaleValue, duration));
-        introSequence.Join(uiStartScene.SetScale(initScaleValue, duration));
-
+        // 끝나면 텍스트 애니메이션 재생 SUPER, COOL // 2.1초 뒤 끝남..
+        introSequence.AppendCallback(() => PlayEffectText("SUPER"));
+        introSequence.AppendInterval(1f); // 그냥 1초로 끊기
+        introSequence.AppendCallback(() => PlayEffectText("COOL"));
+        
+        // 전부 재생 후 시퀀스 삭제
         introSequence.SetAutoKill(true);
     }
 }
