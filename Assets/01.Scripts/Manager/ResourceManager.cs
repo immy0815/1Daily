@@ -68,9 +68,7 @@ public class ResourceManager : MonoBehaviour
         // 로딩을 보여주기 위해 임시로 3초 정지
         yield return new WaitForSeconds(3f);
 
-        StageManager.StartStage();
-
-        UIManager.Instance.UpdateGUIByEnterScene(SceneType.Game);
+        StageManager.StartStageStatic();
     }
 
     public IEnumerator ReleaseAllResources()

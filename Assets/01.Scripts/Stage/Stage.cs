@@ -41,12 +41,12 @@ public class Stage : MonoBehaviour
   /// <summary>
   /// 적 웨이브가 클리어됬을 때 호출되는 이벤트입니다.
   /// </summary>
-  public UnityEvent<WaveGroup> OnWaveClear;
+  public UnityEvent<WaveGroup> OnWaveClear = new();
   
   /// <summary>
   /// 스테이지가 끝났을 때 호출되는 이벤트입니다.
   /// </summary>
-  public UnityEvent<StageFinishState> OnStageEnd;
+  public UnityEvent<StageFinishState> OnStageEnd = new();
   private Coroutine timer = null;
   
   #region Unity Event
@@ -93,34 +93,13 @@ public class Stage : MonoBehaviour
   
   #endif
 
-  #endregion
-
   private void Awake()
   {
     camera = Camera.main;
   }
-
-  private void Update()
-  {
-    if (Input.GetMouseButtonUp(0))
-    {
-      if (Physics.Raycast(camera.ScreenPointToRay(new(camera.pixelWidth / 2, camera.pixelHeight / 2)), out var hit) &&
-          hit.transform.TryGetComponent<TriggerObject>(out var obj))
-      {
-        obj.Trigger(TriggerType.LeftClick);
-      }
-    }
-    
-    if (Input.GetMouseButtonUp(1))
-    {
-      if (Physics.Raycast(camera.ScreenPointToRay(new(camera.pixelWidth / 2, camera.pixelHeight / 2)), out var hit) &&
-          hit.transform.TryGetComponent<TriggerObject>(out var obj))
-      {
-        obj.Trigger(TriggerType.RightClick);
-      }
-    }
-  }
   
+  #endregion
+
   #region Feature
   
   /// <summary>
@@ -160,6 +139,11 @@ public class Stage : MonoBehaviour
   public void StageCancel() => StopStage(StageFinishState.Cancel);
   
   #endregion
+
+  public void StartStage(int stageIndex)
+  {
+    StageManager.StartStageStatic(stageIndex);
+  }
   
   private void OnPlayerDeath()
   {
@@ -180,6 +164,7 @@ public class Stage : MonoBehaviour
     }
     else if (currentWaveIndex == waves.Count - 1)
     {
+      Debug.Log("Stage Clear");
       OnStageEnd?.Invoke(StageFinishState.Clear);
     }
   }

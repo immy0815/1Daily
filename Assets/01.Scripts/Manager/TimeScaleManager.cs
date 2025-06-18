@@ -21,7 +21,7 @@ namespace _01.Scripts.Manager
         [field: SerializeField] public float MaxTimeScale { get; private set; } = 1f;
         [field: SerializeField] public float MinTimeScale { get; private set; } = 0.01f;
         [field: SerializeField] public float TargetTimeScale { get; private set; } = 0.01f;
-        
+        [field: SerializeField] public float CurrentTimeScale { get; private set; } = 0.01f;
         
         // Fields
         private Coroutine timeScaleCoroutine;
@@ -40,7 +40,14 @@ namespace _01.Scripts.Manager
         {
             TargetTimeScale = MinTimeScale;
             Time.timeScale = TargetTimeScale;
+            CurrentTimeScale = Time.timeScale;
             originalFixedDeltaTime = Time.fixedDeltaTime;
+        }
+
+        private void OnDestroy()
+        {
+            Time.timeScale = MaxTimeScale;
+            Time.fixedDeltaTime = originalFixedDeltaTime;
         }
 
         public void ChangeTimeScale(PriorityType type, float timeScale)
@@ -51,6 +58,7 @@ namespace _01.Scripts.Manager
             if (Mathf.Approximately(TargetTimeScale, timeScale)) return; 
             // Debug.Log($"Time Scale Changed from {TargetTimeScale} to {timeScale}");
             TargetTimeScale = timeScale;
+            CurrentTimeScale = Time.timeScale;
             PreviousUpdateType = type;
             
             Time.timeScale = TargetTimeScale;
