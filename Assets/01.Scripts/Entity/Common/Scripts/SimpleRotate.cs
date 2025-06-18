@@ -7,6 +7,6 @@ public class SimpleRotate : MonoBehaviour
     [SerializeField] float rotateSpeed = 500f;
     void Update()
     {
-        transform.Rotate(Vector3.up * (rotateSpeed * Time.deltaTime), Space.Self);
+        transform.Rotate(Vector3.up * (rotateSpeed * Time.unscaledDeltaTime), Space.Self);
     }
 }
