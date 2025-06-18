@@ -1,6 +1,8 @@
 using System;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
@@ -8,76 +10,126 @@ using Object = UnityEngine.Object;
 using UnityEditor.SceneManagement;
 #endif
 
-public static class StageManager
+public class StageManager : Singleton<StageManager>
 {
-  private static Stage currentStage = null;
+  [SerializeField, ReadOnly] private int stageIndex = 1;
+  [SerializeField, ReadOnly] private Stage currentStage = null;
   
   /// <summary>
   /// 현재 진행중인 스테이지입니다.
   /// 스테이지가 진행중이 아닐경우 null을 반환합니다.
   /// </summary>
-  public static Stage CurrentStage => currentStage;
+  public static Stage CurrentStage => Instance.currentStage;
   /// <summary>
   /// 스테이지 시작시 이벤트입니다.
   /// 인자로 시작하려는 스테이지를 넘겨줍니다.
   /// </summary>
-  public static event Action<Stage> OnStageStart;
+  public UnityEvent<Stage> OnStageStart = new();
   
   /// <summary>
   /// 스테이지 종료 시 이벤트입니다.
   /// 해당 이벤트 호출 시점에는 currentStage가 null이 아닙닌다.
   /// </summary>
-  public static event Action<StageFinishState> OnStageEnd;
+  public UnityEvent<StageFinishState> OnStageEnd = new();
+
+  /// <summary>
+  /// 스테이지를 시작할 수 있습니다.
+  /// 게임씬을 로딩 후 시작시킵니다.
+  /// </summary>
+  /// <returns></returns>
+  public void StartStage()
+  {
+    OnStageEnd.AddListener((state) =>
+    {
+      switch (state)
+      {
+        case StageFinishState.Cancel:
+        {
+          SceneManager.LoadScene("StartScene");
+          break;
+        }
+        case StageFinishState.Clear:
+        {
+          stageIndex++;
+          // 마지막 스테이인지 판단하는
+          // if()
+          // {
+          // 엔딩 씬 연결 -> 최영임
+          // }
+          break;
+        }
+        case StageFinishState.Failure:
+        {
+          // 죽었을 때 → 노이즈 → 인트로 (화면 전환 느낌)
+          UIManager.Instance.onUpdateDeathAnimation.Invoke();
+          break;
+        }
+      }
+    });
+    
+    StartStage(stageIndex);
+  }
+  
+  public static void StartStageStatic() => Instance.StartStage();
+  public static void StartStageStatic(int stageIndex) => Instance.StartStage(stageIndex);
   
   /// <summary>
   /// 스테이지를 시작할 수 있습니다.
   /// 게임씬을 로딩 후 시작시킵니다.
   /// </summary>
-  /// <param name="stageIndex"></param>
-  /// <returns></returns>
-  public static Stage StartStage(int stageIndex)
+  /// <param name="stageIndex">시작할 스테이지의 번호입니다.</param>
+  /// <returns>시작한 스테이지를 </returns>
+  public void StartStage(int stageIndex)
   {
     var sceneName = SceneManager.GetActiveScene().name;
     
     if (sceneName == "GameScene") StopStage();
-    
-    #if UNITY_EDITOR
-    EditorSceneManager.OpenScene("Assets/00.Scenes/GameScene.unity", OpenSceneMode.Single);
-    #else
-    SceneManager.LoadScene("GameScene");
-    #endif
-    
-    if (ResourceManager.Instance.InstantiateStage($"Stage{stageIndex}", out var obj))
-    {
-      var stage = obj.GetComponent<Stage>();
-      obj.transform.position = Vector3.zero;
-      currentStage = stage;
-      stage.StartStage();
-      OnStageStart?.Invoke(stage);
-      stage.OnStageEnd += OnStageFinish;
 
-      var vCam = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
-      vCam.Follow = stage.Player.transform;
-      vCam.LookAt = stage.Player.transform;
-    }
-    else
-    {
-      SceneManager.LoadScene(sceneName);
-#if UNITY_EDITOR
-      EditorSceneManager.OpenScene("00.Scenes/GameScene", OpenSceneMode.Single);
-      Debug.LogError("Stage not found");
-#else
-      SceneManager.LoadScene("GameScene");
-#endif
-    }
+    UnityAction<Scene,LoadSceneMode> action = null;
     
-    return currentStage;
+    action = (scene, _) =>
+    {
+      if (scene.name != "GameScene") return;
+      var origin = Addressables.LoadAssetAsync<GameObject>($"Stage{stageIndex}").WaitForCompletion();
+      var obj = Object.Instantiate(origin);
+      
+      if (obj)
+      {
+        var stage = obj.GetComponent<Stage>();
+        obj.transform.position = Vector3.zero;
+        currentStage = stage;
+        stage.StartStage();
+        OnStageStart?.Invoke(stage);
+        stage.OnStageEnd.AddListener(OnStageFinish);
+        stage.OnStageEnd.AddListener((_) =>
+        {
+          Addressables.ReleaseInstance(origin);
+        });
+
+        var vCam = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
+        vCam.Follow = stage.Player.transform;
+        vCam.LookAt = stage.Player.transform;
+      }
+      else
+      {
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+#if UNITY_EDITOR
+        Debug.LogError("Stage not found");
+#endif
+      }
+      
+      SceneManager.sceneLoaded -= action;
+    };
+
+    SceneManager.sceneLoaded += action;
+    
+    UIManager.Instance.EnterScene(SceneType.Game);
   }
 
   /// <summary>
   /// 현재 진행중인 스테이지가 있다면 강제로 종료시킵니다.
   /// </summary>
-  public static void StopStage()
+  public void StopStage()
   {
     if(currentStage)
     {
@@ -87,9 +139,9 @@ public static class StageManager
     }
   }
 
-  private static void OnStageFinish(StageFinishState state)
+  private void OnStageFinish(StageFinishState state)
   {
-    currentStage.OnStageEnd -= OnStageFinish;
+    currentStage.OnStageEnd.RemoveListener(OnStageFinish);
     OnStageEnd?.Invoke(state);
   }
 }

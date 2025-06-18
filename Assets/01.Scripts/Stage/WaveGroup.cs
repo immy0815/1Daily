@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[ AddComponentMenu( "Stage/WaveGroup" )]
 public class WaveGroup : MonoBehaviour
 {
   [SerializeField, Tooltip("웨이브의 적 목록입니다. Reset 시 자동으로 설정합니다.")] private List<Enemy> enemies = new();
@@ -53,9 +54,14 @@ public class WaveGroup : MonoBehaviour
       void OnEnemyDeath()
       {
         enemy.OnDeath -= OnEnemyDeath;
-        if (enemies.Any(e => e.gameObject.activeSelf))
-          return;
-    
+        foreach (var enemy in enemies)
+        {
+          if (!enemy.IsDead)
+          {
+            return;
+          }
+        }
+
         OnClear?.Invoke();
       }
     }
