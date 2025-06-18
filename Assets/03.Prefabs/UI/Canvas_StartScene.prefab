@@ -531,8 +531,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4561338451446939617}
-  - {fileID: 1488977154784037160}
-  - {fileID: 3017286395270509547}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -551,7 +549,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -629,6 +627,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvasGroup: {fileID: 8521768058514818888}
   canvas: {fileID: 4093765008133875237}
+  rectTransform: {fileID: 4561338451446939617}
   btnStart: {fileID: 2294083467454416992}
   btnOption: {fileID: 6867672719722149103}
   btnExit: {fileID: 8031888427661218909}
@@ -925,7 +924,7 @@ RectTransform:
   - {fileID: 2086623336189817062}
   - {fileID: 3045261423942438008}
   - {fileID: 2152204617173316469}
-  m_Father: {fileID: 1055512811901828999}
+  m_Father: {fileID: 4561338451446939617}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1141,7 +1140,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5821579299564803776}
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1149,7 +1148,7 @@ RectTransform:
   - {fileID: 6561513732417684051}
   - {fileID: 5773157032316375988}
   - {fileID: 6784422382595084998}
-  m_Father: {fileID: 1055512811901828999}
+  m_Father: {fileID: 4561338451446939617}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -1206,7 +1205,7 @@ GameObject:
   - component: {fileID: 7802394667010311242}
   - component: {fileID: 765351236461922400}
   m_Layer: 5
-  m_Name: Img_BG
+  m_Name: Group_StartScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1223,7 +1222,9 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1488977154784037160}
+  - {fileID: 3017286395270509547}
   m_Father: {fileID: 1055512811901828999}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
