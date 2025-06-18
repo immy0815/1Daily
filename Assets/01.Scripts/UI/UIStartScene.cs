@@ -1,10 +1,9 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UIStartScene : MonoBehaviour
+public class UIStartScene : UIBase
 {
-    [SerializeField] private CanvasGroup canvasGroup;
-    
     [SerializeField] private Button btnStart;
     [SerializeField] private Button btnOption;
     [SerializeField] private Button btnExit;
@@ -15,10 +14,10 @@ public class UIStartScene : MonoBehaviour
     [SerializeField] private Button btnNo;
     
     [SerializeField] private CanvasGroup canvasGroupExitPopup;
-    
-    private void Reset()
+
+    protected override void Reset()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
+        base.Reset();
         
         btnStart = transform.FindChildByName<Button>("Btn_Start");
         btnOption = transform.FindChildByName<Button>("Btn_Option");
@@ -32,8 +31,10 @@ public class UIStartScene : MonoBehaviour
         canvasGroupExitPopup = transform.FindChildByName<CanvasGroup>("Group_ExitPopup");
     }
 
-    public void Initialization()
+    public override void Initialization()
     {
+        base.Initialization();
+        
         canvasGroupExitPopup.SetAlpha(0);
         canvasGroupButtons.SetAlpha(1);
         
@@ -60,17 +61,12 @@ public class UIStartScene : MonoBehaviour
         btnYes.onClick.AddListener(ExitGame);
     }
 
-    public void Open()
+    public override void Open()
     {
         Initialization();
-        canvasGroup.SetAlpha(1);
+        base.Open();
     }
     
-    public void Close()
-    {
-        canvasGroup.SetAlpha(0);
-    }
-
     private void ButtonGroupActive()
     {
         float endValue = canvasGroupButtons.alpha > 0.5f ? 0 : 1;
@@ -82,6 +78,7 @@ public class UIStartScene : MonoBehaviour
     {
         float endValue = canvasGroupExitPopup.alpha > 0.5f ? 0 : 1;
         canvasGroupExitPopup.BlinkAnimation(endValue, false);
+        ButtonGroupActive();
     }
     
     private void ExitGame()
@@ -95,6 +92,6 @@ public class UIStartScene : MonoBehaviour
 
     private void StartGame()
     {
-        UIManager.Instance.UpdateGUIByEnterScene(SceneType.Loading);
+        UIManager.Instance.EnterScene(SceneType.Loading);
     }
 }

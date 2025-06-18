@@ -27,13 +27,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9fc0d4010bbf28b4594072e72b8655ab
-    m_Address: Scene_Game
+  - m_GUID: 6326b71661c324c44b88502d66609e05
+    m_Address: Stage3
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6326b71661c324c44b88502d66609e05
-    m_Address: Stage3
+  - m_GUID: 68ad1e250c951fb4899cbd1df3148de1
+    m_Address: Stage2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

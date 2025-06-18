@@ -2,33 +2,33 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIOption : MonoBehaviour
+public class UIOption : UIBase
 {
-    [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Button btnClose;
-    
-    private void Reset()
+
+    protected override void Reset()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
+        base.Reset();
+        
         btnClose = transform.FindChildByName<Button>("Btn_Close");
     }
 
-    public void Initialization()
+    public override void Initialization()
     {
         canvasGroup.SetAlpha(0);
         btnClose.onClick.RemoveAllListeners();
-        btnClose.onClick.AddListener(Close);
+        btnClose.onClick.AddListener(PopupClose);
     }
 
-    public void Open(Action closeCallback)
+    public void PopupOpen(Action closeCallback)
     {
         canvasGroup.BlinkAnimation(1);
         
         btnClose.onClick.RemoveAllListeners();
-        btnClose.onClick.AddListener(() => { closeCallback.Invoke(); Close(); });
+        btnClose.onClick.AddListener(() => { closeCallback.Invoke(); PopupClose(); });
     }
 
-    private void Close()
+    private void PopupClose()
     {
         canvasGroup.BlinkAnimation(0,false);
     }
