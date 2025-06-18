@@ -44,6 +44,11 @@ namespace _01.Scripts.Manager
             originalFixedDeltaTime = Time.fixedDeltaTime;
         }
 
+        private void Update()
+        {
+            CurrentTimeScale = Time.timeScale;
+        }
+
         private void OnDestroy()
         {
             Time.timeScale = MaxTimeScale;
@@ -58,7 +63,7 @@ namespace _01.Scripts.Manager
             if (Mathf.Approximately(TargetTimeScale, timeScale)) return; 
             // Debug.Log($"Time Scale Changed from {TargetTimeScale} to {timeScale}");
             TargetTimeScale = timeScale;
-            CurrentTimeScale = Time.timeScale;
+            
             PreviousUpdateType = type;
             
             Time.timeScale = TargetTimeScale;
