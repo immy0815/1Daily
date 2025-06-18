@@ -99,6 +99,7 @@ public class StageManager : Singleton<StageManager>
   /// </summary>
   public void StartNextStage()
   {
+    Debug.Log("StartNextStage, 여긴가?");
     if(StageIndex != LastStageIndex)
     {
       StageIndex++;
@@ -139,12 +140,16 @@ public class StageManager : Singleton<StageManager>
         obj.transform.position = Vector3.zero;
         currentStage = stage;
         stage.StartStage();
+        Debug.Log("OnStageStart Invoke 전, 여긴가?");
         OnStageStart?.Invoke(stage);
+        Debug.Log("OnStageStart Invoke 후, 여긴가?");
         stage.OnStageEnd.AddListener(OnStageFinish);
-
+        
         var vCam = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
         vCam.Follow = stage.Player.transform;
         vCam.LookAt = stage.Player.transform;
+        
+        Debug.Log("게임오브젝트 찾기, 여긴가?");
       }
     }
     else UIManager.Instance.EnterScene(SceneType.Game);

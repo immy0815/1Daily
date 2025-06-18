@@ -122,6 +122,7 @@ public class UIManager : MonoBehaviour
                 SceneManager.LoadScene("LoadingScene");
                 break;
             case SceneType.Game:
+                Debug.Log("게임씬 호출 직전..여긴가?");
                 SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
                 break;
             case SceneType.Credit:

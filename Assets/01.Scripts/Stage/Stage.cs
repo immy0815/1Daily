@@ -91,6 +91,7 @@ public class Stage : MonoBehaviour
       if (waves.Count > 0)
         currentWave = waves[0];
     }
+    Debug.Log("스테이지 리셋..여긴가?");
   }
   
   #endif
@@ -110,6 +111,8 @@ public class Stage : MonoBehaviour
         orb.SetActive(true);
       }
     });
+    
+    Debug.Log("스테이지 생성..여긴가?");
   }
   
   #endregion
@@ -194,6 +197,8 @@ public class Stage : MonoBehaviour
   }
   
   #endregion
+  
+  
 }
 
 /// <summary>

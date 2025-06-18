@@ -15,6 +15,16 @@ public class UICredit : MonoBehaviour
         creditScrollSpeed = 5f;
     }
 
+    private void Awake()
+    {
+        Debug.Log("크레딧..여기보다 늦나?");
+    }
+
+    private void Start()
+    {
+        Debug.Log("크레딧 스타트 여기는?");
+    }
+
     private void Update()
     {
         Vector2 position = creditPivot.anchoredPosition;
