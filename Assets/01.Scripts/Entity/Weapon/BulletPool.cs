@@ -44,4 +44,9 @@ public class BulletPool : MonoBehaviour
         bullet.SetActive(false);
         pool.Enqueue(bullet);
     }
+    
+    private void OnDestroy()
+    {
+        while (pool.TryDequeue(out var bullet)) { Destroy(bullet); }
+    }
 }
