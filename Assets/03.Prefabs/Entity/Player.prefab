@@ -710,7 +710,7 @@ CharacterController:
   m_Radius: 0.25
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.025
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!114 &4251973049345965736
@@ -804,7 +804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddcf1236fa76ebc4eb2c507213e2f89b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <CartSpeed>k__BackingField: 3
+  <CartSpeed>k__BackingField: 1
   <AnimationData>k__BackingField:
     groundParameterName: '@Ground'
     idleParameterName: Idle
@@ -815,19 +815,19 @@ MonoBehaviour:
     jumpParameterName: Jump
     fallParameterName: Fall
     attackParameter: '@NormalAttack'
-    comboAttackIndex: Combo
+    comboAttackIndex: NormalCombo
     shotParameterName: Shot
     deathParameterName: Dead
     hitParameterName: Hit
   <Animator>k__BackingField: {fileID: 3439992321258709547}
   <CharacterController>k__BackingField: {fileID: 1689909025527273621}
   <PlayerController>k__BackingField: {fileID: 2871678874714045733}
-  <PlayerCondition>k__BackingField: {fileID: 0}
+  <PlayerCondition>k__BackingField: {fileID: 4251973049345965736}
   <PlayerInteraction>k__BackingField: {fileID: 2914589697141439159}
   <PlayerInventory>k__BackingField: {fileID: 2163060283811807229}
   <PlayerGravity>k__BackingField: {fileID: 1810071388816411344}
   <MainCameraTransform>k__BackingField: {fileID: 0}
-  <CameraPivot>k__BackingField: {fileID: 0}
+  <CameraPivot>k__BackingField: {fileID: 6312346090052736190}
   <FirstPersonCamera>k__BackingField: {fileID: 0}
   <ThirdPersonCamera>k__BackingField: {fileID: 0}
   <DollyCart>k__BackingField: {fileID: 0}
@@ -1166,7 +1166,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: fb3d7efb423998548ba94c92ccc3928b, type: 3}
   m_Controller: {fileID: 9100000, guid: 21f73019323760d4b95925f61d41476c, type: 2}
   m_CullingMode: 1
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0

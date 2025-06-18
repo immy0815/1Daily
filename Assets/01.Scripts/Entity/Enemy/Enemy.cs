@@ -103,7 +103,7 @@ public class Enemy : MonoBehaviour, IDamagable
         if (IsDead) return;
         currentHP -= damage;
         currentHP = Mathf.Max(currentHP, 0);
-        weaponHandler.DropWeapon();
+        if(weaponHandler.Weapon) weaponHandler.DropWeapon();
         if (currentHP != 0) IsHit = true;
         else Die();
     }
@@ -117,7 +117,7 @@ public class Enemy : MonoBehaviour, IDamagable
         fsm.enabled = false;
         characterController.enabled = false;
         enabled = false;
-        weaponHandler.DropWeapon();
+        if(weaponHandler.Weapon) weaponHandler.DropWeapon();
         
         OnDeath?.Invoke();
     }
