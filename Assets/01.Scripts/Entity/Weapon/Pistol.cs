@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using _01.Scripts.Entity.Player.Scripts;
 using _01.Scripts.Util;
 using Retronia.Core;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Pistol : Weapon, IShootable
 {
@@ -10,7 +12,9 @@ public class Pistol : Weapon, IShootable
     [SerializeField] private Rigidbody rigidBody;
     [SerializeField] private BoxCollider boxCollider;
     [SerializeField] private AudioClip gunshotClip;
+    [SerializeField] private ParticleSystem muzzleFlash;
     
+
     [Header("Pistol Settings")]
     [SerializeField] private GameObject bullet;
     [SerializeField] private GameObject bulletPoolObj;
@@ -19,20 +23,20 @@ public class Pistol : Weapon, IShootable
     [SerializeField] private int bulletCount = 6;
     [SerializeField] private float recoilTime = 1f;
     [SerializeField] private float throwForce = 10;
-    [SerializeField] private ParticleSystem muzzleFlash;
     
+    [field: Header("Pistol Condition")]
+    [field: SerializeField] public float TimeSinceLastShoot { get; private set; }
+    [field: SerializeField] public bool IsReady { get; private set; } = true;
+    
+    public static event Action OnReloadStart;
+    
+	private int originalBulletCount;
     private float recoilAngle = -70f;  
     private float upTime  = 0.1f;         
     private float downTime  = 0.15f;    
     private Quaternion originalRot;
     private Coroutine recoilRoutine;
     
-    [field: Header("Pistol Condition")]
-    [field: SerializeField] public float TimeSinceLastShoot { get; private set; }
-    [field: SerializeField] public bool IsReady { get; private set; } = true;
-    
-	private int originalBulletCount;
-
     protected override void Awake()
     {
         base.Awake();
@@ -40,7 +44,7 @@ public class Pistol : Weapon, IShootable
         if (!boxCollider) boxCollider = gameObject.GetComponent_Helper<BoxCollider>();
         if (!bulletPoolObj) bulletPoolObj = GameObject.Find("BulletPool");
 
-        originalRot = transform.localRotation;
+        originalRot = Quaternion.Euler(0, 0, 0);
         originalBulletCount = bulletCount;
     }
 
@@ -59,33 +63,60 @@ public class Pistol : Weapon, IShootable
         if (!bulletPoolObj) bulletPoolObj = GameObject.Find("BulletPool");
     }
 
-    public bool OnShoot(Enemy enemy)
-    {
-        return true;
-    }
-
     public bool OnShoot(Player player)
     {
         if (!IsReady || bulletCount < 1) return false;
         var bulletPool = bulletPoolObj?.GetComponent<BulletPool>();
         if (!bulletPool) return false;
-        PlayMuzzleFlash();
-        SoundManager.Play(gunshotClip,gameObject);
+        
 
         bullet = bulletPool.GetBullet();
         if (!bullet) return false;
         bulletCount--;
         IsReady = false;
         
+        OnReloadStart?.Invoke();
         PlayRecoil();  // 반동
+        PlayMuzzleFlash();
+        SoundManager.Play(gunshotClip,gameObject);
         
+        // Direction 결정
         var direction = Physics.Raycast(
             player.MainCameraTransform.position,
             player.MainCameraTransform.forward, out var hitInfo, float.MaxValue, shootableLayer)
             ? (hitInfo.point - player.PlayerInventory.WeaponPivot.position).normalized
             : player.MainCameraTransform.forward;
         
-        bullet.GetComponent<Bullet>().Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
+        if (!bullet.TryGetComponent<Bullet>(out var obj)) return false;
+        obj.Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
+        return true;
+    }
+
+    public bool OnShoot(Enemy enemy)
+    {
+        if (!IsReady || bulletCount < 1) return false;
+        var bulletPool = bulletPoolObj?.GetComponent<BulletPool>();
+        if (!bulletPool) return false;
+        bullet = bulletPool.GetBullet();
+        
+        if (!bullet) return false;
+
+        bulletCount--;
+        IsReady = false;
+        
+        var targetPosRandomElement = new Vector3(
+            Random.Range(-0.15f, 0.15f),
+            Random.Range(-0.15f, 0.15f),
+            Random.Range(-0.15f, 0.15f)
+        );
+
+        var targetPos = enemy.Target.transform.position + targetPosRandomElement + Vector3.up * 1.5f; // 1.5f는 대략 플레이어 모델의 상체~머리
+        
+        // Direction 결정
+        var direction = targetPos - firePoint.transform.position;
+
+        if (!bullet.TryGetComponent<Bullet>(out var obj)) return false;
+        obj.Init(firePoint.transform.position, direction, bulletPool, IsOwnedByPlayer);
         return true;
     }
 
@@ -104,10 +135,18 @@ public class Pistol : Weapon, IShootable
         IsReady = true;
         TimeSinceLastShoot = 0;
         IsThrownByPlayer = isThrownByPlayer;
+        IsCurrentlyOwned = false;
         
         // TODO: 던지는 데미지를 적용해야 하는데 현재는 무기의 기본 데미지가 적용되어있음.(수정 필요!!!)
-        thrownObject.Init(WeaponData.damage);
-        rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
+        if (IsThrownByPlayer)
+        {
+            thrownObject.Init(WeaponData.damage);
+            rigidBody.AddForce(direction * throwForce, ForceMode.Impulse);
+        }
+        else
+        {
+            rigidBody.AddForce(direction, ForceMode.Impulse);
+        }
     }
 
     /// <summary>
@@ -120,11 +159,12 @@ public class Pistol : Weapon, IShootable
 
     public override void OnInteract(Transform pivot, bool isOwnedByPlayer)
     {
-        if (IsThrownByPlayer) return;
+        if (IsThrownByPlayer || IsCurrentlyOwned) return;
         rigidBody.isKinematic = true;
         rigidBody.useGravity = false;
         boxCollider.isTrigger = true;
         IsOwnedByPlayer = isOwnedByPlayer;
+        IsCurrentlyOwned = true;
         FillAmmo();
         StartCoroutine(MoveToPivot(pivot));
     }
@@ -137,6 +177,7 @@ public class Pistol : Weapon, IShootable
         muzzleFlash.transform.rotation = firePoint.transform.rotation;
         muzzleFlash.Play(); 
     }
+    
     public void PlayRecoil()
     {
         if (recoilRoutine != null)
@@ -167,5 +208,4 @@ public class Pistol : Weapon, IShootable
 
         transform.localRotation = originalRot;
     }
-
 }

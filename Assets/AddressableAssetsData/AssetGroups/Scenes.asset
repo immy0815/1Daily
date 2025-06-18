@@ -17,28 +17,23 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: b8d2669262a19924d825ec382cf0fd4e
   m_SerializeEntries:
-  - m_GUID: 9daf66694c9e89d4a9038ac2f3efd91b
-    m_Address: Scene_Game
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 02d41c8216c5f454f8ca27be12d9c0de
     m_Address: Stage1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 68c46f43f50c68f46b383f4eb76dea92
-    m_Address: Assets/03.Prefabs/Stage/Stage_2.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0c4708ce9d9900146b1cea1c1444d9e8
-    m_Address: Assets/03.Prefabs/Stage/Stage_3.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 35f43625a107b58498c76e322f8595c3
     m_Address: AudioMixer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6326b71661c324c44b88502d66609e05
+    m_Address: Stage3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68ad1e250c951fb4899cbd1df3148de1
+    m_Address: Stage2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

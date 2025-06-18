@@ -1,4 +1,5 @@
-﻿using _01.Scripts.Manager;
+﻿using System.Collections;
+using _01.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -27,7 +28,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             base.PhysicsUpdate();
 
             if (!stateMachine.Player.CharacterController.isGrounded &&
-                stateMachine.Player.CharacterController.velocity.y < Physics.gravity.y * Time.deltaTime)
+                stateMachine.Player.CharacterController.velocity.y < Physics.gravity.y * Time.fixedDeltaTime)
             {
                 stateMachine.ChangeState(stateMachine.FallState);
             }
@@ -38,7 +39,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             base.ReadMovementInput();
             if (stateMachine.MovementDirection != Vector2.zero)
             {
-                stateMachine.Player.PlayerInventory.CurrentWeapon?.ResetAttackCoroutine();
+                if (AttackCoroutine != null){ stateMachine.Player.StopCoroutine(AttackCoroutine); AttackCoroutine = null; }
                 stateMachine.Player.PlayerInventory.ResetThrowCoroutine();
                 if(!Mathf.Approximately(Time.timeScale, 1))
                     TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Move, 1f);
@@ -74,14 +75,13 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Pistol pistol)
             {
                 if (!pistol.OnShoot(stateMachine.Player)) return;
-                if (AttackCoroutine != null) StopCoroutine(AttackCoroutine); 
+                if (AttackCoroutine != null) stateMachine.Player.StopCoroutine(AttackCoroutine); 
                 AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(0.5f));
-                // TODO: Animation 호출
                 return;
             }
 
             if (stateMachine.Player.PlayerInteraction.Damagable is not Enemy) return;
-            if (AttackCoroutine != null) StopCoroutine(AttackCoroutine);
+            if (AttackCoroutine != null) stateMachine.Player.StopCoroutine(AttackCoroutine);
             AttackCoroutine = stateMachine.Player.StartCoroutine(ChangeTimeScaleForSeconds(1f));
             if (stateMachine.Player.PlayerInventory.CurrentWeapon is Katana katana)
             {
@@ -94,6 +94,8 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             {
                 // TODO: Animation 호출
                 Debug.Log("Fist Attack");
+                if(normalAttackCoroutine != null){ stateMachine.Player.StopCoroutine(normalAttackCoroutine); StopAnimation(stateMachine.Player.AnimationData.AttackParameterHash); }
+                normalAttackCoroutine = stateMachine.Player.StartCoroutine(PlayFistAttackAnimation());
                 stateMachine.Player.PlayerInteraction.Damagable.OnTakeDamage(stateMachine.Player.PlayerCondition.Damage);
             }
             stateMachine.Player.PlayerInteraction.ResetParameters();
@@ -105,7 +107,6 @@ namespace _01.Scripts.Entity.Player.Scripts.States.Ground
             if (playerCondition.IsDead) return;
             if (stateMachine.Player.PlayerInventory.CurrentWeapon)
             {
-                // TODO: Animation 호출?
                 stateMachine.Player.PlayerInventory.OnDropWeapon(Physics.Raycast(
                     stateMachine.Player.MainCameraTransform.position,
                     stateMachine.Player.MainCameraTransform.forward, out var hitInfo, float.MaxValue)

@@ -1,6 +1,15 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
+
+public enum SceneType
+{
+    Start,
+    Loading,
+    Game
+}
 
 public class UIManager : MonoBehaviour
 {
@@ -15,17 +24,40 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    [SerializeField] private LensDistortionController lensDistortionController;
+    public LensDistortionController LensDistortionController => lensDistortionController;
+    
+    [SerializeField] private Camera uiCamera;
+    public Camera UICamera => uiCamera;
+
     [SerializeField] private UIOption uiOption;
     [SerializeField] private UIStartScene uiStartScene;
+    [SerializeField] private UILoading uiLoading;
+    [SerializeField] private UICrosshair uiCrosshair;
+    [SerializeField] private UIEffectText uiEffectText;
+    [SerializeField] private UIDeathScreenFX uiDeathScreenFX;
+
+    private List<UIBase> curUIList;
 
     // 로딩 할 때, progressBar UI 업데이트 시, 호출
     public Action<float> onUpdateLoadingProgress;
     
+    // 플레이어 죽었을 때, 실행
+    public Action onUpdateDeathAnimation;
+    
     private void Reset()
     {
-        // 이후 Initialization할 때 해주기
+        lensDistortionController = GetComponentInChildren<LensDistortionController>();
+        // uiCamera = GetComponentInChildren<Camera>();
+        
+        // Resource Manager에서 GetResource와 같이 Resource를 꺼내주는 메서드가 있을 시,
+        // Initialization할 때 해주기
         uiOption = GetComponentInChildren<UIOption>();
         uiStartScene = GetComponentInChildren<UIStartScene>();
+        uiLoading = GetComponentInChildren<UILoading>();
+        uiCrosshair = GetComponentInChildren<UICrosshair>();
+        uiEffectText = GetComponentInChildren<UIEffectText>();
+        uiDeathScreenFX = GetComponentInChildren<UIDeathScreenFX>();
     }
 
     private void Awake()
@@ -47,24 +79,86 @@ public class UIManager : MonoBehaviour
 
     private void Initialization()
     {
-        if (uiOption == null)
-        {
-            Debug.Log("UI Option is null");
-        }
-        else
-        {
-            uiOption.Initialization();
-        }
+        curUIList = new List<UIBase>();
+        curUIList.Add(uiOption);
+        curUIList.Add(uiStartScene);
+        curUIList.Add(uiLoading);
+        curUIList.Add(uiCrosshair);
+        curUIList.Add(uiEffectText);
+        curUIList.Add(uiDeathScreenFX);
         
-        if (uiOption == null)
+        // 최초 실행
+        SetUICamera();
+        uiStartScene.Open();
+    }
+
+    public void OpenOption(Action closeCallback) => uiOption.PopupOpen(closeCallback);
+
+    public void EnterScene(SceneType type)
+    {
+        SceneManager.sceneLoaded += UpdateGUIAfterSceneLoad;
+
+        switch (type)
         {
-            Debug.Log("UI Start Scene is null");
+            case SceneType.Start:
+                SceneManager.LoadScene("StartScene");
+                break;
+            case SceneType.Loading:
+                SceneManager.LoadScene("LoadingScene");
+                break;
+            case SceneType.Game:
+                SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+                break;
+            default:
+                Debug.Log($"SceneType {type} is not exist.");
+                break;
         }
-        else
+    }
+    
+    private void UpdateGUIAfterSceneLoad(Scene scene, LoadSceneMode mode)
+    {
+        SceneManager.sceneLoaded -= UpdateGUIAfterSceneLoad;
+        
+        SetUICamera();
+
+        switch (scene.name)
         {
-            uiStartScene.Initialization();
+            case "StartScene":
+                uiStartScene.Open();
+                uiCrosshair.Close();
+                uiDeathScreenFX.Close();
+                break;
+            case "LoadingScene":
+                uiStartScene.Close();
+                uiLoading.Open();
+                break;
+            case "GameScene":
+                uiLoading.Close();
+                uiCrosshair.Open();
+                break;
         }
     }
 
-    public void OpenOption(Action closeCallback) => uiOption.Open(closeCallback);
+    private void SetUICamera()
+    {
+        uiCamera = Camera.main;
+        
+        foreach (var uiBase in curUIList)
+        {
+            if (uiBase == null)
+            {
+                Debug.Log("Reset UIManager Script");
+            }
+            else
+            {
+                uiBase.Initialization();
+            }
+        }
+
+    }
+
+    public void PlayEffectText(string text)
+    {
+        uiEffectText.Open(text);
+    }
 }
