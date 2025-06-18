@@ -5,7 +5,7 @@ using UnityEngine;
 public class UIBase : MonoBehaviour
 {
     [SerializeField] protected CanvasGroup canvasGroup;
-    [SerializeField] private Canvas canvas;
+    [SerializeField] protected Canvas canvas;
     
     protected virtual void Reset()
     {

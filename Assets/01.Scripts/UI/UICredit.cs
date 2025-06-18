@@ -20,11 +20,16 @@ public class UICredit : MonoBehaviour
         Vector2 position = creditPivot.anchoredPosition;
         position.y += creditScrollSpeed * Time.deltaTime;
         creditPivot.anchoredPosition = position;
+
+        if (creditPivot.anchoredPosition.y >= 1360f)
+        {
+            OnClickSkip();
+        }
     }
 
     public void OnClickSkip()
     {
         // TODO: 메인으로 - 안전하게 돌아가는 처리가 필요하면 작성해주세요
-        SceneManager.LoadScene("StartScene");
+        UIManager.Instance.EnterScene(SceneType.Start);
     }
 }
