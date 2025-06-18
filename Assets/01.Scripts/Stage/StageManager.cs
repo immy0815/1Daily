@@ -3,6 +3,7 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
@@ -15,12 +16,16 @@ public class StageManager : Singleton<StageManager>
   public const int LastStageIndex = 3;
   [SerializeField, ReadOnly] private int stageIndex = 1;
   [SerializeField, ReadOnly] private Stage currentStage = null;
+  [SerializeField, ReadOnly] private GameObject clearObj;
   
   /// <summary>
   /// 현재 진행중인 스테이지입니다.
   /// 스테이지가 진행중이 아닐경우 null을 반환합니다.
   /// </summary>
   public static Stage CurrentStage => Instance.currentStage;
+  
+  public static GameObject ClearOrb => Instance.clearObj;
+  public static int CurrentStageIndex => Instance.stageIndex;
   /// <summary>
   /// 스테이지 시작시 이벤트입니다.
   /// 인자로 시작하려는 스테이지를 넘겨줍니다.
@@ -33,6 +38,12 @@ public class StageManager : Singleton<StageManager>
   /// </summary>
   public UnityEvent<StageFinishState> OnStageEnd = new();
 
+  private void Awake()
+  {
+    DontDestroyOnLoad(gameObject);
+    clearObj = Addressables.LoadAssetAsync<GameObject>("ClearOrb").WaitForCompletion();
+  }
+  
   /// <summary>
   /// 스테이지를 시작할 수 있습니다.
   /// 게임씬을 로딩 후 시작시킵니다.
@@ -51,11 +62,6 @@ public class StageManager : Singleton<StageManager>
         }
         case StageFinishState.Clear:
         {
-          if (stageIndex == LastStageIndex)
-          {
-            // 마지막 스테이지 클리어시
-          }
-          stageIndex++;
           break;
         }
         case StageFinishState.Failure:
@@ -69,6 +75,28 @@ public class StageManager : Singleton<StageManager>
     
     StartStage(stageIndex);
   }
+
+  /// <summary>
+  /// StageClearTrigger(ClearOrb) 상호작용 용도 메서드
+  /// </summary>
+  public void StartNextStage()
+  {
+    if(stageIndex != LastStageIndex)
+    {
+      stageIndex++;
+      StartStage(stageIndex);
+    }
+    else
+    {
+      stageIndex = 1;
+      currentStage = null;
+      Cursor.lockState = CursorLockMode.None;
+      
+      SceneManager.LoadScene("CreditScene");
+    }
+  }
+  
+  public static void StartNextStageStatic() => Instance.StartNextStage();
   
   public static void StartStageStatic() => Instance.StartStage();
   public static void StartStageStatic(int stageIndex) => Instance.StartStage(stageIndex);
