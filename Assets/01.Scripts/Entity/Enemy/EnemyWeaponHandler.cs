@@ -49,15 +49,20 @@ public class EnemyWeaponHandler : MonoBehaviour
                 shootable.OnShoot(enemy);
                 if (!shootable.CanShoot())
                 {
-                    weapon.OnThrow(Vector3.down, false);
-                    weapon = null;
-                    enemy.Animator.SetBool(enemy.AnimationData.ShotParameterHash, false);
+                    DropWeapon();
                 }
                 break;
             case IHittable hittable:
                 hittable.OnHit();
                 break;
         }
+    }
+
+    public void DropWeapon()
+    {
+        weapon.OnThrow(Vector3.down, false);
+        weapon = null;
+        enemy.Animator.SetBool(enemy.AnimationData.ShotParameterHash, false);
     }
 
     IEnumerator WaitUntilPostureReady()
