@@ -83,7 +83,7 @@ public class StageManager : Singleton<StageManager>
           {
             // Destroy(gameObject);
             // 죽었을 때 → 노이즈 → 인트로 (화면 전환 느낌)
-            UIManager.Instance.EnterScene(SceneType.Start);
+            UIManager.Instance.EnterScene(SceneType.Start, true);
             break;
           }
         }

@@ -108,6 +108,7 @@ public class UIStartScene : UIBase
     private void StartGame()
     {
         UIManager.Instance.EnterScene(SceneType.Loading);
+        StartCoroutine(ResourceManager.Instance.LoadAllResources());
     }
     
     public Tween SetScale(float endValue, float duration)

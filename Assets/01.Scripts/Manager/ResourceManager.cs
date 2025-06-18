@@ -19,6 +19,7 @@ public class ResourceManager : MonoBehaviour
     private StageLoader _stageLoader;
 
     [SerializeField] private GameObject _currentStage;
+    private bool isAlreadyLoaded;
 
     private float progress;
 
@@ -43,11 +44,17 @@ public class ResourceManager : MonoBehaviour
     private void Start()
     {
         //_sceneLoader.Init();
-        StartCoroutine(LoadAllResources());
+        
     }
-
-    private IEnumerator LoadAllResources()
+    
+    public IEnumerator LoadAllResources()
     {
+        if (isAlreadyLoaded)
+        {
+            StageManager.StartStageStatic();
+            yield break;
+        }
+
         yield return Addressables.InitializeAsync();
 
         int total = _stageKeys.Count;
@@ -63,7 +70,7 @@ public class ResourceManager : MonoBehaviour
         }
 
         Debug.Log("[ResourceManager] All Resources Loaded");
-
+        isAlreadyLoaded = true;
 
         // 로딩을 보여주기 위해 임시로 3초 정지
         yield return new WaitForSeconds(3f);

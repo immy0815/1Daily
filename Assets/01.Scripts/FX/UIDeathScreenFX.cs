@@ -10,7 +10,6 @@ public class UIDeathScreenFX : UIBase
     private static readonly int Opacity = Shader.PropertyToID("_Opacity");
     [SerializeField] private RawImage noise;
     [SerializeField] float noiseSpeed;
-    [SerializeField] private float noiseDuration;
     [SerializeField] RectTransform rectTransform;
     [SerializeField] private Texture rawTexture;
     [SerializeField] private Image imgBG;
@@ -42,10 +41,6 @@ public class UIDeathScreenFX : UIBase
         
         noiseMat = noise.material;
         noiseSpeed = -2;
-        noiseDuration = 15;
-
-        UIManager.Instance.onUpdateDeathAnimation -= () => Open(3);
-        UIManager.Instance.onUpdateDeathAnimation += () => Open(3);
     }
 
     public void Open(float waitTime)

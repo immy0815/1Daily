@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -44,9 +45,6 @@ public class UIManager : MonoBehaviour
 
     // 로딩 할 때, progressBar UI 업데이트 시, 호출
     public Action<float> onUpdateLoadingProgress;
-    
-    // 플레이어 죽었을 때, 실행
-    public Action onUpdateDeathAnimation;
     
     private void Reset()
     {
@@ -98,19 +96,27 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        IntroAnimation(true);
+        IntroAnimation(1f); // Initialization 대기
     }
 
     public void OpenOption(Action closeCallback) => uiOption.PopupOpen(closeCallback);
 
-    public void EnterScene(SceneType type)
+    public void EnterScene(SceneType type, bool isDeath = false)
     {
         SceneManager.sceneLoaded += UpdateGUIAfterSceneLoad;
 
         switch (type)
         {
             case SceneType.Start:
-                SceneManager.LoadScene("StartScene");
+                if (isDeath)
+                {
+                    StartCoroutine(DelayedSceneLoad(3));
+                }
+                else
+                {
+                    SceneManager.LoadScene("StartScene");
+                }
+                
                 break;
             case SceneType.Loading:
                 SceneManager.LoadScene("LoadingScene");
@@ -125,6 +131,13 @@ public class UIManager : MonoBehaviour
                 Debug.Log($"SceneType {type} is not exist.");
                 break;
         }
+    }
+    
+    private IEnumerator DelayedSceneLoad(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
+        SceneManager.LoadScene("StartScene");
     }
     
     private void UpdateGUIAfterSceneLoad(Scene scene, LoadSceneMode mode)
@@ -171,7 +184,7 @@ public class UIManager : MonoBehaviour
         uiEffectText.Open(text);
     }
 
-    public void IntroAnimation(bool isFirst = false)
+    public void IntroAnimation(float firstWaitTime = 0)
     {
         Sequence introSequence = DOTween.Sequence();
         
@@ -184,8 +197,7 @@ public class UIManager : MonoBehaviour
         
         uiStartScene.Open();
         
-        if(isFirst)
-            introSequence.AppendInterval(1f); //  Initialization 대기
+        introSequence.AppendInterval(firstWaitTime);
         
         // 1번 애니메이션 시퀀스: 화면 축소 및 노이즈
         introSequence.Append(lensDistortionController.DOSetIntensity(endIntensity, duration));
@@ -230,4 +242,6 @@ public class UIManager : MonoBehaviour
         // 전부 재생 후 시퀀스 삭제
         introSequence.SetAutoKill(true);
     }
+    
+    
 }
