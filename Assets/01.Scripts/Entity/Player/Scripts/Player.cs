@@ -30,6 +30,10 @@ namespace _01.Scripts.Entity.Player.Scripts
         [field: SerializeField] public CinemachineVirtualCamera ThirdPersonCamera { get; private set; }
         [field: SerializeField] public CinemachineDollyCart DollyCart { get; private set; }
         [field: SerializeField] public GameObject DollyTrack { get; private set; }
+
+        [field: SerializeField] private Transform nectTr;
+        [field: SerializeField] private Transform legLTr;
+        [field: SerializeField] private Transform legRTr;
         
         private PlayerStateMachine stateMachine;
         private Coroutine deathCoroutine;
@@ -66,12 +70,16 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!PlayerGravity) PlayerGravity = gameObject.GetComponent_Helper<PlayerGravity>(); 
             if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
 
-            if (!FirstPersonCamera) FirstPersonCamera = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
-            if (!ThirdPersonCamera) ThirdPersonCamera = GameObject.Find("ThirdPersonCamera").GetComponent<CinemachineVirtualCamera>();
-            if (!DollyCart) DollyCart = GameObject.Find("Dolly Cart").GetComponent<CinemachineDollyCart>();
-            if (!DollyTrack) DollyTrack = GameObject.Find("Dolly Track");
+            if (!FirstPersonCamera) FirstPersonCamera = GameObject.Find("FirstPersonCamera")?.GetComponent<CinemachineVirtualCamera>();
+            if (!ThirdPersonCamera) ThirdPersonCamera = GameObject.Find("ThirdPersonCamera")?.GetComponent<CinemachineVirtualCamera>();
+            if (!DollyCart) DollyCart = GameObject.Find("Dolly Cart")?.GetComponent<CinemachineDollyCart>();
+            if (!DollyTrack) DollyTrack = GameObject.Find("Dolly Track")?.gameObject;
             
             AnimationData.Initialize();
+            
+            nectTr = transform.FindChildByName<Transform>("DEF-neck");
+            legLTr = transform.FindChildByName<Transform>("DEF-thigh.L");
+            legRTr = transform.FindChildByName<Transform>("DEF-thigh.R");
         }
 
         // Start is called before the first frame update
@@ -87,6 +95,8 @@ namespace _01.Scripts.Entity.Player.Scripts
             stateMachine.ChangeState(stateMachine.IdleState);
 
             PlayerCondition.OnDeath += OnDeath;
+            
+            stateMachine.Player.SetScaleNeckLeg(0);
         }
 
         private void FixedUpdate()
@@ -118,6 +128,8 @@ namespace _01.Scripts.Entity.Player.Scripts
 
         private IEnumerator MoveDollyCart_Coroutine()
         {
+            SetScaleNeckLeg(1);
+            
             Animator.SetLayerWeight(1, 0);
             FirstPersonCamera.Priority = 5; 
             ThirdPersonCamera.Priority = 10; 
@@ -142,6 +154,22 @@ namespace _01.Scripts.Entity.Player.Scripts
             
             DollyCart.m_Position = 1f;
             deathCoroutine = null;
+        }
+
+        private void SetScaleNeckLeg(int endValue01)
+        {
+            Vector3 endVector = new Vector3(endValue01,endValue01,endValue01);
+            nectTr.localScale = endVector;
+            legLTr.localScale = endVector;
+            legRTr.localScale = endVector;
+        }
+
+        public void SetCameraLayer(bool isVisible)
+        {
+            if(isVisible)
+                cam.cullingMask |= 1 << gameObject.layer; 
+            else
+                cam.cullingMask &= ~(1 << gameObject.layer);
         }
     }
 }

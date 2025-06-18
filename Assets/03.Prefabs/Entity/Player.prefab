@@ -804,7 +804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddcf1236fa76ebc4eb2c507213e2f89b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <CartSpeed>k__BackingField: 1
+  <CartSpeed>k__BackingField: 3
   <AnimationData>k__BackingField:
     groundParameterName: '@Ground'
     idleParameterName: Idle
@@ -832,6 +832,9 @@ MonoBehaviour:
   <ThirdPersonCamera>k__BackingField: {fileID: 0}
   <DollyCart>k__BackingField: {fileID: 0}
   <DollyTrack>k__BackingField: {fileID: 0}
+  nectTr: {fileID: 2354247954328481921}
+  legLTr: {fileID: 2949545817570321786}
+  legRTr: {fileID: 1929190272143483678}
 --- !u!1 &2911242834350918119
 GameObject:
   m_ObjectHideFlags: 0
@@ -1934,7 +1937,7 @@ Transform:
   m_GameObject: {fileID: 7687754701749510681}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.7, z: 0}
+  m_LocalPosition: {x: 0, y: 1.4, z: 0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
