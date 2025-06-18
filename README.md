@@ -22,7 +22,10 @@
 2. TimeScale을 이용한 시간 감속 및 가속 기능
 3. Player/Enemy 캐릭터에 FSM을 적용하여 다양한 상황에 맞게 행동분기 처리
 4. RayCast를 이용한 Player 캐릭터의 상호작용 물건 인식 및 공격 기능
-5. SphereCast를 이용한 Enemy 캐릭터의 Player 캐릭터 인식 및 공격
+5. SphereCollider와 RayCast의 연계를 이용한 Enemy 캐릭터의 Player 캐릭터 인식 및 공격
+6. AI Navigation 패키지를 이용한 Enemy 이동 경로 탐색
+7. URP를 이용한 화면 왜곡 연출
+8. Addressable을 이용한 스테이지 동적 로드
 
 [📅 개발 기간](Images/%F0%9F%93%85%20%E1%84%80%E1%85%A2%E1%84%87%E1%85%A1%E1%86%AF%20%E1%84%80%E1%85%B5%E1%84%80%E1%85%A1%E1%86%AB%202167f1bcf14a8031983edcc6d1c361c3.csv)
 
