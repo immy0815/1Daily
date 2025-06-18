@@ -32,6 +32,7 @@ public class StageManager : Singleton<StageManager>
 
   private void Awake()
   {
+    Cursor.lockState = CursorLockMode.Locked;
     clearObj = Addressables.LoadAssetAsync<GameObject>("ClearOrb").WaitForCompletion();
   }
 
@@ -39,6 +40,8 @@ public class StageManager : Singleton<StageManager>
   {
     if(clearObj)
       Addressables.Release(clearObj);
+    
+    Cursor.lockState = CursorLockMode.None;
   }
   
   /// <summary>
