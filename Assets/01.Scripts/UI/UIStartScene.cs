@@ -65,6 +65,8 @@ public class UIStartScene : UIBase
         
         btnYes.onClick.RemoveAllListeners();
         btnYes.onClick.AddListener(ExitGame);
+
+        ButtonGroupActive();
     }
 
     public override void Open()
@@ -73,7 +75,7 @@ public class UIStartScene : UIBase
         base.Open();
     }
     
-    private void ButtonGroupActive()
+    public void ButtonGroupActive()
     {
         float endValue = canvasGroupButtons.alpha > 0.5f ? 0 : 1;
 

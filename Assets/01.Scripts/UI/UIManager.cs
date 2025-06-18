@@ -94,7 +94,11 @@ public class UIManager : MonoBehaviour
         
         // 최초 실행
         SetUICamera();
-        uiStartScene.Open();
+    }
+
+    private void Start()
+    {
+        IntroAnimation(true);
     }
 
     public void OpenOption(Action closeCallback) => uiOption.PopupOpen(closeCallback);
@@ -132,7 +136,7 @@ public class UIManager : MonoBehaviour
         switch (scene.name)
         {
             case "StartScene":
-                uiStartScene.Open();
+                IntroAnimation();
                 break;
             case "LoadingScene":
                 uiLoading.Open();
@@ -167,7 +171,7 @@ public class UIManager : MonoBehaviour
         uiEffectText.Open(text);
     }
 
-    public void IntroAnimation()
+    public void IntroAnimation(bool isFirst = false)
     {
         Sequence introSequence = DOTween.Sequence();
         
@@ -177,6 +181,11 @@ public class UIManager : MonoBehaviour
         float endIntensity = 0.5f;
         float initScaleValue = 1;
         float endScaleValue = 0.8f;
+        
+        uiStartScene.Open();
+        
+        if(isFirst)
+            introSequence.AppendInterval(1f); //  Initialization 대기
         
         // 1번 애니메이션 시퀀스: 화면 축소 및 노이즈
         introSequence.Append(lensDistortionController.DOSetIntensity(endIntensity, duration));
@@ -213,6 +222,10 @@ public class UIManager : MonoBehaviour
         introSequence.AppendCallback(() => PlayEffectText("SUPER"));
         introSequence.AppendInterval(1f); // 그냥 1초로 끊기
         introSequence.AppendCallback(() => PlayEffectText("COOL"));
+        
+        introSequence.AppendInterval(2.1f); // 텍스트 사라지면 버튼 ON
+        
+        introSequence.AppendCallback(() => uiStartScene.ButtonGroupActive());
         
         // 전부 재생 후 시퀀스 삭제
         introSequence.SetAutoKill(true);
