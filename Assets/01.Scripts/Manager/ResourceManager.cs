@@ -15,8 +15,8 @@ public class ResourceManager : MonoBehaviour
 
     [SerializeField] private List<string> _stageKeys;
 
-    private SceneLoader _sceneLoader;
-    private StageLoader _stageLoader;    
+    //private SceneLoader _sceneLoader;
+    private StageLoader _stageLoader;
 
     [SerializeField] private GameObject _currentStage;
 
@@ -28,7 +28,7 @@ public class ResourceManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            _sceneLoader = new SceneLoader();
+            //_sceneLoader = new SceneLoader();
             _stageLoader = new StageLoader();
         }
         else
@@ -42,7 +42,7 @@ public class ResourceManager : MonoBehaviour
 
     private void Start()
     {
-        _sceneLoader.Init();
+        //_sceneLoader.Init();
         StartCoroutine(LoadAllResources());
     }
 
@@ -88,10 +88,10 @@ public class ResourceManager : MonoBehaviour
         Debug.Log("[ResourceManager] All resources released.");
     }
 
-    public IEnumerator SwitchScene(SceneName targetScene)
-    {
-        yield return _sceneLoader.LoadSceneAsync(targetScene);
-    }
+    // public IEnumerator SwitchScene(SceneName targetScene)
+    // {
+    //     yield return _sceneLoader.LoadSceneAsync(targetScene);
+    // }
 
     public bool InstantiateStage(string stageKey, out GameObject stagePrefab)
     {
