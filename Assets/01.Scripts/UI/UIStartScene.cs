@@ -1,9 +1,12 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIStartScene : UIBase
 {
+    [SerializeField] RectTransform rectTransform;
+    
     [SerializeField] private Button btnStart;
     [SerializeField] private Button btnOption;
     [SerializeField] private Button btnExit;
@@ -14,6 +17,7 @@ public class UIStartScene : UIBase
     [SerializeField] private Button btnNo;
     
     [SerializeField] private CanvasGroup canvasGroupExitPopup;
+    
 
     protected override void Reset()
     {
@@ -29,6 +33,8 @@ public class UIStartScene : UIBase
         btnNo = transform.FindChildByName<Button>("Btn_No");
         
         canvasGroupExitPopup = transform.FindChildByName<CanvasGroup>("Group_ExitPopup");
+        
+        rectTransform = transform.FindChildByName<RectTransform>("Group_StartScene");
     }
 
     public override void Initialization()
@@ -93,5 +99,10 @@ public class UIStartScene : UIBase
     private void StartGame()
     {
         UIManager.Instance.EnterScene(SceneType.Loading);
+    }
+    
+    public Tween SetScale(float endValue, float duration)
+    {
+        return rectTransform.DOScale(endValue, duration);
     }
 }

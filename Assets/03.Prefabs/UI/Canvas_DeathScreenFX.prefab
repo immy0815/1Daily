@@ -62,7 +62,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!114 &711502875503198918
 MonoBehaviour:
@@ -133,6 +133,7 @@ MonoBehaviour:
   noise: {fileID: 596679808170975565}
   noiseSpeed: 0
   noiseDuration: 0
+  rectTransform: {fileID: 115916759927760199}
 --- !u!1 &3549294924562082325
 GameObject:
   m_ObjectHideFlags: 0

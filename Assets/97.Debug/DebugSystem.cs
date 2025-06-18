@@ -20,5 +20,10 @@ public class DebugSystem : EditorWindow
         {
             UIManager.Instance.PlayEffectText("COOL");
         }
+        
+        if (GUILayout.Button("Intro Text"))
+        {
+            UIManager.Instance.IntroAnimation();
+        }
     }
 }

@@ -447,6 +447,7 @@ MonoBehaviour:
   <MaxTimeScale>k__BackingField: 1
   <MinTimeScale>k__BackingField: 0.01
   <TargetTimeScale>k__BackingField: 0.01
+  <CurrentTimeScale>k__BackingField: 0.01
 --- !u!4 &993631132
 Transform:
   m_ObjectHideFlags: 0
@@ -828,6 +829,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 963194228}
     m_Modifications:
+    - target: {fileID: 2438040277274745025, guid: 8215ad9a011200541bb4beb999366c3e, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3238153177639297357, guid: 8215ad9a011200541bb4beb999366c3e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

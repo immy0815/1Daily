@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,8 @@ public class UIDeathScreenFX : UIBase
     [SerializeField] private RawImage noise;
     [SerializeField] float noiseSpeed;
     [SerializeField] private float noiseDuration;
-
+    [SerializeField] RectTransform rectTransform;
+    
     private float noiseDensity;
     private Material noiseMat;
 
@@ -21,6 +23,7 @@ public class UIDeathScreenFX : UIBase
         base.Reset();
         
         noise = GetComponentInChildren<RawImage>();
+        rectTransform = noise.GetComponent<RectTransform>();
     }
     
     public override void Initialization()
@@ -48,8 +51,17 @@ public class UIDeathScreenFX : UIBase
         noiseMat.SetFloat(Opacity, noiseDensity);
     }
 
+    public void Close(float endValue)
+    {
+        canvasGroup.FadeAnimation(endValue);
+        
+        Close();
+    }
+
     private IEnumerator NoiseAnimation()
     {
+        float alpha = 0;
+        noiseMat.color = new Color(0, 0, 0, alpha);
         elapsedTime = 0f;
         noiseDensity = 0f;
         noiseMat.SetFloat(Opacity, noiseDensity);
@@ -57,14 +69,23 @@ public class UIDeathScreenFX : UIBase
         yield return new WaitForSeconds(3f);
         
         base.Open();
-        
-        while (elapsedTime <= noiseDuration)
-        {
-            elapsedTime += Time.unscaledDeltaTime;
-            noiseDensity += Time.unscaledDeltaTime * noiseSpeed;
 
+        while (elapsedTime < 3f)
+        {
+            float t = elapsedTime / 3f;
+            alpha = Mathf.Clamp01(t);
+            noiseMat.color = new Color(0, 0, 0, alpha);
+
+            noiseDensity += Time.unscaledDeltaTime * noiseSpeed;
             noiseMat.SetFloat(Opacity, noiseDensity);
+
+            elapsedTime += Time.unscaledDeltaTime;
             yield return null;
         }
+    }
+    
+    public Tween SetScale(float endValue, float duration)
+    {
+        return rectTransform.DOScale(endValue, duration);
     }
 }
