@@ -1,20 +1,12 @@
-using System;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
-
-#if UNITY_EDITOR
-using UnityEditor.SceneManagement;
-#endif
 
 public class StageManager : Singleton<StageManager>
 {
   public const int LastStageIndex = 3;
-  [SerializeField, ReadOnly] private int stageIndex = 1;
   [SerializeField, ReadOnly] private Stage currentStage = null;
   [SerializeField, ReadOnly] private GameObject clearObj;
   
@@ -25,7 +17,7 @@ public class StageManager : Singleton<StageManager>
   public static Stage CurrentStage => Instance.currentStage;
   
   public static GameObject ClearOrb => Instance.clearObj;
-  public static int CurrentStageIndex => Instance.stageIndex;
+  public static int StageIndex { get; private set; } = 1;
   /// <summary>
   /// 스테이지 시작시 이벤트입니다.
   /// 인자로 시작하려는 스테이지를 넘겨줍니다.
@@ -40,8 +32,13 @@ public class StageManager : Singleton<StageManager>
 
   private void Awake()
   {
-    DontDestroyOnLoad(gameObject);
     clearObj = Addressables.LoadAssetAsync<GameObject>("ClearOrb").WaitForCompletion();
+  }
+
+  private void OnDestroy()
+  {
+    if(clearObj)
+      Addressables.Release(clearObj);
   }
   
   /// <summary>
@@ -49,48 +46,64 @@ public class StageManager : Singleton<StageManager>
   /// 게임씬을 로딩 후 시작시킵니다.
   /// </summary>
   /// <returns></returns>
-  public void StartStage()
+  public static void StartStageStatic()
   {
-    OnStageEnd.AddListener((state) =>
-    {
-      switch (state)
-      {
-        case StageFinishState.Cancel:
-        {
-          // Destroy(gameObject);
-          UIManager.Instance.EnterScene(SceneType.Start);
-          break;
-        }
-        case StageFinishState.Clear:
-        {
-          break;
-        }
-        case StageFinishState.Failure:
-        {
-          // Destroy(gameObject);
-          // 죽었을 때 → 노이즈 → 인트로 (화면 전환 느낌)
-          UIManager.Instance.EnterScene(SceneType.Start);
-          break;
-        }
-      }
-    });
+    var sceneName = SceneManager.GetActiveScene().name;
     
-    StartStage(stageIndex);
+    if (sceneName != "GameScene")
+    {
+      UIManager.Instance.EnterScene(SceneType.Game);
+      SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    else
+    {
+      Instance.StartStage(StageIndex);
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+      Instance.OnStageEnd.AddListener((state) =>
+      {
+        switch (state)
+        {
+          case StageFinishState.Cancel:
+          {
+            // Destroy(gameObject);
+            UIManager.Instance.EnterScene(SceneType.Start);
+            break;
+          }
+          case StageFinishState.Clear:
+          {
+            break;
+          }
+          case StageFinishState.Failure:
+          {
+            // Destroy(gameObject);
+            // 죽었을 때 → 노이즈 → 인트로 (화면 전환 느낌)
+            UIManager.Instance.EnterScene(SceneType.Start);
+            break;
+          }
+        }
+      });
+    
+      SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
   }
+    
 
   /// <summary>
   /// StageClearTrigger(ClearOrb) 상호작용 용도 메서드
   /// </summary>
   public void StartNextStage()
   {
-    if(stageIndex != LastStageIndex)
+    if(StageIndex != LastStageIndex)
     {
-      stageIndex++;
-      StartStage(stageIndex);
+      StageIndex++;
+      StartStage(StageIndex);
     }
     else
     {
-      stageIndex = 1;
+      StageIndex = 1;
       currentStage = null;
       Cursor.lockState = CursorLockMode.None;
       
@@ -100,7 +113,6 @@ public class StageManager : Singleton<StageManager>
   
   public static void StartNextStageStatic() => Instance.StartNextStage();
   
-  public static void StartStageStatic() => Instance.StartStage();
   public static void StartStageStatic(int stageIndex) => Instance.StartStage(stageIndex);
   
   /// <summary>
@@ -112,15 +124,13 @@ public class StageManager : Singleton<StageManager>
   public void StartStage(int stageIndex)
   {
     var sceneName = SceneManager.GetActiveScene().name;
+    StageIndex = stageIndex;
     
-    if (sceneName == "GameScene") StopStage();
-
-    void OnSceneLoad(Scene scene, LoadSceneMode _)
+    if (sceneName == "GameScene")
     {
-      if (scene.name != "GameScene") return;
+      StopStage();
       
-      
-      if (ResourceManager.Instance.InstantiateStage($"Stage{stageIndex}", out var obj))
+      if (ResourceManager.Instance.InstantiateStage($"Stage{StageIndex}", out var obj))
       {
         var stage = obj.GetComponent<Stage>();
         obj.transform.position = Vector3.zero;
@@ -133,20 +143,25 @@ public class StageManager : Singleton<StageManager>
         vCam.Follow = stage.Player.transform;
         vCam.LookAt = stage.Player.transform;
       }
-      else
-      {
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
-#if UNITY_EDITOR
-        Debug.LogError("Stage not found");
-#endif
-      }
-      
-      SceneManager.sceneLoaded -= OnSceneLoad;
-    };
+    }
+    else UIManager.Instance.EnterScene(SceneType.Game);
+  }
 
-    SceneManager.sceneLoaded += OnSceneLoad;
-    
-    UIManager.Instance.EnterScene(SceneType.Game);
+  private void Start()
+  {
+    if (ResourceManager.Instance.InstantiateStage($"Stage{StageIndex}", out var obj))
+    {
+      var stage = obj.GetComponent<Stage>();
+      obj.transform.position = Vector3.zero;
+      currentStage = stage;
+      stage.StartStage();
+      OnStageStart?.Invoke(stage);
+      stage.OnStageEnd.AddListener(OnStageFinish);
+
+      var vCam = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
+      vCam.Follow = stage.Player.transform;
+      vCam.LookAt = stage.Player.transform;
+    }
   }
 
   /// <summary>
@@ -157,7 +172,7 @@ public class StageManager : Singleton<StageManager>
     if(currentStage)
     {
       currentStage.StopStage();
-      Object.Destroy(currentStage.gameObject);
+      Destroy(currentStage.gameObject);
       currentStage = null;
     }
   }
