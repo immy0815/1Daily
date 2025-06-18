@@ -32,6 +32,8 @@ namespace _01.Scripts.Entity.Player.Scripts
         [field: SerializeField] public GameObject DollyTrack { get; private set; }
         
         private PlayerStateMachine stateMachine;
+        private Coroutine deathCoroutine;
+        
         public Camera cam { get; private set; }
         
         private void Awake()
@@ -42,12 +44,13 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!PlayerCondition) PlayerCondition = gameObject.GetComponent_Helper<PlayerCondition>();
             if (!PlayerInteraction) PlayerInteraction = gameObject.GetComponent_Helper<PlayerInteraction>();
             if (!PlayerInventory) PlayerInventory = gameObject.GetComponent_Helper<PlayerInventory>();
-            if (!PlayerGravity) PlayerGravity = gameObject.GetComponent_Helper<PlayerGravity>();
+            if (!PlayerGravity) PlayerGravity = gameObject.GetComponent_Helper<PlayerGravity>(); 
+            if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
+
             if (!FirstPersonCamera) FirstPersonCamera = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
             if (!ThirdPersonCamera) ThirdPersonCamera = GameObject.Find("ThirdPersonCamera").GetComponent<CinemachineVirtualCamera>();
             if (!DollyCart) DollyCart = GameObject.Find("Dolly Cart").GetComponent<CinemachineDollyCart>();
             if (!DollyTrack) DollyTrack = GameObject.Find("Dolly Track");
-            if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
             
             AnimationData.Initialize();
         }
@@ -60,12 +63,13 @@ namespace _01.Scripts.Entity.Player.Scripts
             if (!PlayerCondition) PlayerCondition = gameObject.GetComponent_Helper<PlayerCondition>();
             if (!PlayerInteraction) PlayerInteraction = gameObject.GetComponent_Helper<PlayerInteraction>();
             if (!PlayerInventory) PlayerInventory = gameObject.GetComponent_Helper<PlayerInventory>();
-            if (!PlayerGravity) PlayerGravity = gameObject.GetComponent_Helper<PlayerGravity>();
+            if (!PlayerGravity) PlayerGravity = gameObject.GetComponent_Helper<PlayerGravity>(); 
+            if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
+
             if (!FirstPersonCamera) FirstPersonCamera = GameObject.Find("FirstPersonCamera").GetComponent<CinemachineVirtualCamera>();
             if (!ThirdPersonCamera) ThirdPersonCamera = GameObject.Find("ThirdPersonCamera").GetComponent<CinemachineVirtualCamera>();
             if (!DollyCart) DollyCart = GameObject.Find("Dolly Cart").GetComponent<CinemachineDollyCart>();
             if (!DollyTrack) DollyTrack = GameObject.Find("Dolly Track");
-            if (!CameraPivot) CameraPivot = gameObject.FindObjectAndGetComponentInChildren_Helper<Transform>("CameraPivot");
             
             AnimationData.Initialize();
         }
@@ -101,10 +105,15 @@ namespace _01.Scripts.Entity.Player.Scripts
             stateMachine.LateUpdate();
         }
 
+        private void OnDestroy()
+        {
+            if (deathCoroutine != null) StopCoroutine(deathCoroutine);
+        }
+
         private void OnDeath()
         {
             PlayerInventory.OnDropWeapon(Vector3.zero);
-            StartCoroutine(MoveDollyCart_Coroutine());
+            deathCoroutine = StartCoroutine(MoveDollyCart_Coroutine());
         }
 
         private IEnumerator MoveDollyCart_Coroutine()
@@ -132,6 +141,7 @@ namespace _01.Scripts.Entity.Player.Scripts
             }
             
             DollyCart.m_Position = 1f;
+            deathCoroutine = null;
         }
     }
 }
