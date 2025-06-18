@@ -103,6 +103,7 @@ public class Enemy : MonoBehaviour, IDamagable
         if (IsDead) return;
         currentHP -= damage;
         currentHP = Mathf.Max(currentHP, 0);
+        weaponHandler.DropWeapon();
         if (currentHP != 0) IsHit = true;
         else Die();
     }
@@ -111,10 +112,12 @@ public class Enemy : MonoBehaviour, IDamagable
     {
         IsDead = true;
         Animator.SetTrigger(AnimationData.DeathParameterHash);
+        Animator.SetBool(AnimationData.ShotParameterHash, false);
         agent.enabled = false;
         fsm.enabled = false;
         characterController.enabled = false;
         enabled = false;
+        weaponHandler.DropWeapon();
         
         OnDeath?.Invoke();
     }
