@@ -46,7 +46,7 @@ public class StageManager : Singleton<StageManager>
       {
         case StageFinishState.Cancel:
         {
-          SceneManager.LoadScene("StartScene");
+          UIManager.Instance.EnterScene(SceneType.Start);
           break;
         }
         case StageFinishState.Clear:

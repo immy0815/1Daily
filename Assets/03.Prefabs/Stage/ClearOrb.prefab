@@ -420,12 +420,12 @@ GameObject:
   - component: {fileID: 1470554489663070831}
   - component: {fileID: 1736422497115017971}
   - component: {fileID: 4877227420218000227}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4473625997484696365
 Transform:
