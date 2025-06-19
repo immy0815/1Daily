@@ -1,4 +1,5 @@
-# SuperCool
+![Image](https://github.com/user-attachments/assets/d1880d07-e586-4aba-a007-41b307a55f02)
+
 
 ## 📋 프로젝트 소개
 
