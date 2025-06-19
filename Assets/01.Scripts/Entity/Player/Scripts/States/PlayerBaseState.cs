@@ -1,18 +1,24 @@
-﻿using _01.Scripts.Entity.Common.Scripts;
+﻿using System.Collections;
+using _01.Scripts.Entity.Common.Scripts;
 using _01.Scripts.Entity.Common.Scripts.Interface;
+using _01.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace _01.Scripts.Entity.Player.Scripts.States
 {
-    public class PlayerBaseState : MonoBehaviour, IState
+    public class PlayerBaseState : IState
     {
         protected readonly PlayerStateMachine stateMachine;
         protected readonly EntityCondition playerCondition;
+        protected Coroutine AttackCoroutine;
+        protected Coroutine normalAttackCoroutine;
+        private int comboIndex = -1;
 
         public PlayerBaseState(PlayerStateMachine machine)
         {
             stateMachine = machine;
+            AttackCoroutine = null;
             playerCondition = stateMachine.Player.PlayerCondition;
         }
         
@@ -29,8 +35,14 @@ namespace _01.Scripts.Entity.Player.Scripts.States
 
         public virtual void Update()
         {
+            if (playerCondition.IsDead) { return; }
             Move();
-            Rotate(new Vector3(stateMachine.Player.MainCameraTransform.forward.x, 0, stateMachine.Player.MainCameraTransform.forward.z));
+            Rotate(stateMachine.Player.MainCameraTransform.forward);
+        }
+
+        public virtual void LateUpdate()
+        {
+            
         }
 
         public virtual void PhysicsUpdate()
@@ -42,7 +54,6 @@ namespace _01.Scripts.Entity.Player.Scripts.States
         {
             RemoveInputActionCallbacks();
         }
-
         
         protected void StartAnimation(int animatorHash)
         {
@@ -64,7 +75,6 @@ namespace _01.Scripts.Entity.Player.Scripts.States
         {
             var movementDirection = GetMovementDirection();
             Move(movementDirection);
-            Rotate(movementDirection);
         }
 
         private Vector3 GetMovementDirection()
@@ -96,29 +106,72 @@ namespace _01.Scripts.Entity.Player.Scripts.States
 
         private void Rotate(Vector3 direction)
         {
+            if (playerCondition.IsDead) return;
             if (direction == Vector3.zero) return;
             
             var unitTransform = stateMachine.Player.transform;
-            var targetRotation = Quaternion.LookRotation(direction);
+            var cameraPivotTransform = stateMachine.Player.PlayerInventory.CameraPivot; 
+            
+            var unitDirection = new Vector3(direction.x, 0, direction.z);
+            var targetRotation = Quaternion.LookRotation(unitDirection);
             unitTransform.rotation = Quaternion.Slerp(unitTransform.rotation, targetRotation, stateMachine.RotationalDamping * Time.unscaledDeltaTime);
+            
+            var cameraTargetRotation = Quaternion.LookRotation(direction);
+            cameraPivotTransform.rotation = cameraTargetRotation;
+        }
+        
+        protected IEnumerator ChangeTimeScaleForSeconds(float timeDuration)
+        {
+            var time = 0f;
+            var startTimeScale = TimeScaleManager.Instance.MaxTimeScale;
+            var targetTimeScale = TimeScaleManager.Instance.MinTimeScale;
+            
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Attack, startTimeScale);
+            while (time < timeDuration)
+            {
+                time += Time.unscaledDeltaTime;
+                var t = time / timeDuration;
+                var lerpScale = Mathf.Lerp(startTimeScale, targetTimeScale, t);
+                TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Attack, lerpScale);
+                yield return null;
+            }
+            
+            TimeScaleManager.Instance.ChangeTimeScale(PriorityType.Attack, targetTimeScale);
+            AttackCoroutine = null;
+        }
+        
+        protected IEnumerator PlayFistAttackAnimation()
+        {
+            stateMachine.Player.SetCameraLayer(true);
+            
+            StartAnimation(stateMachine.Player.AnimationData.AttackParameterHash);
+            stateMachine.Player.Animator.SetInteger("NormalCombo", comboIndex = comboIndex++ % 2);
+            yield return new WaitForSecondsRealtime(1f);
+            StopAnimation(stateMachine.Player.AnimationData.AttackParameterHash);
+            
+            stateMachine.Player.SetCameraLayer(false);
         }
 
-        protected virtual void AddInputActionCallbacks()
+        private void AddInputActionCallbacks()
         {
             var playerController = stateMachine.Player.PlayerController;
             playerController.PlayerActions.Move.canceled += OnMoveCanceled;
             playerController.PlayerActions.Jump.started += OnJumpStarted;
             playerController.PlayerActions.SlowMotion.performed += OnSlowMotionPerformed;
             playerController.PlayerActions.SlowMotion.canceled += OnSlowMotionCanceled;
+            playerController.PlayerActions.Attack.started += OnAttack;
+            playerController.PlayerActions.PickOrThrow.started += OnPickOrThrow;
         }
         
-        protected virtual void RemoveInputActionCallbacks()
+        private void RemoveInputActionCallbacks()
         {
             var playerController = stateMachine.Player.PlayerController;
             playerController.PlayerActions.Move.canceled -= OnMoveCanceled;
             playerController.PlayerActions.Jump.started -= OnJumpStarted;
             playerController.PlayerActions.SlowMotion.performed -= OnSlowMotionPerformed;
             playerController.PlayerActions.SlowMotion.canceled -= OnSlowMotionCanceled;
+            playerController.PlayerActions.Attack.started -= OnAttack;
+            playerController.PlayerActions.PickOrThrow.started -= OnPickOrThrow;
         }
 
         protected virtual void OnMoveCanceled(InputAction.CallbackContext context) { }

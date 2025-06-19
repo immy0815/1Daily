@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public enum SceneName
 {
-    Title,
     Game,
 }
 
@@ -16,10 +15,13 @@ public class ResourceManager : MonoBehaviour
 
     [SerializeField] private List<string> _stageKeys;
 
-    // private SceneLoader _sceneLoader;
+    //private SceneLoader _sceneLoader;
     private StageLoader _stageLoader;
 
-    // private SceneName _currentScene;
+    [SerializeField] private GameObject _currentStage;
+    private bool isAlreadyLoaded;
+
+    private float progress;
 
     private void Awake()
     {
@@ -27,9 +29,8 @@ public class ResourceManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            // _sceneLoader = new SceneLoader();
+            //_sceneLoader = new SceneLoader();
             _stageLoader = new StageLoader();
-            // _sceneLoader.Init();
         }
         else
         {
@@ -42,53 +43,85 @@ public class ResourceManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(LoadAllResources());
+        //_sceneLoader.Init();
+        
     }
-
-    private IEnumerator LoadAllResources()
+    
+    public IEnumerator LoadAllResources()
     {
-        //ield return Addressables.InitializeAsync();
+        if (isAlreadyLoaded)
+        {
+            StageManager.StartStageStatic();
+            yield break;
+        }
 
-        // StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Title));
-        // StartCoroutine(_sceneLoader.LoadSceneAsync(SceneName.Game));
+        yield return Addressables.InitializeAsync();
+
+        int total = _stageKeys.Count;
+        int loaded = 0;
 
         foreach (string key in _stageKeys)
         {
             yield return StartCoroutine(_stageLoader.LoadStageAsync(key));
+
+            loaded++;
+            progress = (float)loaded / total;
+            UIManager.Instance.onUpdateLoadingProgress.Invoke(progress);
         }
 
-        Debug.Log("All Resources Loaded");
+        Debug.Log("[ResourceManager] All Resources Loaded");
+        isAlreadyLoaded = true;
 
-        // SwitchScene(SceneName.Title);
+        // 로딩을 보여주기 위해 임시로 3초 정지
+        yield return new WaitForSeconds(3f);
+
+        StageManager.StartStageStatic();
     }
 
-    // public void SwitchScene(SceneName targetScene)
+    public IEnumerator ReleaseAllResources()
+    {
+        Debug.Log("[ResourceManager] Releasing all resources...");
+
+        _stageLoader.ReleaseStagePrefab();
+
+        if (_currentStage != null)
+        {
+            Destroy(_currentStage);
+            _currentStage = null;
+        }
+
+        yield return null;
+
+        Debug.Log("[ResourceManager] All resources released.");
+    }
+
+    // public IEnumerator SwitchScene(SceneName targetScene)
     // {
-    //     Scene current = _sceneLoader.GetScene(_currentScene);
-    //     Scene target = _sceneLoader.GetScene(targetScene);
-    //
-    //     SceneManager.SetActiveScene(target);
-    //
-    //     if (current.IsValid() && current != target)
-    //     {
-    //         SceneManager.UnloadSceneAsync(current);
-    //     }
-    //
-    //     _currentScene = targetScene;
-    //     Debug.Log($"[ResourceManager] Switched to scene: {targetScene}");
+    //     yield return _sceneLoader.LoadSceneAsync(targetScene);
     // }
 
-    public void InstantiateStage(string stageKey)
+    public bool InstantiateStage(string stageKey, out GameObject stagePrefab)
     {
+        if (_currentStage != null)
+        {
+            Destroy(_currentStage);
+            _currentStage = null;
+        }
+
         GameObject prefab = _stageLoader.GetStagePrefab(stageKey);
         if (prefab != null)
         {
-            Instantiate(prefab);
+            _currentStage = Instantiate(prefab);
+            stagePrefab = _currentStage;
+
             Debug.Log($"[ResourceManager] Instantiated stage: {stageKey}");
+            return true;
         }
         else
         {
-            Debug.LogError($"[ResourceManager] Cannot instantiate stage. '{stageKey}' not found.");
+            Debug.LogError($"[ResourceManager] Cannot instantiate stage. <{stageKey}> not found.");
+            stagePrefab = null;
+            return false;
         }
     }
 }

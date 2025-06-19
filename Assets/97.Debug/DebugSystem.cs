@@ -13,7 +13,17 @@ public class DebugSystem : EditorWindow
     {
         if (GUILayout.Button("Spawn Map"))
         {
-            ResourceManager.Instance.InstantiateStage("Stage1");
+            // ResourceManager.Instance.InstantiateStage("Stage1");
+        }
+
+        if (GUILayout.Button("Effect UI Text"))
+        {
+            UIManager.Instance.PlayEffectText("COOL");
+        }
+        
+        if (GUILayout.Button("Intro Text"))
+        {
+            UIManager.Instance.IntroAnimation();
         }
     }
 }

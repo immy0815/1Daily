@@ -1,5 +1,4 @@
 using _01.Scripts.Entity.Player.Scripts.Interface;
-using _01.Scripts.Manager;
 using UnityEngine;
 
 namespace _01.Scripts.Entity.Player.Scripts
@@ -10,14 +9,16 @@ namespace _01.Scripts.Entity.Player.Scripts
         [SerializeField] private float checkRate = 0.05f;
         [SerializeField] private float maxCheckDistance = 5f;
         [SerializeField] private LayerMask interactableLayers;
-        [SerializeField] private GameObject interactableObject;
+        [SerializeField] private GameObject detectedObject;
 
         // Fields
-        private float timeSinceLastCheck;
+        [Header("Last Check Time")]
+        [SerializeField, ReadOnly] private float timeSinceLastCheck;
         private Camera cam;
         
         // Properties
         public IInteractable Interactable { get; private set; }
+        public IDamagable Damagable { get; private set; }
         
         // Start is called before the first frame update
         private void Start()
@@ -35,26 +36,43 @@ namespace _01.Scripts.Entity.Player.Scripts
             var ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
             if (Physics.Raycast(ray, out var hit, maxCheckDistance, interactableLayers))
             {
-                if (hit.collider.gameObject == interactableObject) return;
+                if (hit.collider.gameObject == detectedObject) return;
                 
-                interactableObject = hit.collider.gameObject;
-                if (!interactableObject.TryGetComponent<IInteractable>(out var interactable)) return;
-                Interactable = interactable;
+                detectedObject = hit.collider.gameObject;
+                if (detectedObject.TryGetComponent<IInteractable>(out var interactable)){ Interactable = interactable; Damagable = null; }
+                else if(detectedObject.TryGetComponent<IDamagable>(out var damagable)) { Interactable = null; Damagable = damagable; }
+                else { Interactable = null; Damagable = null; }
             }
             else
             {
-                interactableObject = null;
+                detectedObject = null;
                 Interactable = null;
+                Damagable = null;
             }
         }
 
         public void OnInteract()
         {
             Interactable.OnInteract();
-            interactableObject = null;
-            Interactable = null;
+            ResetParameters();
+        }
 
-            
+        /// <summary>
+        /// Damage detected object
+        /// </summary>
+        /// <param name="damage"></param>
+        /// <remarks>Deprecated</remarks>
+        public void OnDamage(int damage)
+        {
+            Damagable.OnTakeDamage(damage);
+            ResetParameters();
+        }
+
+        public void ResetParameters()
+        {
+            detectedObject = null;
+            Interactable = null;
+            Damagable = null;
         }
     }
 }

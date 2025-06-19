@@ -1,5 +1,4 @@
-﻿using System;
-using _01.Scripts.Util;
+﻿using _01.Scripts.Util;
 using UnityEngine;
 
 namespace _01.Scripts.Entity.Player.Scripts
@@ -25,13 +24,13 @@ namespace _01.Scripts.Entity.Player.Scripts
 
         private void Update()
         {
-            if (characterController.isGrounded) verticalVelocity = Physics.gravity.y * Time.deltaTime;
+            if (characterController.isGrounded && verticalVelocity < 0f) verticalVelocity = Physics.gravity.y * Time.deltaTime;
             else verticalVelocity += Physics.gravity.y * Time.deltaTime;
         }
         
         public void Jump(float jumpForce)
         {
-            verticalVelocity += jumpForce;
+            verticalVelocity = jumpForce;
         }
     }
 }

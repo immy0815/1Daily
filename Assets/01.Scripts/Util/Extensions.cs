@@ -34,6 +34,11 @@ public static class Extensions
             canvasGroup.blocksRaycasts = false;
         }
     }
+    
+    public static void FadeAnimation(this CanvasGroup canvasGroup, float endValue, float duration = 0.2f)
+    {
+        canvasGroup.DOFade(endValue, duration).OnComplete(() => canvasGroup.SetAlpha(endValue));
+    }
 
     public static void BlinkAnimation(this CanvasGroup canvasGroup, float endValue, bool enterAnim = true, float duration = 0.1f, int count = 2)
     {
@@ -55,6 +60,34 @@ public static class Extensions
         blinkSequence.OnComplete(() =>
         {
             canvasGroup.SetAlpha(endValue);
+        });
+    }
+
+
+    public static Sequence zoomSequence;
+    
+    // RectTransform 확장 메서드
+    public static void ZoomOut(this RectTransform rectTransform, bool endAnimPlay = true, float duration = 0.1f, float waitingDuration = 2f)
+    {
+        rectTransform.DOKill();
+        zoomSequence?.Kill(false);
+        UIManager.Instance.LensDistortionController.DOKill(); 
+        
+        UIManager.Instance.LensDistortionController.DOIntensity(duration);
+
+        zoomSequence = DOTween.Sequence();
+        zoomSequence.SetUpdate(true);
+        
+        zoomSequence.Append(rectTransform.DOScale(Vector3.one, duration).From(new Vector3(5, 5, 5)));
+        
+        // Waiting Animation
+        if(endAnimPlay)
+            zoomSequence.Append(rectTransform.DOScale(new Vector3(0.98f, 0.98f, 0.98f), waitingDuration));
+
+        zoomSequence.OnComplete(() =>
+        {
+            UIBase uiBase = rectTransform.parent.GetComponent<UIBase>();
+            uiBase.Close();
         });
     }
 }

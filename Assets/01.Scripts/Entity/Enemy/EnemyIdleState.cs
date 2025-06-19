@@ -20,12 +20,19 @@ public class EnemyIdleState : EnemyStateBase
 
     public override void Update()
     {
-        enemy.Agent.SetDestination(enemy.Target.position);
-        if (enemy.Target && enemy.Agent.remainingDistance > enemy.Agent.stoppingDistance)
+        if (!enemy.Target)
+        {
+            enemy.Agent.ResetPath();
+            return;
+        }
+        if (enemy.TargetPlayer.PlayerCondition.IsDead) return;
+        
+        enemy.Agent.SetDestination(enemy.Target.transform.position);
+        if (!enemy.CanTouchTarget())
         {
             fsm.ChangeState(fsm.runState);
         }
-        else if (true)  // 무기 검사 추가 필요. 거리는 되는 상황
+        else if (!enemy.HasWeapon())  // 무기 검사 추가 필요. 거리는 되는 상황
         {
             fsm.ChangeState(fsm.punchState);
         }

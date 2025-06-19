@@ -1,48 +1,60 @@
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UIStartScene : MonoBehaviour
+public class UIStartScene : UIBase
 {
+    [SerializeField] RectTransform rectTransform;
+    
     [SerializeField] private Button btnStart;
     [SerializeField] private Button btnOption;
     [SerializeField] private Button btnExit;
     
-    [SerializeField] private RectTransform rectTrBtnStart;
-    [SerializeField] private RectTransform rectTrBtnOption;
-    [SerializeField] private RectTransform rectTrBtnExit;
+    [SerializeField] private CanvasGroup canvasGroupButtons;
     
     [SerializeField] private Button btnYes;
     [SerializeField] private Button btnNo;
     
     [SerializeField] private CanvasGroup canvasGroupExitPopup;
     
-    private void Reset()
+
+    protected override void Reset()
     {
+        base.Reset();
+        
         btnStart = transform.FindChildByName<Button>("Btn_Start");
         btnOption = transform.FindChildByName<Button>("Btn_Option");
         btnExit = transform.FindChildByName<Button>("Btn_Exit");
 
-        rectTrBtnStart = btnStart.gameObject.GetComponent<RectTransform>();
-        rectTrBtnOption = btnOption.gameObject.GetComponent<RectTransform>();
-        rectTrBtnExit = btnExit.gameObject.GetComponent<RectTransform>();
+        canvasGroupButtons = transform.FindChildByName<CanvasGroup>("Group_Buttons");
         
         btnYes = transform.FindChildByName<Button>("Btn_Yes");
         btnNo = transform.FindChildByName<Button>("Btn_No");
         
         canvasGroupExitPopup = transform.FindChildByName<CanvasGroup>("Group_ExitPopup");
+        
+        rectTransform = transform.FindChildByName<RectTransform>("Group_StartScene");
     }
 
-    public void Initialization()
+    public override void Initialization()
     {
+        base.Initialization();
+        
         canvasGroupExitPopup.SetAlpha(0);
+        canvasGroupButtons.SetAlpha(1);
         
         // Start
         btnStart.onClick.RemoveAllListeners();
-        // btnStart.onClick.AddListener();
+        btnStart.onClick.AddListener(StartGame);
         
         // Option
         btnOption.onClick.RemoveAllListeners();
-        btnOption.onClick.AddListener(UIManager.Instance.OpenOption);
+        btnOption.onClick.AddListener(() =>
+        {
+            UIManager.Instance.OpenOption(ButtonGroupActive);
+            ButtonGroupActive();
+        });
         
         // Exit
         btnExit.onClick.RemoveAllListeners();
@@ -53,17 +65,35 @@ public class UIStartScene : MonoBehaviour
         
         btnYes.onClick.RemoveAllListeners();
         btnYes.onClick.AddListener(ExitGame);
+
+        ButtonGroupActive();
     }
 
-    void StartGame()
+    public override void Open()
     {
-        
+        Initialization();
+        base.Open();
+    }
+    
+    public void ButtonGroupActive()
+    {
+        float endValue = canvasGroupButtons.alpha > 0.5f ? 0 : 1;
+
+        if (endValue < 0.1f)
+        {
+            canvasGroupButtons.SetAlpha(endValue);
+        }
+        else
+        {
+            canvasGroupButtons.FadeAnimation(endValue);
+        }
     }
     
     private void ExitPopupActive()
     {
         float endValue = canvasGroupExitPopup.alpha > 0.5f ? 0 : 1;
         canvasGroupExitPopup.BlinkAnimation(endValue, false);
+        ButtonGroupActive();
     }
     
     private void ExitGame()
@@ -73,5 +103,16 @@ public class UIStartScene : MonoBehaviour
 #else
         Application.Quit();
 #endif
+    }
+
+    private void StartGame()
+    {
+        UIManager.Instance.EnterScene(SceneType.Loading);
+        StartCoroutine(ResourceManager.Instance.LoadAllResources());
+    }
+    
+    public Tween SetScale(float endValue, float duration)
+    {
+        return rectTransform.DOScale(endValue, duration);
     }
 }
