@@ -145,7 +145,7 @@ namespace _01.Scripts.Entity.Player.Scripts.States
             stateMachine.Player.SetCameraLayer(true);
             
             StartAnimation(stateMachine.Player.AnimationData.AttackParameterHash);
-            stateMachine.Player.Animator.SetInteger("NormalCombo", comboIndex = comboIndex++ % 2);
+            stateMachine.Player.Animator.SetInteger("NormalCombo", comboIndex = comboIndex++ % 3);
             yield return new WaitForSecondsRealtime(1f);
             StopAnimation(stateMachine.Player.AnimationData.AttackParameterHash);
             
